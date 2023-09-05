@@ -4,6 +4,7 @@ import FullLoading from './FullLoadingPage'
 import ForgotPassword from './ForgotPasswordPage'
 import NotFound from './404Page'
 import ErrorPage from './500Page'
+import ProfilePage from './ProfilePage'
 
 export {
   StarterPage,
@@ -12,4 +13,5 @@ export {
   ForgotPassword,
   NotFound,
   ErrorPage,
+  ProfilePage,
 }

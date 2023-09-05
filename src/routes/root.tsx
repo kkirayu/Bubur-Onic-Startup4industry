@@ -10,6 +10,7 @@ import {
   ForgotPassword,
   NotFound,
   ErrorPage,
+  ProfilePage,
 } from '@/pages'
 
 const router = createBrowserRouter([
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <></> },
+      { path: 'profile', element: <ProfilePage /> },
       { path: 'starter', element: <StarterPage /> },
     ],
   },

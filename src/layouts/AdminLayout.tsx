@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom'
 import { Header, Sidebar } from 'alurkerja-ui'
 import clsx from 'clsx'
+import { LogOut, User2 } from 'lucide-react'
 
 import { menuConfig } from '@/utils'
 import { FullLoading } from '@/pages'
-import { Button } from '@/components'
 
 export default function AdminLayout() {
   const { pathname } = useLocation()
@@ -57,17 +57,26 @@ export default function AdminLayout() {
       >
         <Header
           avatarContent={
-            <>
-              <Button
+            <div className="w-full">
+              <div
+                className="hover:bg-light-blue-alurkerja hover:text-main-blue-alurkerja px-4 py-2 cursor-pointer flex items-center gap-1"
                 onClick={() => {
-                  console.log('click')
+                  navigate('/profile')
+                }}
+              >
+                <User2 size={18} /> Profile Saya
+              </div>
+              <div
+                className="hover:bg-light-blue-alurkerja hover:text-main-blue-alurkerja px-4 py-2 cursor-pointer flex items-center gap-1"
+                onClick={() => {
                   localStorage.removeItem('token')
                   handleUnauthenticated()
                 }}
               >
+                <LogOut size={18} />
                 Logout
-              </Button>
-            </>
+              </div>
+            </div>
           }
         />
         <main className="px-4 py-8">
