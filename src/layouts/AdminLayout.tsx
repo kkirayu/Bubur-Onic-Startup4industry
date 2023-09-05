@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom'
 import { Header, Sidebar } from 'alurkerja-ui'
 import clsx from 'clsx'
 
@@ -36,10 +36,16 @@ export default function AdminLayout() {
     <div className="max-w-screen">
       <div className="fixed">
         <Sidebar
+          logo={<>Bubur Onic</>}
           toggled={toggled}
           setToggled={setToggled}
           menuConfig={menuConfig}
           currentPathName={pathname}
+          menuWrapper={({ children, menu }) => (
+            <Link to={menu.href}>
+              <>{children}</>
+            </Link>
+          )}
         />
       </div>
 

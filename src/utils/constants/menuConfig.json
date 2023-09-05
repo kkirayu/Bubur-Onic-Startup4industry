@@ -1,1 +1,4 @@
-[{ "href": "/", "label": "Starter Page" }]
+[
+  { "href": "/", "label": "Home" },
+  { "href": "/starter", "label": "Alurkerja Example" }
+]
