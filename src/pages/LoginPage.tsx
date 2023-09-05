@@ -1,7 +1,9 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import { Input } from 'alurkerja-ui'
-import { Button } from '@/components'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+
+import { Button } from '@/components'
 
 const LoginPage = () => {
   const {
@@ -18,7 +20,15 @@ const LoginPage = () => {
 
   const onSubmit = (data: FieldValues) => {
     localStorage.setItem('token', 'tes')
-    navigate('/')
+    Swal.fire({
+      title: 'Berhasil Login!',
+      text: 'Selamat datang admin',
+      icon: 'success',
+      timer: 2000,
+      timerProgressBar: true,
+    }).then(() => {
+      navigate('/')
+    })
   }
 
   return (
