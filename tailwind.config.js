@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 export default {
   content: [
     './index.html',
@@ -8,14 +10,15 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: { sans: ['Poppins', ...defaultTheme.fontFamily.sans] },
       colors: {
+        black: '#3F4254',
         red: {
           alurkerja: '#F64E60',
         },
         orange: { alurkerja: '#FFA800' },
         purple: { alurkerja: '#9056FC' },
         blue: { alurkerja: '#586BE2' },
-        'main-blue': { alurkerja: '#0095E8' },
         'main-blue': { alurkerja: '#0095E8' },
         'tifany-blue': { alurkerja: '#17BCB4' },
         green: { alurkerja: '#50CD89' },
