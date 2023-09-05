@@ -5,6 +5,7 @@ import ForgotPassword from './ForgotPasswordPage'
 import NotFound from './404Page'
 import ErrorPage from './500Page'
 import ProfilePage from './ProfilePage'
+import ResetPasswordPage from './ResetPasswordPage'
 
 export {
   StarterPage,
@@ -14,4 +15,5 @@ export {
   NotFound,
   ErrorPage,
   ProfilePage,
+  ResetPasswordPage,
 }

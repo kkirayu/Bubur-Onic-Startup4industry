@@ -3,14 +3,15 @@ import { Input } from 'alurkerja-ui'
 import { Button } from '@/components'
 import { Link } from 'react-router-dom'
 
-const ForgotPassword = () => {
+const ResetPasswordPage = () => {
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: '',
+      newPassword: '',
+      confirmNewPassword: '',
     },
   })
 
@@ -28,29 +29,43 @@ const ForgotPassword = () => {
         >
           <div className="flex flex-col space-y-2 ">
             <h1 className="text-2xl font-semibold tracking-tight">
-              Lupa Password?
+              Reset Password
             </h1>
             <span className="text-grey-alurkerja-1 text-sm">
-              Silahkan masukkan email dan kami akan mengirimkan link untuk reset
-              password
+              Silahkan masukkan password baru
             </span>
           </div>
           <div>
             <label htmlFor="email">
-              Email <span className="text-red-600 text-sm">*</span>
+              Password Baru <span className="text-red-600 text-sm">*</span>
             </label>
             <Input
-              {...register('email', {
+              {...register('newPassword', {
                 required: { message: 'this field required', value: true },
               })}
-              type="email"
+              type="password"
             />
             <span className="text-xs text-red-400" role="alert">
-              {errors?.email?.message}
+              {errors?.newPassword?.message}
+            </span>
+          </div>
+          <div>
+            <label htmlFor="confirmNewPassword">
+              Konfirmasi Password Baru
+              <span className="text-red-600 text-sm">*</span>
+            </label>
+            <Input
+              {...register('confirmNewPassword', {
+                required: { message: 'this field required', value: true },
+              })}
+              type="password"
+            />
+            <span className="text-xs text-red-400" role="alert">
+              {errors?.confirmNewPassword?.message}
             </span>
           </div>
 
-          <Button isblock={false}>Kirim Email</Button>
+          <Button isblock={false}>Reset Password</Button>
           <Link
             className="text-center text-main-blue-alurkerja text-sm"
             to="/login"
@@ -63,4 +78,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default ResetPasswordPage
