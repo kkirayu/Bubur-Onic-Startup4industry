@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 export default {
   content: [
     './index.html',
@@ -6,7 +7,21 @@ export default {
     './node_modules/alurkerja-ui/dist/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        red: {
+          alurkerja: '#F64E60',
+        },
+        orange: { alurkerja: '#FFA800' },
+        purple: { alurkerja: '#9056FC' },
+        blue: { alurkerja: '#586BE2' },
+        'main-blue': { alurkerja: '#0095E8' },
+        'main-blue': { alurkerja: '#0095E8' },
+        'tifany-blue': { alurkerja: '#17BCB4' },
+        green: { alurkerja: '#50CD89' },
+        'light-blue': { alurkerja: '#E1F0FF' },
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/forms')({

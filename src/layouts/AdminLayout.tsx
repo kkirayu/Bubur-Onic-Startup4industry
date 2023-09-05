@@ -3,6 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { Header, Sidebar } from 'alurkerja-ui'
 import clsx from 'clsx'
 
+import { menuConfig } from '@/utils'
+
 export default function AdminLayout() {
   const { pathname } = useLocation()
 
@@ -14,7 +16,7 @@ export default function AdminLayout() {
         <Sidebar
           toggled={toggled}
           setToggled={setToggled}
-          menuConfig={[{ href: '/', label: 'Menu1' }]}
+          menuConfig={menuConfig}
           currentPathName={pathname}
         />
       </div>

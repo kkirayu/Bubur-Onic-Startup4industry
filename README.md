@@ -24,6 +24,18 @@ Clone the project
   yarn
 ```
 
+Install the project
+
+```bash
+  yarn install --frozen-lockfile
+```
+
+```bash
+  git clone https://gitlab.javan.co.id/alurkerja-template/alurkerja-UI-starter.git
+  cd alurkerja-UI-starter
+  yarn
+```
+
 Start the server
 
 ```bash

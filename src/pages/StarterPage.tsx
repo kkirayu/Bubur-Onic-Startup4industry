@@ -1,7 +1,7 @@
 import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 
-function App() {
+function StarterPage() {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -26,4 +26,4 @@ function App() {
   )
 }
 
-export default App
+export default StarterPage
