@@ -50,7 +50,10 @@ const ForgotPassword = () => {
           </div>
 
           <Button isblock={false}>Reset Password</Button>
-          <Link className="text-center text-blue-alurkerja text-sm" to="/login">
+          <Link
+            className="text-center text-main-blue-alurkerja text-sm"
+            to="/login"
+          >
             Kembali ke halaman Login
           </Link>
         </form>

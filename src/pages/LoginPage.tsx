@@ -37,12 +37,6 @@ const LoginPage = () => {
         <div className="relative z-20 flex items-center text-lg font-medium">
           Bubur Onic
         </div>
-        <div className="relative z-20 mt-auto">
-          <blockquote>
-            "Alurkerja merupakan sekumpulan library yang mempercepat pembuatan
-            aplikasi berbasis workflow"
-          </blockquote>
-        </div>
       </div>
       <div className="h-full p-6 lg:p-8 flex items-center justify-center md:justify-start">
         <form
@@ -50,9 +44,9 @@ const LoginPage = () => {
           className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
         >
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Masuk</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Login</h1>
             <span className="text-grey-alurkerja-1 text-sm">
-              Silahkan masuk menggunakan username
+              Silahkan login menggunakan username
             </span>
           </div>
           <div>
@@ -83,8 +77,16 @@ const LoginPage = () => {
               {errors?.password?.message}
             </span>
           </div>
-          <Button isblock={false}>Masuk</Button>
-          <Link className=" text-blue-alurkerja text-sm" to="/forgot-password">
+          <Button isblock={false}>Login</Button>
+          <Link to="/register">
+            <Button variant="outlined" isblock={false}>
+              Register
+            </Button>
+          </Link>
+          <Link
+            className=" text-main-blue-alurkerja text-sm"
+            to="/forgot-password"
+          >
             Lupa password?
           </Link>
         </form>
