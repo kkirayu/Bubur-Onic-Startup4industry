@@ -1,3 +1,13 @@
+## Tech Stack
+
+**Client:** React v18, React-Router-Dom v6, Typescript, Vite v3
+
+**Testing:** Vitest, Testing-library
+
+**Code Quality:** Eslint, Prettier, Airbnb Style Guides
+
+**List Icon:** Lucide
+
 ## Run Locally
 
 Clone the project
