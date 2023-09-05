@@ -5,11 +5,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   variant?: 'filled' | 'outlined' | 'text'
   size?: 'small' | 'medium'
-  isBlock?: boolean
+  isblock?: boolean
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { children, size = 'small', variant = 'filled', isBlock = true } = props
+  const { children, size = 'small', variant = 'filled', isblock = true } = props
 
   const buttonSize = () =>
     size === 'small' ? 'px-[15px] py-2' : 'px-[15px] py-2.5'
@@ -22,7 +22,7 @@ const Button: FC<ButtonProps> = (props) => {
       return 'text-main-blue-alurkerja'
     }
   }
-  const buttonBlock = () => (isBlock ? 'w-fit' : 'w-full')
+  const buttonBlock = () => (isblock ? 'w-fit' : 'w-full')
 
   return (
     <button

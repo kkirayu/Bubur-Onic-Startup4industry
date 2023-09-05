@@ -11,12 +11,13 @@ import router from './routes/root'
 
 // styles
 import './index.css'
+import { FullLoading } from './pages'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <AuthContext.Provider value={axiosInstance}>
       <ThemeContext.Provider value={theme}>
-        <RouterProvider router={router} />
+        <RouterProvider router={router} fallbackElement={<FullLoading />} />
       </ThemeContext.Provider>
     </AuthContext.Provider>
   </React.StrictMode>
