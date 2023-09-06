@@ -12,7 +12,11 @@ import {
   ProfilePage,
   ResetPasswordPage,
 } from '@/pages'
-import { UserManagement, RoleManagement } from '@/pages/admin'
+import {
+  UserManagement,
+  RoleManagement,
+  UnactiveUserManagement,
+} from '@/pages/admin'
 
 const router = createBrowserRouter([
   {
@@ -53,6 +57,10 @@ const router = createBrowserRouter([
         children: [
           { path: 'user-management', element: <UserManagement /> },
           { path: 'role-management', element: <RoleManagement /> },
+          {
+            path: 'unactive-user-management',
+            element: <UnactiveUserManagement />,
+          },
         ],
       },
     ],

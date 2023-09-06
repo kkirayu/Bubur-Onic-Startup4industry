@@ -1,4 +1,4 @@
-import { UserCog, Home, Lock, User } from 'lucide-react'
+import { UserCog, Home, Lock, User, UserX2 } from 'lucide-react'
 import type { MenuConfig } from 'alurkerja-ui'
 
 export const menuConfig: MenuConfig[] = [
@@ -18,6 +18,11 @@ export const menuConfig: MenuConfig[] = [
         href: '/admin/role-management',
         label: 'Role Management',
         icon: <UserCog size={20} />,
+      },
+      {
+        href: '/admin/unactive-user-management',
+        label: 'Unactive User Management',
+        icon: <UserX2 size={20} />,
       },
     ],
   },
