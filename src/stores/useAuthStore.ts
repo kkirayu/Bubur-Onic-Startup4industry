@@ -20,7 +20,7 @@ const useAuthStore = create<UseAuthStore>((set) => ({
   },
   login: (token) => {
     set(() => ({ token: token }))
-    localStorage.setItem('token', 'tes')
+    localStorage.setItem('token', token)
   },
 }))
 
