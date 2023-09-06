@@ -12,7 +12,7 @@ import {
   ProfilePage,
   ResetPasswordPage,
 } from '@/pages'
-import { UserManagement } from '@/pages/admin'
+import { UserManagement, RoleManagement } from '@/pages/admin'
 
 const router = createBrowserRouter([
   {
@@ -50,7 +50,10 @@ const router = createBrowserRouter([
       {
         path: 'admin',
         element: <Outlet />,
-        children: [{ path: 'user-management', element: <UserManagement /> }],
+        children: [
+          { path: 'user-management', element: <UserManagement /> },
+          { path: 'role-management', element: <RoleManagement /> },
+        ],
       },
     ],
   },
