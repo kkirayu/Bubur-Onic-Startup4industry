@@ -719,10 +719,10 @@ ajv@^6.10.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alurkerja-ui@^0.0.330:
-  version "0.0.330"
-  resolved "https://registry.yarnpkg.com/alurkerja-ui/-/alurkerja-ui-0.0.330.tgz#1c492f83d4b0bf6bf1fd5cab35f54ba34120edc2"
-  integrity sha512-aiTobkIrV9pbARvgGHn64CVG3fyZ8FCVotSEAjsaYEN4EHa+9CaoDfoUOLhkKUd52+9bJWc2OStokYtGgewuUg==
+alurkerja-ui@^0.0.332:
+  version "0.0.332"
+  resolved "https://registry.yarnpkg.com/alurkerja-ui/-/alurkerja-ui-0.0.332.tgz#431d654a10179569fb49067862296de7038aeb5b"
+  integrity sha512-Y6C5/yMGlXpJqqpbGiS2jqzU4uf5lzzQqPX1awvIkAmmy24mQGTIUVJgCLcw/3HZVF+4lvp9eTHYAA5CjqZrzQ==
   dependencies:
     "@headlessui/react" "^1.7.14"
     "@types/dompurify" "^3.0.2"

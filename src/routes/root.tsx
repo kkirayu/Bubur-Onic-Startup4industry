@@ -3,7 +3,6 @@ import { Outlet, createBrowserRouter } from 'react-router-dom'
 // layouts
 import { AdminLayout } from '@/layouts'
 
-//pages
 import {
   StarterPage,
   LoginPage,
@@ -13,6 +12,7 @@ import {
   ProfilePage,
   ResetPasswordPage,
 } from '@/pages'
+import { UserManagement } from '@/pages/admin'
 
 const router = createBrowserRouter([
   {
@@ -47,6 +47,11 @@ const router = createBrowserRouter([
       { index: true, element: <></> },
       { path: 'profile', element: <ProfilePage /> },
       { path: 'starter', element: <StarterPage /> },
+      {
+        path: 'admin',
+        element: <Outlet />,
+        children: [{ path: 'user-management', element: <UserManagement /> }],
+      },
     ],
   },
 ])

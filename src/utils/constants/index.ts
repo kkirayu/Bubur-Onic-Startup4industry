@@ -1,3 +1,3 @@
-import menuConfig from './menuConfig.json'
+import { menuConfig } from './menuConfig'
 
 export { menuConfig }
