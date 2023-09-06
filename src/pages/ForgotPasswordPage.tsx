@@ -50,7 +50,7 @@ const ForgotPassword = () => {
             </span>
           </div>
 
-          <Button isblock={false}>Kirim Email</Button>
+          <Button>Kirim Email</Button>
           <Link
             className="text-center text-main-blue-alurkerja text-sm"
             to="/login"

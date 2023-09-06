@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider } from 'react-router-dom'
 import { AuthContext, ThemeContext } from 'alurkerja-ui'
-import axiosInstance from '@/api'
+import { axiosInstance } from '@/api'
 import { theme } from '@/utils'
 import 'alurkerja-ui/dist/style.css'
 

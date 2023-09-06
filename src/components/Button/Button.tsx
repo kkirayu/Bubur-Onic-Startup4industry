@@ -9,7 +9,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { children, size = 'small', variant = 'filled', isblock = true } = props
+  const {
+    children,
+    size = 'small',
+    variant = 'filled',
+    isblock = false,
+  } = props
 
   const buttonSize = () =>
     size === 'small' ? 'px-[15px] py-2' : 'px-[15px] py-2.5'

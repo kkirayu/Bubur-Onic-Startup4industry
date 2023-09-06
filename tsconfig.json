@@ -23,7 +23,8 @@
       "@/pages/*": ["./pages/*"],
       "@/utils": ["./utils/"],
       "@/api": ["./api/"],
-      "@/pages": ["./pages/"]
+      "@/pages": ["./pages/"],
+      "@/stores": ["./stores/"]
     }
   },
 

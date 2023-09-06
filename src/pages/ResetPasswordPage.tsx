@@ -65,7 +65,7 @@ const ResetPasswordPage = () => {
             </span>
           </div>
 
-          <Button isblock={false}>Reset Password</Button>
+          <Button>Reset Password</Button>
           <Link
             className="text-center text-main-blue-alurkerja text-sm"
             to="/login"

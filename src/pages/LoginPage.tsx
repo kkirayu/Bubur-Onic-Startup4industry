@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 import { Button } from '@/components'
+import { useAuthStore } from '@/stores'
 
 const LoginPage = () => {
   const {
@@ -17,9 +18,10 @@ const LoginPage = () => {
     },
   })
   const navigate = useNavigate()
+  const { login } = useAuthStore()
 
   const onSubmit = (data: FieldValues) => {
-    localStorage.setItem('token', 'tes')
+    login('ini tokennya')
     Swal.fire({
       title: 'Berhasil Login!',
       text: 'Selamat datang admin',
@@ -77,11 +79,10 @@ const LoginPage = () => {
               {errors?.password?.message}
             </span>
           </div>
-          <Button isblock={false}>Login</Button>
+          <Button>Login</Button>
+
           <Link to="/register">
-            <Button variant="outlined" isblock={false}>
-              Register
-            </Button>
+            <Button variant="outlined">Register</Button>
           </Link>
           <Link
             className=" text-main-blue-alurkerja text-sm"

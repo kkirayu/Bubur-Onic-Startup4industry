@@ -6,13 +6,14 @@ import { LogOut, User2 } from 'lucide-react'
 
 import { menuConfig } from '@/utils'
 import { FullLoading } from '@/pages'
+import { axiosInstance } from '@/api'
+import { useAuthStore } from '@/stores'
 
 export default function AdminLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const { isAppReady, setIsAppReady, token, logout } = useAuthStore()
 
-  const [token, setToken] = useState(localStorage.getItem('token'))
-  const [isAppReady, setIsAppReady] = useState(false)
   const [toggled, setToggled] = useState(false)
 
   const handleUnauthenticated = async () => {
@@ -24,6 +25,18 @@ export default function AdminLayout() {
       handleUnauthenticated()
       setIsAppReady(true)
     } else {
+      axiosInstance.interceptors.request.use(
+        async (config) => {
+          if (token) {
+            config.headers.Authorization = token
+          }
+          return config
+        },
+        (err) => {
+          return Promise.reject(err)
+        }
+      )
+
       setIsAppReady(true)
     }
   }, [token, isAppReady])
@@ -69,8 +82,7 @@ export default function AdminLayout() {
               <div
                 className="hover:bg-light-blue-alurkerja hover:text-main-blue-alurkerja px-4 py-2 cursor-pointer flex items-center gap-1"
                 onClick={() => {
-                  localStorage.removeItem('token')
-                  handleUnauthenticated()
+                  logout()
                 }}
               >
                 <LogOut size={18} />
