@@ -1,0 +1,16 @@
+stages:
+  - staging
+
+deploy_staging:
+  only:
+    - develop
+  tags:
+    - merapi
+  stage: staging
+  image: javanlabs/ssh-client:latest
+  environment:
+    name: rtgs-fe
+    url: https://rtgs-fe.merapi.javan.id
+  script:
+    - echo "Deploy ke server merapi"
+    - ssh root@192.168.88.210 "cd /opt/alurkerja/onic/onic-fe && sh k8s_update.sh onic-fe"
