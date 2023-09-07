@@ -15,13 +15,11 @@ interface UseAuthStore {
     email: string
     password: string
   }) => Promise<any>
-  registerUser: ({
-    email,
-    password,
-  }: {
+  registerUser: (data: {
     name: string
     email: string
     password: string
+    password_confirmation: string
   }) => Promise<any>
   currentUser: UserType | undefined
   setCurrentUser: (data: UserType) => void
@@ -43,7 +41,7 @@ const useAuthStore = create<UseAuthStore>((set) => ({
           if (res.status === 200) {
             Swal.fire({
               title: 'Berhasil Login!',
-              text: 'Selamat datang admin',
+              text: `Selamat datang ${res.data.data.name}`,
               icon: 'success',
               timer: 2000,
               timerProgressBar: true,
@@ -62,16 +60,16 @@ const useAuthStore = create<UseAuthStore>((set) => ({
         })
     })
   },
-  registerUser: async ({ name, email, password }) => {
-    const payload = { email, password, name }
+  registerUser: async ({ name, email, password, password_confirmation }) => {
+    const payload = { email, password, name, password_confirmation }
     return new Promise((resolve, reject) => {
       axiosInstance
         .post<LoginResponseType>('/auth/register', payload)
         .then((res) => {
-          if (res.status === 200) {
+          if (res.status === 201) {
             Swal.fire({
-              title: 'Berhasil Login!',
-              text: 'Selamat datang admin',
+              title: 'Berhasil!',
+              text: `Berhasil mendaftarkan ${email} `,
               icon: 'success',
               timer: 2000,
               timerProgressBar: true,

@@ -40,6 +40,11 @@ const Login = () => {
           setTimeout(() => {
             setErrorMessage(undefined)
           }, 2500)
+        } else {
+          setErrorMessage('Server Internal Error')
+          setTimeout(() => {
+            setErrorMessage(undefined)
+          }, 2500)
         }
       })
       .finally(() => {
@@ -57,7 +62,7 @@ const Login = () => {
       <div className="h-full p-6 lg:p-8 flex items-center justify-center md:justify-start relative">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
+          className="mx-auto flex w-full flex-col justify-center space-y-4 sm:w-[350px]"
         >
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">Login</h1>
