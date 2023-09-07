@@ -120,11 +120,6 @@ const LoginPage = () => {
         <div className="absolute right-0 bottom-0 mb-6 mr-6 mt-auto flex items-center gap-4">
           <img
             className="h-10 w-auto object-cover"
-            src="/logo-pt.webp"
-            alt="PT. Rofindiya Ekamulia Sukses"
-          />
-          <img
-            className="h-20 w-auto object-cover"
             src="/logo.webp"
             alt="bubur onic"
           />

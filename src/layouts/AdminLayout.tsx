@@ -61,7 +61,7 @@ export default function AdminLayout() {
         <Sidebar
           logo={
             <img
-              className="h-16 w-auto aspect-auto object-cover"
+              className="h-10 w-auto aspect-auto object-cover"
               src="/logo.webp"
             />
           }
