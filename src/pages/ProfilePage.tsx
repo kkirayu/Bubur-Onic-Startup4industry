@@ -107,7 +107,7 @@ const ProfilePage = () => {
             </div>
             <div className="w-fit ml-auto">
               <Button
-                isblock
+                block
                 onClick={() => hookFormReset.handleSubmit(onResetPassword)()}
               >
                 Reset Password
@@ -116,7 +116,7 @@ const ProfilePage = () => {
           </div>
         </Modal>
         <Button
-          isblock
+          block
           onClick={() => hookFormProfile.handleSubmit(onEditProfile)()}
         >
           Simpan

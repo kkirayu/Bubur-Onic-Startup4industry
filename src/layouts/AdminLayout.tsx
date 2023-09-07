@@ -4,15 +4,16 @@ import { Header, Sidebar } from 'alurkerja-ui'
 import clsx from 'clsx'
 import { LogOut, User2 } from 'lucide-react'
 
-import { menuConfig } from '@/utils'
+import { UserType, menuConfig } from '@/utils'
 import { FullLoading } from '@/pages'
 import { axiosInstance } from '@/api'
 import { useAuthStore } from '@/stores'
+import { AxiosResponse } from 'axios'
 
 export default function AdminLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { token, logout, currentUser } = useAuthStore()
+  const { token, logout, currentUser, setCurrentUser } = useAuthStore()
 
   const [isAppReady, setIsAppReady] = useState(false)
 
@@ -39,9 +40,16 @@ export default function AdminLayout() {
         }
       )
 
-      setIsAppReady(true)
+      axiosInstance
+        .get<AxiosResponse<UserType>>('/auth/info')
+        .then((res) => {
+          setCurrentUser(res.data.data)
+        })
+        .finally(() => {
+          setIsAppReady(true)
+        })
     }
-  }, [token, isAppReady])
+  }, [token])
 
   if (!isAppReady) {
     return <FullLoading />

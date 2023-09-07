@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import Swal from 'sweetalert2'
+import _ from 'underscore'
 import { axiosInstance } from '@/api'
-import { LoginResponseType, LoginUserType } from '@/utils'
+import { LoginResponseType, UserType } from '@/utils'
 
 interface UseAuthStore {
   token: string | null
@@ -14,7 +15,8 @@ interface UseAuthStore {
     email: string
     password: string
   }) => Promise<any>
-  currentUser: LoginUserType | undefined
+  currentUser: UserType | undefined
+  setCurrentUser: (data: UserType) => void
 }
 
 const useAuthStore = create<UseAuthStore>((set) => ({
@@ -41,7 +43,6 @@ const useAuthStore = create<UseAuthStore>((set) => ({
               const data = res.data.data
               set(() => ({
                 token: data.access_token,
-                currentUser: data,
               }))
               localStorage.setItem('token', data.access_token)
               resolve(data)
@@ -54,6 +55,9 @@ const useAuthStore = create<UseAuthStore>((set) => ({
     })
   },
   currentUser: undefined,
+  setCurrentUser: (data) => {
+    set(() => ({ currentUser: data }))
+  },
 }))
 
 export { useAuthStore }

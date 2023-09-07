@@ -6,7 +6,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   variant?: 'filled' | 'outlined' | 'text'
   size?: 'small' | 'medium'
-  isblock?: boolean
+  block?: boolean
   loading?: boolean
 }
 
@@ -15,13 +15,14 @@ const Button: FC<ButtonProps> = (props) => {
     children,
     size = 'small',
     variant = 'filled',
-    isblock = false,
+    block = false,
     loading = false,
     disabled = false,
   } = props
 
   const buttonSize = () =>
     size === 'small' ? 'px-[15px] py-2' : 'px-[15px] py-2.5'
+
   const buttonVariant = () => {
     if (variant === 'filled') {
       return 'bg-main-blue-alurkerja text-white disabled:bg-grey-alurkerja-2 disabled:cursor-not-allowed'
@@ -31,7 +32,7 @@ const Button: FC<ButtonProps> = (props) => {
       return 'text-main-blue-alurkerja'
     }
   }
-  const buttonBlock = () => (isblock ? 'w-fit' : 'w-full')
+  const buttonBlock = () => (block ? 'w-fit' : 'w-full')
 
   return (
     <button
@@ -40,7 +41,7 @@ const Button: FC<ButtonProps> = (props) => {
         buttonBlock(),
         buttonSize(),
         buttonVariant(),
-        loading && 'flex items-center justify-center gap-1 '
+        loading && 'flex items-center justify-center gap-1'
       )}
       disabled={loading || disabled}
       {...props}
