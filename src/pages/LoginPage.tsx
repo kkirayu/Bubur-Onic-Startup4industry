@@ -54,20 +54,8 @@ const LoginPage = () => {
         <div className="relative z-20 flex items-center text-lg font-medium">
           Bubur Onic
         </div>
-        <div className="mt-auto flex items-center gap-4">
-          <img
-            className="h-10 w-auto object-cover"
-            src="/logo-pt.webp"
-            alt="PT. Rofindiya Ekamulia Sukses"
-          />
-          <img
-            className="h-10 w-auto object-cover"
-            src="/logo.webp"
-            alt="bubur onic"
-          />
-        </div>
       </div>
-      <div className="h-full p-6 lg:p-8 flex items-center justify-center md:justify-start">
+      <div className="h-full p-6 lg:p-8 flex items-center justify-center md:justify-start relative">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
@@ -129,6 +117,18 @@ const LoginPage = () => {
             Lupa password?
           </Link>
         </form>
+        <div className="absolute right-0 bottom-0 mb-6 mr-6 mt-auto flex items-center gap-4">
+          <img
+            className="h-10 w-auto object-cover"
+            src="/logo-pt.webp"
+            alt="PT. Rofindiya Ekamulia Sukses"
+          />
+          <img
+            className="h-20 w-auto object-cover"
+            src="/logo.webp"
+            alt="bubur onic"
+          />
+        </div>
       </div>
     </div>
   )
