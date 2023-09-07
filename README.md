@@ -18,11 +18,10 @@ Clone the project
   yarn install --frozen-lockfile
 ```
 
-```bash
-  git clone https://gitlab.javan.co.id/alurkerja-template/alurkerja-UI-starter.git
-  cd alurkerja-UI-starter
-  yarn
-```
+Copy paste env
+
+1. create file .env.local
+2. copy all from .env.example to .env.local
 
 Start the server
 
