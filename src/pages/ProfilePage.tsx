@@ -2,8 +2,10 @@ import { Input, ReactHookWrapper, Modal } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import _ from 'underscore'
 import { Button } from '@/components'
+import { useAuthStore } from '@/stores'
 
 const ProfilePage = () => {
+  const { currentUser } = useAuthStore()
   const hookFormProfile = useForm()
   const hookFormReset = useForm({
     defaultValues: {
@@ -33,11 +35,12 @@ const ProfilePage = () => {
 
       <ReactHookWrapper control={hookFormProfile.control}>
         <Input
-          name="fullname"
-          aria-label="Nama Lengkap"
+          name="name"
+          aria-label="Nama"
           onChange={(e) =>
             hookFormProfile.setValue(e.target.name, e.target.value)
           }
+          defaultValue={currentUser?.name}
         />
         <Input
           name="email"
@@ -46,6 +49,7 @@ const ProfilePage = () => {
           onChange={(e) =>
             hookFormProfile.setValue(e.target.name, e.target.value)
           }
+          defaultValue={currentUser?.email}
         />
         <Input
           name="birth_date"

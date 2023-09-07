@@ -1,11 +1,9 @@
 import { create } from 'zustand'
 import Swal from 'sweetalert2'
 import { axiosInstance } from '@/api'
-import { LoginResponseType } from '@/utils'
+import { LoginResponseType, LoginUserType } from '@/utils'
 
 interface UseAuthStore {
-  isAppReady: boolean
-  setIsAppReady: (value: boolean) => void
   token: string | null
   setToken: (value: string) => void
   logout: () => void
@@ -16,11 +14,10 @@ interface UseAuthStore {
     email: string
     password: string
   }) => Promise<any>
+  currentUser: LoginUserType | undefined
 }
 
 const useAuthStore = create<UseAuthStore>((set) => ({
-  isAppReady: false,
-  setIsAppReady: (value: boolean) => set(() => ({ isAppReady: value })),
   token: localStorage.getItem('token'),
   setToken: (value: string) => set(() => ({ token: value })),
   logout: () => {
@@ -42,7 +39,10 @@ const useAuthStore = create<UseAuthStore>((set) => ({
               timerProgressBar: true,
             }).then(() => {
               const data = res.data.data
-              set(() => ({ token: data.access_token }))
+              set(() => ({
+                token: data.access_token,
+                currentUser: data,
+              }))
               localStorage.setItem('token', data.access_token)
               resolve(data)
             })
@@ -53,6 +53,7 @@ const useAuthStore = create<UseAuthStore>((set) => ({
         })
     })
   },
+  currentUser: undefined,
 }))
 
 export { useAuthStore }

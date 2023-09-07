@@ -1,3 +1,4 @@
-import { LoginResponseType } from './loginResponseType'
+import { LoginResponseType, LoginUserType } from './loginResponseType'
+import { UserType } from './UserType'
 
-export type { LoginResponseType }
+export type { LoginResponseType, LoginUserType, UserType }

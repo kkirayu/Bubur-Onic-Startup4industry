@@ -12,7 +12,9 @@ import { useAuthStore } from '@/stores'
 export default function AdminLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { isAppReady, setIsAppReady, token, logout } = useAuthStore()
+  const { token, logout, currentUser } = useAuthStore()
+
+  const [isAppReady, setIsAppReady] = useState(false)
 
   const [toggled, setToggled] = useState(false)
 
@@ -28,7 +30,7 @@ export default function AdminLayout() {
       axiosInstance.interceptors.request.use(
         async (config) => {
           if (token) {
-            config.headers.Authorization = token
+            config.headers.Authorization = `Bearer ${token}`
           }
           return config
         },
@@ -69,6 +71,7 @@ export default function AdminLayout() {
         )}
       >
         <Header
+          role={currentUser?.name ?? 'Admin'}
           avatarContent={
             <div className="w-full">
               <div
