@@ -69,11 +69,7 @@ const ProfilePage = () => {
       <div className="flex items-center gap-4">
         <Modal
           title="Reset Password"
-          triggerButton={
-            <Button variant="text" className="text-main-blue-alurkerja">
-              Lupa Password?
-            </Button>
-          }
+          triggerButton={<Button variant="outlined">Ubah Password</Button>}
         >
           <div className="px-4 pt-4 space-y-6">
             <div>
