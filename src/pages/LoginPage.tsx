@@ -1,10 +1,10 @@
 import { FieldValues, useForm } from 'react-hook-form'
-import { Input } from 'alurkerja-ui'
+import { Input, StatusIcon } from 'alurkerja-ui'
 import { Link, useNavigate } from 'react-router-dom'
-import Swal from 'sweetalert2'
 
 import { Button } from '@/components'
 import { useAuthStore } from '@/stores'
+import { useState } from 'react'
 
 const LoginPage = () => {
   const {
@@ -13,24 +13,38 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   })
   const navigate = useNavigate()
   const { login } = useAuthStore()
 
-  const onSubmit = (data: FieldValues) => {
-    login('ini tokennya')
-    Swal.fire({
-      title: 'Berhasil Login!',
-      text: 'Selamat datang admin',
-      icon: 'success',
-      timer: 2000,
-      timerProgressBar: true,
-    }).then(() => {
-      navigate('/')
-    })
+  const [loading, setLoading] = useState({ login: false })
+  const [errorMessage, setErrorMessage] = useState<string>()
+
+  const handlerLoading = (key: string, value: boolean) => {
+    setLoading((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const onSubmit = async (data: FieldValues) => {
+    handlerLoading('login', true)
+    setErrorMessage(undefined)
+    await login({ email: data.email, password: data.password })
+      .then(() => {
+        navigate('/login')
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          setErrorMessage('Email / Password salah')
+          setTimeout(() => {
+            setErrorMessage(undefined)
+          }, 2500)
+        }
+      })
+      .finally(() => {
+        handlerLoading('login', false)
+      })
   }
 
   return (
@@ -51,18 +65,29 @@ const LoginPage = () => {
               Silahkan login menggunakan username
             </span>
           </div>
+          {errorMessage && (
+            <div
+              className={
+                'flex items-center gap-1 bg-red-50 px-4 py-2 rounded fixed top-0 right-0 mr-10 mt-10 shadow'
+              }
+            >
+              <StatusIcon type="danger" />
+              <span className="text-sm">{errorMessage}</span>
+            </div>
+          )}
+
           <div>
-            <label htmlFor="username">
-              Username <span className="text-red-600 text-sm">*</span>
+            <label htmlFor="email">
+              Email <span className="text-red-600 text-sm">*</span>
             </label>
             <Input
-              {...register('username', {
+              {...register('email', {
                 required: { message: 'this field required', value: true },
               })}
-              type="text"
+              type="email"
             />
             <span className="text-xs text-red-400" role="alert">
-              {errors?.username?.message}
+              {errors?.email?.message}
             </span>
           </div>
           <div>
@@ -79,7 +104,7 @@ const LoginPage = () => {
               {errors?.password?.message}
             </span>
           </div>
-          <Button>Login</Button>
+          <Button loading={loading.login}>Login</Button>
 
           <Link to="/register">
             <Button variant="outlined">Register</Button>

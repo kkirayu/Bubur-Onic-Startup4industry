@@ -1,4 +1,7 @@
 import { create } from 'zustand'
+import Swal from 'sweetalert2'
+import { axiosInstance } from '@/api'
+import { LoginResponseType } from '@/utils'
 
 interface UseAuthStore {
   isAppReady: boolean
@@ -6,7 +9,13 @@ interface UseAuthStore {
   token: string | null
   setToken: (value: string) => void
   logout: () => void
-  login: (token: string) => void
+  login: ({
+    email,
+    password,
+  }: {
+    email: string
+    password: string
+  }) => Promise<any>
 }
 
 const useAuthStore = create<UseAuthStore>((set) => ({
@@ -18,9 +27,31 @@ const useAuthStore = create<UseAuthStore>((set) => ({
     set(() => ({ token: null }))
     localStorage.removeItem('token')
   },
-  login: (token) => {
-    set(() => ({ token: token }))
-    localStorage.setItem('token', token)
+  login: async ({ email, password }) => {
+    const payload = { email, password }
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post<LoginResponseType>('/auth/login', payload)
+        .then((res) => {
+          if (res.status === 200) {
+            Swal.fire({
+              title: 'Berhasil Login!',
+              text: 'Selamat datang admin',
+              icon: 'success',
+              timer: 2000,
+              timerProgressBar: true,
+            }).then(() => {
+              const data = res.data.data
+              set(() => ({ token: data.access_token }))
+              localStorage.setItem('token', data.access_token)
+              resolve(data)
+            })
+          }
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   },
 }))
 

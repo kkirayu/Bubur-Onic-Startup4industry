@@ -1,3 +1,4 @@
+import { Spinner } from 'alurkerja-ui'
 import clsx from 'clsx'
 import { ButtonHTMLAttributes, FC, ReactNode } from 'react'
 
@@ -6,6 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'filled' | 'outlined' | 'text'
   size?: 'small' | 'medium'
   isblock?: boolean
+  loading?: boolean
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -14,6 +16,7 @@ const Button: FC<ButtonProps> = (props) => {
     size = 'small',
     variant = 'filled',
     isblock = false,
+    loading = false,
   } = props
 
   const buttonSize = () =>
@@ -35,10 +38,12 @@ const Button: FC<ButtonProps> = (props) => {
         'rounded-md',
         buttonBlock(),
         buttonSize(),
-        buttonVariant()
+        buttonVariant(),
+        loading && 'flex items-center justify-center gap-1'
       )}
       {...props}
     >
+      {loading && <Spinner />}
       {children}
     </button>
   )
