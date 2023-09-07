@@ -27,12 +27,12 @@ const LoginPage = () => {
     setLoading((prev) => ({ ...prev, [key]: value }))
   }
 
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = (data: FieldValues) => {
     handlerLoading('login', true)
     setErrorMessage(undefined)
-    await login({ email: data.email, password: data.password })
+    login({ email: data.email, password: data.password })
       .then(() => {
-        navigate('/login')
+        navigate('/')
       })
       .catch((err) => {
         if (err.response.status === 401) {
