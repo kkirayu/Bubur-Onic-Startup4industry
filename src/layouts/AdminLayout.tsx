@@ -59,7 +59,12 @@ export default function AdminLayout() {
     <div className="max-w-screen">
       <div className="fixed">
         <Sidebar
-          logo={<>Bubur Onic</>}
+          logo={
+            <img
+              className="h-16 w-auto aspect-auto object-cover"
+              src="/logo.webp"
+            />
+          }
           toggled={toggled}
           setToggled={setToggled}
           menuConfig={menuConfig}
