@@ -15,6 +15,14 @@ interface UseAuthStore {
     email: string
     password: string
   }) => Promise<any>
+  registerUser: ({
+    email,
+    password,
+  }: {
+    name: string
+    email: string
+    password: string
+  }) => Promise<any>
   currentUser: UserType | undefined
   setCurrentUser: (data: UserType) => void
 }
@@ -45,6 +53,30 @@ const useAuthStore = create<UseAuthStore>((set) => ({
                 token: data.access_token,
               }))
               localStorage.setItem('token', data.access_token)
+              resolve(data)
+            })
+          }
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  registerUser: async ({ name, email, password }) => {
+    const payload = { email, password, name }
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post<LoginResponseType>('/auth/register', payload)
+        .then((res) => {
+          if (res.status === 200) {
+            Swal.fire({
+              title: 'Berhasil Login!',
+              text: 'Selamat datang admin',
+              icon: 'success',
+              timer: 2000,
+              timerProgressBar: true,
+            }).then(() => {
+              const data = res.data.data
               resolve(data)
             })
           }

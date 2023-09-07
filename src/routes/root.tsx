@@ -3,20 +3,14 @@ import { Outlet, createBrowserRouter } from 'react-router-dom'
 // layouts
 import { AdminLayout } from '@/layouts'
 
+import { Starter, NotFound, Error } from '@/pages'
 import {
-  StarterPage,
-  LoginPage,
-  ForgotPassword,
-  NotFound,
-  ErrorPage,
-  ProfilePage,
-  ResetPasswordPage,
-} from '@/pages'
-import {
+  Profile,
   UserManagement,
   RoleManagement,
   UnactiveUserManagement,
 } from '@/pages/admin'
+import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
 
 const router = createBrowserRouter([
   {
@@ -26,31 +20,37 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Outlet />,
-    errorElement: <ErrorPage />,
-    children: [{ index: true, element: <LoginPage /> }],
+    errorElement: <Error />,
+    children: [{ index: true, element: <Login /> }],
+  },
+  {
+    path: '/register',
+    element: <Outlet />,
+    errorElement: <Error />,
+    children: [{ index: true, element: <Register /> }],
   },
   {
     path: '/forgot-password',
     element: <Outlet />,
-    errorElement: <ErrorPage />,
+    errorElement: <Error />,
 
     children: [{ index: true, element: <ForgotPassword /> }],
   },
   {
     path: '/reset-password',
     element: <Outlet />,
-    errorElement: <ErrorPage />,
+    errorElement: <Error />,
 
-    children: [{ index: true, element: <ResetPasswordPage /> }],
+    children: [{ index: true, element: <ResetPassword /> }],
   },
   {
     path: '/',
     element: <AdminLayout />,
-    errorElement: <ErrorPage />,
+    errorElement: <Error />,
     children: [
       { index: true, element: <></> },
-      { path: 'profile', element: <ProfilePage /> },
-      { path: 'starter', element: <StarterPage /> },
+      { path: 'profile', element: <Profile /> },
+      { path: 'starter', element: <Starter /> },
       {
         path: 'admin',
         element: <Outlet />,

@@ -4,10 +4,9 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components'
 import { useAuthStore } from '@/stores'
-import { useEffect, useState } from 'react'
-import { axiosInstance } from '@/api'
+import { useState } from 'react'
 
-const LoginPage = () => {
+const Login = () => {
   const {
     handleSubmit,
     register,
@@ -129,4 +128,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default Login

@@ -1,19 +1,6 @@
-import StarterPage from './StarterPage'
-import LoginPage from './LoginPage'
-import FullLoading from './FullLoadingPage'
-import ForgotPassword from './ForgotPasswordPage'
+import Starter from './Starter'
+import FullLoading from './FullLoading'
 import NotFound from './404Page'
-import ErrorPage from './500Page'
-import ProfilePage from './ProfilePage'
-import ResetPasswordPage from './ResetPasswordPage'
+import Error from './500Page'
 
-export {
-  StarterPage,
-  LoginPage,
-  FullLoading,
-  ForgotPassword,
-  NotFound,
-  ErrorPage,
-  ProfilePage,
-  ResetPasswordPage,
-}
+export { Starter, FullLoading, NotFound, Error }
