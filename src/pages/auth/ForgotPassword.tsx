@@ -37,7 +37,10 @@ const ForgotPassword = () => {
       .catch((err) => {
         Swal.fire({
           title: 'Gagal!',
-          text: 'Gagal mengirimkan email',
+          text:
+            err.response.status === 422
+              ? err.response.data.message
+              : 'Gagal mengirim email',
           icon: 'error',
           timer: 2000,
           timerProgressBar: true,

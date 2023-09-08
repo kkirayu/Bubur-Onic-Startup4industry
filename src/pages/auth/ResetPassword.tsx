@@ -5,6 +5,7 @@ import Swal from 'sweetalert2'
 import { Button } from '@/components'
 import { NotFound } from '@/pages'
 import { axiosInstance } from '@/api'
+import { useState } from 'react'
 
 const ResetPasswordPage = () => {
   const searchParams = new URLSearchParams(window.location.search)
@@ -23,7 +24,10 @@ const ResetPasswordPage = () => {
     },
   })
 
+  const [loading, setLoading] = useState(false)
+
   const onSubmit = (data: FieldValues) => {
+    setLoading(true)
     axiosInstance
       .post('/auth/password/reset', { email, token, ...data })
       .then((res) => {
@@ -42,11 +46,17 @@ const ResetPasswordPage = () => {
       .catch((err) => {
         Swal.fire({
           title: 'Gagal!',
-          text: 'Gagal mengganti password',
+          text:
+            err.response.status === 422
+              ? err.response.data.message
+              : 'Gagal mengganti password',
           icon: 'error',
           timer: 2000,
           timerProgressBar: true,
         })
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }
 
@@ -102,7 +112,7 @@ const ResetPasswordPage = () => {
             </span>
           </div>
 
-          <Button>Reset Password</Button>
+          <Button loading={loading}>Reset Password</Button>
           <Link
             className="text-center text-main-blue-alurkerja text-sm"
             to="/login"
