@@ -125,7 +125,7 @@ const Login = () => {
           <img
             className="h-10 w-auto object-cover"
             src="/logo.webp"
-            alt="bubur onic"
+            alt="PT Rofindiya Ekamulia Sukses"
           />
         </div>
       </div>
