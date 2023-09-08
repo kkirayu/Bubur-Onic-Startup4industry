@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { Input } from 'alurkerja-ui'
-import { Button } from '@/components'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import { Button } from '@/components'
+import { axiosInstance } from '@/api'
 
 const ForgotPassword = () => {
   const {
@@ -14,8 +17,35 @@ const ForgotPassword = () => {
     },
   })
 
+  const [loading, setLoading] = useState(false)
+
   const onSubmit = (data: FieldValues) => {
-    console.log(data)
+    setLoading(true)
+    axiosInstance
+      .post('/auth/password/email', { email: data.email, type: 'email' })
+      .then((res) => {
+        if (res.status === 200) {
+          Swal.fire({
+            title: 'Berhasil!',
+            text: 'Silahkan check email untuk mereset password',
+            icon: 'success',
+            timer: 2000,
+            timerProgressBar: true,
+          })
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: 'Gagal!',
+          text: 'Gagal mengirimkan email',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   return (
@@ -50,7 +80,7 @@ const ForgotPassword = () => {
             </span>
           </div>
 
-          <Button>Kirim Email</Button>
+          <Button loading={loading}>Kirim Email</Button>
           <Link
             className="text-center text-main-blue-alurkerja text-sm"
             to="/login"

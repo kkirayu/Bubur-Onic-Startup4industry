@@ -1,22 +1,59 @@
 import { FieldValues, useForm } from 'react-hook-form'
 import { Input } from 'alurkerja-ui'
+import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { Button } from '@/components'
-import { Link } from 'react-router-dom'
+import { NotFound } from '@/pages'
+import { axiosInstance } from '@/api'
 
 const ResetPasswordPage = () => {
+  const searchParams = new URLSearchParams(window.location.search)
+  const token = searchParams.get('token')
+  const email = searchParams.get('email')
+
+  const navigate = useNavigate()
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      newPassword: '',
-      confirmNewPassword: '',
+      password: '',
+      password_confirmation: '',
     },
   })
 
   const onSubmit = (data: FieldValues) => {
-    console.log(data)
+    axiosInstance
+      .post('/auth/password/reset', { email, token, ...data })
+      .then((res) => {
+        if (res.status === 200) {
+          Swal.fire({
+            title: 'Berhasil!',
+            text: 'Berhasil mengganti password',
+            icon: 'success',
+            timer: 2000,
+            timerProgressBar: true,
+          }).then(() => {
+            navigate('/login')
+          })
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: 'Gagal!',
+          text: 'Gagal mengganti password',
+          icon: 'error',
+          timer: 2000,
+          timerProgressBar: true,
+        })
+      })
+  }
+
+  if (!token) {
+    return <NotFound />
+  } else if (!email) {
+    return <NotFound />
   }
 
   return (
@@ -36,32 +73,32 @@ const ResetPasswordPage = () => {
             </span>
           </div>
           <div>
-            <label htmlFor="email">
+            <label htmlFor="password">
               Password Baru <span className="text-red-600 text-sm">*</span>
             </label>
             <Input
-              {...register('newPassword', {
+              {...register('password', {
                 required: { message: 'this field required', value: true },
               })}
               type="password"
             />
             <span className="text-xs text-red-400" role="alert">
-              {errors?.newPassword?.message}
+              {errors?.password?.message}
             </span>
           </div>
           <div>
-            <label htmlFor="confirmNewPassword">
+            <label htmlFor="password_confirmation">
               Konfirmasi Password Baru
               <span className="text-red-600 text-sm">*</span>
             </label>
             <Input
-              {...register('confirmNewPassword', {
+              {...register('password_confirmation', {
                 required: { message: 'this field required', value: true },
               })}
               type="password"
             />
             <span className="text-xs text-red-400" role="alert">
-              {errors?.confirmNewPassword?.message}
+              {errors?.password_confirmation?.message}
             </span>
           </div>
 
