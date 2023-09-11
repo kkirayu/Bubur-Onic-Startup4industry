@@ -13,7 +13,8 @@ import { AxiosResponse } from 'axios'
 export default function AdminLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { token, logout, currentUser, setCurrentUser } = useAuthStore()
+  const { token, logout, currentUser, setCurrentUser, setToken } =
+    useAuthStore()
 
   const [isAppReady, setIsAppReady] = useState(false)
 
@@ -37,6 +38,21 @@ export default function AdminLayout() {
         },
         (err) => {
           return Promise.reject(err)
+        }
+      )
+
+      axiosInstance.interceptors.response.use(
+        (response) => {
+          // Any status code that lie within the range of 2xx cause this function to trigger
+
+          return response
+        },
+        (error) => {
+          // Any status codes that falls outside the range of 2xx cause this function to trigger
+          if (error.response.status === 401) {
+            logout()
+          }
+          return Promise.reject(error)
         }
       )
 

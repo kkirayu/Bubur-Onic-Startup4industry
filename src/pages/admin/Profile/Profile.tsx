@@ -3,30 +3,71 @@ import { FieldValues, useForm } from 'react-hook-form'
 import _ from 'underscore'
 import { Button } from '@/components'
 import { useAuthStore } from '@/stores'
+import { axiosInstance } from '@/api'
+import Swal from 'sweetalert2'
+import { useState } from 'react'
 
 const ProfilePage = () => {
   const { currentUser } = useAuthStore()
   const hookFormProfile = useForm()
   const hookFormReset = useForm({
     defaultValues: {
-      newPassword: '',
-      confirmNewPassword: '',
+      current_password: '',
+      new_password: '',
+      new_password_confirmation: '',
     },
   })
 
-  const onEditProfile = (data: FieldValues) => {
-    const payload = _.omit(data, 'confirmNewPassword', 'newPassword')
+  const [loaders, setLoaders] = useState({
+    SUBMIT_NEW_PASSWORD: false,
+    SUBMIT_PROFILE: false,
+  })
 
-    console.log(payload)
+  const handleLoader = (key: string, value: boolean) => {
+    setLoaders((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const onEditProfile = (data: FieldValues) => {
+    console.log(data)
   }
 
   const onResetPassword = (data: FieldValues) => {
-    const payload = {
-      confirmNewPassword: data.confirmNewPassword,
-      newPassword: data.newPassword,
-    }
-
-    console.log(payload)
+    handleLoader('SUBMIT_NEW_PASSWORD', true)
+    axiosInstance
+      .post('/auth/password/confirm', data)
+      .then((res) => {
+        if (res.status === 200) {
+          Swal.fire({
+            title: 'Berhasil!',
+            text: 'Password berhasil diganti',
+            icon: 'success',
+            timer: 2000,
+            timerProgressBar: true,
+          })
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 422) {
+          Swal.fire({
+            title: 'Gagal!',
+            text: err.response.data.message,
+            icon: 'info',
+            timer: 2000,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            title: 'Gagal!',
+            text: 'Password gagal diganti',
+            icon: 'error',
+            timer: 2000,
+            timerProgressBar: true,
+          })
+        }
+      })
+      .finally(() => {
+        handleLoader('SUBMIT_NEW_PASSWORD', false)
+      })
   }
 
   return (
@@ -77,38 +118,57 @@ const ProfilePage = () => {
         >
           <div className="px-4 pt-4 space-y-6">
             <div>
-              <label htmlFor="email">
-                Password Baru <span className="text-red-600 text-sm">*</span>
+              <label htmlFor="current_password">
+                Password Lama <span className="text-red-600 text-sm">*</span>
               </label>
               <Input
-                {...hookFormReset.register('newPassword', {
+                {...hookFormReset.register('current_password', {
                   required: { message: 'this field required', value: true },
                 })}
                 type="password"
               />
               <span className="text-xs text-red-400" role="alert">
-                {hookFormReset.formState.errors?.newPassword?.message}
+                {hookFormReset.formState.errors?.new_password?.message}
               </span>
             </div>
             <div>
-              <label htmlFor="confirmNewPassword">
+              <label htmlFor="new_password">
+                Password Baru <span className="text-red-600 text-sm">*</span>
+              </label>
+              <Input
+                {...hookFormReset.register('new_password', {
+                  required: { message: 'this field required', value: true },
+                })}
+                type="password"
+              />
+              <span className="text-xs text-red-400" role="alert">
+                {hookFormReset.formState.errors?.new_password?.message}
+              </span>
+            </div>
+            <div>
+              <label htmlFor="new_password_confirmation">
                 Konfirmasi Password Baru
                 <span className="text-red-600 text-sm">*</span>
               </label>
               <Input
-                {...hookFormReset.register('confirmNewPassword', {
+                {...hookFormReset.register('new_password_confirmation', {
                   required: { message: 'this field required', value: true },
                 })}
                 type="password"
               />
               <span className="text-xs text-red-400" role="alert">
-                {hookFormReset.formState.errors?.confirmNewPassword?.message}
+                {
+                  hookFormReset.formState.errors?.new_password_confirmation
+                    ?.message
+                }
               </span>
             </div>
             <div className="w-fit ml-auto">
               <Button
                 block
                 onClick={() => hookFormReset.handleSubmit(onResetPassword)()}
+                disabled={loaders.SUBMIT_NEW_PASSWORD}
+                loading={loaders.SUBMIT_NEW_PASSWORD}
               >
                 Reset Password
               </Button>
