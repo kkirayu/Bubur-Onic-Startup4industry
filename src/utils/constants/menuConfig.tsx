@@ -1,9 +1,20 @@
-import { UserCog, Home, Lock, User, UserX2 } from 'lucide-react'
+import { UserCog, Home, Lock, User, UserX2, Building2 } from 'lucide-react'
 import type { MenuConfig } from 'alurkerja-ui'
 
 export const menuConfig: MenuConfig[] = [
-  { href: '/', label: 'Home', icon: <Home size={20} /> },
-  { href: '/starter', label: 'Alurkerja Example' },
+  {
+    href: '/',
+    label: 'Home',
+    icon: <Home size={20} />,
+    child: [
+      {
+        href: '/company',
+        label: 'Company',
+        icon: <Building2 size={20} />,
+      },
+    ],
+  },
+
   {
     href: '/admin',
     label: 'Administrator',

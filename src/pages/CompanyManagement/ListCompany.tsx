@@ -1,18 +1,18 @@
 import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 
-function UserManagement() {
+export function ListCompany() {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
-  const [selectedRow, setSelectedRow] = useState<number[]>([])
 
   return (
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        tableName="user"
+        tableName="perusahaan"
+        module="saas"
         renderState={renderState}
         setRenderState={setRenderState}
         pageConfig={pageConfig}
@@ -21,11 +21,7 @@ function UserManagement() {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
-        selectedRow={selectedRow}
-        setSelectedRow={setSelectedRow}
       />
     </section>
   )
 }
-
-export default UserManagement
