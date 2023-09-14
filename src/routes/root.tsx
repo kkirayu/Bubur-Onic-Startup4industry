@@ -3,7 +3,7 @@ import { Outlet, createBrowserRouter } from 'react-router-dom'
 // layouts
 import { AdminLayout } from '@/layouts'
 
-import { NotFound, Error, ListCompany } from '@/pages'
+import { NotFound, Error, ListCompany, CreateCompany } from '@/pages'
 import {
   Profile,
   UserManagement,
@@ -50,7 +50,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <></> },
       { path: 'profile', element: <Profile /> },
-      { path: 'company', element: <ListCompany /> },
+      {
+        path: 'company',
+        element: <Outlet />,
+        children: [
+          { path: 'list', element: <ListCompany /> },
+          { path: 'create', element: <CreateCompany /> },
+        ],
+      },
 
       {
         path: 'admin',

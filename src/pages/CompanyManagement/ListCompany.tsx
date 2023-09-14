@@ -21,6 +21,7 @@ export function ListCompany() {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
+        customButtonCreate={() => <></>}
       />
     </section>
   )
