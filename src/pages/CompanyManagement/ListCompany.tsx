@@ -1,4 +1,4 @@
-import { TableLowcode } from 'alurkerja-ui'
+import { Switch, TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -26,8 +26,24 @@ export function ListCompany() {
         setSearch={setSearch}
         customButtonCreate={() => <></>}
         onClickDetail={(id) => {
-          console.log('run')
           navigate('/company/' + id)
+        }}
+        customField={({ defaultField, field, setValue, value }) => {
+          if (field.name === 'status_perusahaan') {
+            return (
+              <Switch
+                options={[
+                  { label: 'Aktif', value: true },
+                  { label: 'Nonaktif', value: false },
+                ]}
+                onChange={(v) =>
+                  setValue(field.name, v ? 'AKTIF' : 'TIDAK AKTIF')
+                }
+                defaultValue={value === 'AKTIF' ? true : false}
+              />
+            )
+          }
+          return defaultField
         }}
       />
     </section>

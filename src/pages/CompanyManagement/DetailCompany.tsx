@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { axiosInstance } from '@/api'
 import { DetailCompanyResponse, CompanyType } from 'utils'
+import { Button } from '@/components'
 
 export const DetailCompany = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
 
   const [company, setCompany] = useState<CompanyType>()
 
@@ -43,6 +45,9 @@ export const DetailCompany = () => {
           </li>
         ))}
       </ul>
+      <Button variant="outlined" block onClick={() => navigate(-1)}>
+        Kembali
+      </Button>
     </div>
   )
 }
