@@ -1,7 +1,10 @@
 import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export function ListCompany() {
+  const navigate = useNavigate()
+
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -22,6 +25,10 @@ export function ListCompany() {
         search={search}
         setSearch={setSearch}
         customButtonCreate={() => <></>}
+        onClickDetail={(id) => {
+          console.log('run')
+          navigate('/company/' + id)
+        }}
       />
     </section>
   )

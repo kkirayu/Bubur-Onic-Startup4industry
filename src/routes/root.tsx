@@ -11,6 +11,7 @@ import {
   UnactiveUserManagement,
 } from '@/pages/admin'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
+import { DetailCompany } from '@/pages/CompanyManagement'
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
         children: [
           { path: 'list', element: <ListCompany /> },
           { path: 'create', element: <CreateCompany /> },
+          { path: ':id', element: <DetailCompany /> },
         ],
       },
 
