@@ -3,9 +3,11 @@ import React, { useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { axiosInstance } from '@/api'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 export const CreateCompany = () => {
   const { control, handleSubmit, register } = useForm()
+  const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
 
@@ -21,6 +23,8 @@ export const CreateCompany = () => {
             icon: 'success',
             timer: 2000,
             timerProgressBar: true,
+          }).then(() => {
+            navigate('/company/list')
           })
         }
       })
