@@ -13,8 +13,7 @@ import { AxiosResponse } from 'axios'
 export default function AdminLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { token, logout, currentUser, setCurrentUser, setToken } =
-    useAuthStore()
+  const { token, logout, currentUser, setCurrentUser } = useAuthStore()
 
   const [isAppReady, setIsAppReady] = useState(false)
 

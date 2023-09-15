@@ -24,6 +24,25 @@ export const CreateCompany = () => {
           })
         }
       })
+      .catch((err) => {
+        if (err.response.status === 422) {
+          Swal.fire({
+            title: 'Error!',
+            text: err.response.data.message,
+            icon: 'error',
+            timer: 2000,
+            timerProgressBar: true,
+          })
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Gagal mendaftarkan perusahaan',
+            icon: 'error',
+            timer: 2000,
+            timerProgressBar: true,
+          })
+        }
+      })
       .finally(() => {
         setLoading(false)
       })
