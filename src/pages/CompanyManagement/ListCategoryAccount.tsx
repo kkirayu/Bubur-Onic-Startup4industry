@@ -1,7 +1,7 @@
 import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 
-export const CategoryAccountManagement = () => {
+export const ListCategoryAccount = () => {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -11,7 +11,8 @@ export const CategoryAccountManagement = () => {
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        tableName="kategori_akun"
+        tableName="kategori-akun"
+        module="akun"
         renderState={renderState}
         setRenderState={setRenderState}
         pageConfig={pageConfig}

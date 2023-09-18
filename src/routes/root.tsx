@@ -16,7 +16,7 @@ import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
 
 import {
   DetailCompany,
-  CategoryAccountManagement,
+  ListCategoryAccount,
   ListBranch,
   CreateCompany,
   ListCompany,
@@ -66,7 +66,7 @@ const router = createBrowserRouter([
         children: [
           { path: 'list', element: <ListCompany /> },
           { path: 'create', element: <CreateCompany /> },
-          { path: 'category-account', element: <CategoryAccountManagement /> },
+          { path: 'category-account', element: <ListCategoryAccount /> },
           {
             path: ':id',
             element: <Outlet />,
