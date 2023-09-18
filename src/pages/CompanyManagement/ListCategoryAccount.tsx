@@ -21,7 +21,6 @@ export const ListCategoryAccount = () => {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
-        customButtonCreate={() => <></>}
       />
     </section>
   )
