@@ -66,7 +66,7 @@ const router = createBrowserRouter([
         children: [
           { path: 'list', element: <ListCompany /> },
           { path: 'create', element: <CreateCompany /> },
-          { path: 'category-account', element: <ListCategoryAccount /> },
+
           {
             path: ':id',
             element: <Outlet />,
@@ -79,23 +79,13 @@ const router = createBrowserRouter([
       },
 
       {
-        path: 'admin',
+        path: 'master',
         element: <Outlet />,
         children: [
-          { path: 'user-management', element: <UserManagement /> },
-          { path: 'role-management', element: <RoleManagement /> },
-          {
-            path: 'unactive-user-management',
-            element: <UnactiveUserManagement />,
-          },
-          {
-            path: 'bonus-management',
-            element: <ListBonus />,
-          },
-          {
-            path: 'denda-management',
-            element: <ListDenda />,
-          },
+          { path: 'kategori-akun', element: <ListCategoryAccount /> },
+          { path: 'user', element: <UserManagement /> },
+          { path: 'role', element: <RoleManagement /> },
+          { path: 'unactive-user', element: <UnactiveUserManagement /> },
         ],
       },
     ],
