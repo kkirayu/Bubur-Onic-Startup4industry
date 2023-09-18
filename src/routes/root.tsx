@@ -3,7 +3,7 @@ import { Outlet, createBrowserRouter } from 'react-router-dom'
 // layouts
 import { AdminLayout } from '@/layouts'
 
-import { NotFound, Error, ListCompany, CreateCompany } from '@/pages'
+import { NotFound, Error } from '@/pages'
 import {
   Profile,
   UserManagement,
@@ -11,7 +11,13 @@ import {
   UnactiveUserManagement,
 } from '@/pages/admin'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
-import { DetailCompany } from '@/pages/CompanyManagement'
+import {
+  DetailCompany,
+  CategoryAccountManagement,
+  ListBranch,
+  CreateCompany,
+  ListCompany,
+} from '@/pages/CompanyManagement'
 
 const router = createBrowserRouter([
   {
@@ -57,7 +63,15 @@ const router = createBrowserRouter([
         children: [
           { path: 'list', element: <ListCompany /> },
           { path: 'create', element: <CreateCompany /> },
-          { path: ':id', element: <DetailCompany /> },
+          { path: 'category-account', element: <CategoryAccountManagement /> },
+          {
+            path: ':id',
+            element: <Outlet />,
+            children: [
+              { index: true, element: <DetailCompany /> },
+              { path: 'branch', element: <ListBranch /> },
+            ],
+          },
         ],
       },
 

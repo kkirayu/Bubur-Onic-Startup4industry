@@ -1,7 +1,7 @@
 import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 
-function UnactiveUserManagement() {
+export const CategoryAccountManagement = () => {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -11,7 +11,7 @@ function UnactiveUserManagement() {
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        tableName="user/NotActive"
+        tableName="kategori_akun"
         renderState={renderState}
         setRenderState={setRenderState}
         pageConfig={pageConfig}
@@ -20,9 +20,8 @@ function UnactiveUserManagement() {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
+        customButtonCreate={() => <></>}
       />
     </section>
   )
 }
-
-export default UnactiveUserManagement

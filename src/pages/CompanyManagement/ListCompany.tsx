@@ -1,6 +1,7 @@
 import { Switch, TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Split } from 'lucide-react'
 
 export function ListCompany() {
   const navigate = useNavigate()
@@ -45,6 +46,15 @@ export function ListCompany() {
           }
           return defaultField
         }}
+        extraActionButton={(data) => (
+          <button
+            type="button"
+            className="bg-gray-100 text-gray-400 h-7 w-7 inline-flex items-center justify-center text-base p-2 rounded"
+            onClick={() => navigate('/company/' + data.id + '/branch')}
+          >
+            <Split size={10} />
+          </button>
+        )}
       />
     </section>
   )

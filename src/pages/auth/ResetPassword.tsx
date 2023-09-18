@@ -78,7 +78,7 @@ const ResetPasswordPage = () => {
             <h1 className="text-2xl font-semibold tracking-tight">
               Reset Password
             </h1>
-            <span className="text-grey-alurkerja-1 text-sm">
+            <span className="text-gray-alurkerja-1 text-sm">
               Silahkan masukkan password baru
             </span>
           </div>

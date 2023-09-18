@@ -6,6 +6,7 @@ import {
   UserX2,
   Building2,
   Plus,
+  Users2,
 } from 'lucide-react'
 import type { MenuConfig } from 'alurkerja-ui'
 
@@ -24,6 +25,11 @@ export const menuConfig: MenuConfig[] = [
         href: '/company/list',
         label: 'List',
         icon: <List size={20} />,
+      },
+      {
+        href: '/company/category-account',
+        label: 'Kategori Akun',
+        icon: <Users2 size={20} />,
       },
     ],
   },

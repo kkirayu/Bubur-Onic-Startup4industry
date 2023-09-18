@@ -30,7 +30,7 @@ export default {
             2: '#3F4254',
           },
         },
-        grey: {
+        gray: {
           alurkerja: {
             1: '#7E8299',
             2: '#B5B5C3',

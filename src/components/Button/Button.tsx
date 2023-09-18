@@ -25,7 +25,7 @@ const Button: FC<ButtonProps> = (props) => {
 
   const buttonVariant = () => {
     if (variant === 'filled') {
-      return 'bg-main-blue-alurkerja text-white disabled:bg-grey-alurkerja-2 disabled:cursor-not-allowed'
+      return 'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2 disabled:cursor-not-allowed'
     } else if (variant === 'outlined') {
       return 'text-main-blue-alurkerja border border-main-blue-alurkerja'
     } else {
