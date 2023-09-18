@@ -9,8 +9,11 @@ import {
   UserManagement,
   RoleManagement,
   UnactiveUserManagement,
+  ListBonus,
+  ListDenda,
 } from '@/pages/admin'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
+
 import {
   DetailCompany,
   CategoryAccountManagement,
@@ -84,6 +87,14 @@ const router = createBrowserRouter([
           {
             path: 'unactive-user-management',
             element: <UnactiveUserManagement />,
+          },
+          {
+            path: 'bonus-management',
+            element: <ListBonus />,
+          },
+          {
+            path: 'denda-management',
+            element: <ListDenda />,
           },
         ],
       },

@@ -1,0 +1,1 @@
+export { ListDenda } from './ListDenda'

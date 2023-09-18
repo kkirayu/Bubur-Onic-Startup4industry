@@ -7,6 +7,8 @@ import {
   Building2,
   Plus,
   Users2,
+  BadgeDollarSign,
+  BadgePercent,
 } from 'lucide-react'
 import type { MenuConfig } from 'alurkerja-ui'
 
@@ -53,6 +55,16 @@ export const menuConfig: MenuConfig[] = [
         href: '/admin/unactive-user-management',
         label: 'Unactive User Management',
         icon: <UserX2 size={20} />,
+      },
+      {
+        href: '/admin/bonus-management',
+        label: 'Bonus Management',
+        icon: <BadgeDollarSign size={20} />,
+      },
+      {
+        href: '/admin/denda-management',
+        label: 'Denda Management',
+        icon: <BadgePercent size={20} />,
       },
     ],
   },
