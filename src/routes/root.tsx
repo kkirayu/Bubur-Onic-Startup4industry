@@ -3,6 +3,7 @@ import { Outlet, createBrowserRouter } from 'react-router-dom'
 // layouts
 import { AdminLayout } from '@/layouts'
 
+// pages
 import { NotFound, Error } from '@/pages'
 import {
   Profile,
@@ -11,16 +12,30 @@ import {
   UnactiveUserManagement,
   ListBonus,
   ListDenda,
-} from '@/pages/admin'
+} from '@/pages/master'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
-
 import {
   DetailCompany,
   ListCategoryAccount,
   ListBranch,
   CreateCompany,
   ListCompany,
-} from '@/pages/CompanyManagement'
+} from '@/pages/company'
+import {
+  AkunManagement,
+  Aset,
+  Hutang,
+  Journal,
+  KasBank,
+  Piutang,
+} from '@/pages/keuangan'
+import {
+  BukuBesar,
+  LabaRugi,
+  ListJournal,
+  Neraca,
+  PenambahanModal,
+} from '@/pages/laporan-keuangan'
 
 const router = createBrowserRouter([
   {
@@ -77,7 +92,29 @@ const router = createBrowserRouter([
           },
         ],
       },
-
+      {
+        path: 'keuangan',
+        element: <Outlet />,
+        children: [
+          { path: 'manajemen-akun', element: <AkunManagement /> },
+          { path: 'aset', element: <Aset /> },
+          { path: 'hutang', element: <Hutang /> },
+          { path: 'kas-bank', element: <KasBank /> },
+          { path: 'piutang', element: <Piutang /> },
+          { path: 'journal', element: <Journal /> },
+        ],
+      },
+      {
+        path: 'laporan-keuangan',
+        element: <Outlet />,
+        children: [
+          { path: 'daftar-jurnal', element: <ListJournal /> },
+          { path: 'buku-besar', element: <BukuBesar /> },
+          { path: 'neraca', element: <Neraca /> },
+          { path: 'laba-rugi', element: <LabaRugi /> },
+          { path: 'penambahan-modal', element: <PenambahanModal /> },
+        ],
+      },
       {
         path: 'master',
         element: <Outlet />,
@@ -86,6 +123,8 @@ const router = createBrowserRouter([
           { path: 'user', element: <UserManagement /> },
           { path: 'role', element: <RoleManagement /> },
           { path: 'unactive-user', element: <UnactiveUserManagement /> },
+          { path: 'bonus', element: <ListBonus /> },
+          { path: 'denda', element: <ListDenda /> },
         ],
       },
     ],
