@@ -21,16 +21,16 @@ export const menuMaster = [
         <path
           d="M15.8333 9.16663H4.16667C3.24619 9.16663 2.5 9.91282 2.5 10.8333V16.6666C2.5 17.5871 3.24619 18.3333 4.16667 18.3333H15.8333C16.7538 18.3333 17.5 17.5871 17.5 16.6666V10.8333C17.5 9.91282 16.7538 9.16663 15.8333 9.16663Z"
           stroke="#A2A3B7"
-          stroke-width="1.66667"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.66667"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
         <path
           d="M5.83331 9.16663V5.83329C5.83331 4.72822 6.2723 3.66842 7.0537 2.88701C7.8351 2.10561 8.89491 1.66663 9.99998 1.66663C11.105 1.66663 12.1649 2.10561 12.9463 2.88701C13.7277 3.66842 14.1666 4.72822 14.1666 5.83329V9.16663"
           stroke="#A2A3B7"
-          stroke-width="1.66667"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.66667"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     ),
@@ -54,27 +54,27 @@ export const menuMaster = [
         ),
       },
       {
-        href: '/master/user-management',
+        href: '/master/user',
         label: 'User',
         icon: <User size={20} />,
       },
       {
-        href: '/master/role-management',
+        href: '/master/role',
         label: 'Role',
         icon: <UserCog size={20} />,
       },
       {
-        href: '/master/unactive-user-management',
+        href: '/master/unactive-user',
         label: 'Unactive User',
         icon: <UserX2 size={20} />,
       },
       {
-        href: '/master/bonus-management',
+        href: '/master/bonus',
         label: 'Bonus',
         icon: <BadgeDollarSign size={20} />,
       },
       {
-        href: '/master/denda-management',
+        href: '/master/denda',
         label: 'Denda',
         icon: <BadgePercent size={20} />,
       },

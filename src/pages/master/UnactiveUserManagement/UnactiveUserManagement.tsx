@@ -11,7 +11,8 @@ function UnactiveUserManagement() {
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        tableName="user/NotActive"
+        tableName="user"
+        dataPath="/api/crud/user/scope/NotActive"
         renderState={renderState}
         setRenderState={setRenderState}
         pageConfig={pageConfig}
