@@ -36,8 +36,10 @@ function UserManagement() {
       })
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          Dialog.success(() => {
-            setRenderState((prev) => prev + 1)
+          Dialog.success({
+            callback: () => {
+              setRenderState((prev) => prev + 1)
+            },
           })
         }
       })
@@ -72,7 +74,7 @@ function UserManagement() {
             <div className="p-4">
               <ReactHookWrapper control={control}>
                 <Switch
-                  onChange={(v: boolean) => setValue('status', v)}
+                  onChange={(v: boolean | undefined) => setValue('status', v)}
                   aria-label="Status User"
                   options={[
                     { label: 'Aktif', value: true },
