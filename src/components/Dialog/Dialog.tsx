@@ -8,13 +8,16 @@ type DialogProps = {
 }
 
 export class Dialog extends Component {
-  static success = (param?: DialogProps) => {
+  static success = (arg?: DialogProps) => {
     Swal.fire({
+      title: arg?.title ?? 'Success',
+      text: arg?.description || 'Data Submitted!',
+
       icon: 'success',
-      title: param?.title || 'Success',
-      html: param?.description || 'Data Submitted!',
-    }).then(param?.callback)
+      timer: 2000,
+      timerProgressBar: true,
+    }).then(() => {
+      arg?.callback?.()
+    })
   }
 }
-
-export default Dialog

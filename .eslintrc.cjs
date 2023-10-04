@@ -18,7 +18,7 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  plugins: ['react', '@typescript-eslint', 'prettier', '@tanstack/query'],
   rules: {
     'import/no-extraneous-dependencies': [
       'error',
@@ -38,5 +38,8 @@ module.exports = {
         tsx: 'never',
       },
     ],
+    '@tanstack/query/exhaustive-deps': 'error',
+    '@tanstack/query/prefer-query-object-syntax': 'error',
+    '@tanstack/query/stable-query-client': 'error',
   },
 }
