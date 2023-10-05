@@ -12,11 +12,11 @@ import {
   UnactiveUserManagement,
   ListBonus,
   ListDenda,
+  ListCategoryAccount,
 } from '@/pages/master'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
 import {
   DetailCompany,
-  ListCategoryAccount,
   ListBranch,
   CreateCompany,
   ListCompany,

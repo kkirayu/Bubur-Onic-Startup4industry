@@ -1,5 +1,4 @@
 export { ListCompany } from './ListCompany'
 export { CreateCompany } from './CreateCompany'
 export { DetailCompany } from './DetailCompany'
-export { ListCategoryAccount } from './ListCategoryAccount'
 export { ListBranch } from './ListBranch'
