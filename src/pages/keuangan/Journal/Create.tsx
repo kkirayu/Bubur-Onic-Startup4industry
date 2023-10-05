@@ -38,8 +38,12 @@ export const CreateJurnal = () => {
         },
       })
     },
-    onError: () => {
-      Dialog.error()
+    onError: (err: any) => {
+      if (err.response.status === 422) {
+        Dialog.error({ description: err.response.data.message })
+      } else {
+        Dialog.error()
+      }
     },
   })
 
