@@ -40,8 +40,8 @@ export const KasBank = () => {
               <Button onClick={() => navigate(`${row.akun_id}/terima-uang`)}>
                 Terima Uang
               </Button>
-              <Button onClick={() => navigate(`${row.akun_id}/kirim-uang`)}>
-                Kirim Uang
+              <Button onClick={() => navigate(`${row.akun_id}/pembayaran`)}>
+                Pembayaran
               </Button>
             </div>
           )

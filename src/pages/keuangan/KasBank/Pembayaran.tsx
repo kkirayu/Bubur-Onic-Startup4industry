@@ -8,14 +8,14 @@ import { ErrorMessage } from '@hookform/error-message'
 import { Button, Dialog } from '@/components'
 import { axiosInstance, useListAccount } from '@/api'
 
-interface PayloadTransferUang {
+interface PayloadPembayaran {
   deskripsi: string
   tanggal_transaksi: string
   judul: string
   akuns?: { id: number; debit: number; credit: number; description: string }[]
 }
 
-export const TransferUang = () => {
+export const Pembayaran = () => {
   const {
     register,
     watch,
@@ -28,7 +28,7 @@ export const TransferUang = () => {
   const { account_id } = useParams()
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: (payload: PayloadTransferUang) => {
+    mutationFn: (payload: PayloadPembayaran) => {
       return axiosInstance.post('/journal/journal/create-journal', payload)
     },
     onSuccess: () => {
@@ -127,7 +127,7 @@ export const TransferUang = () => {
   }
 
   const onSubmit = (form: FieldValues) => {
-    const payload: PayloadTransferUang = {
+    const payload: PayloadPembayaran = {
       deskripsi: form.deskripsi,
       judul: form.judul,
       tanggal_transaksi: form.tanggal_transaksi,

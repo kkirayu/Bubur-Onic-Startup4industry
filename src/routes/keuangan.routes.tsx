@@ -5,6 +5,7 @@ import {
   Hutang,
   Journal,
   KasBank,
+  Pembayaran,
   Piutang,
   TransferUang,
 } from '@/pages/keuangan'
@@ -37,6 +38,10 @@ export const keuanganRoutes: RouteObject = {
         {
           path: ':account_id/transfer-uang',
           element: <TransferUang />,
+        },
+        {
+          path: ':account_id/pembayaran',
+          element: <Pembayaran />,
         },
       ],
     },
