@@ -30,6 +30,7 @@ import {
   PenambahanModal,
 } from '@/pages/laporan-keuangan'
 import { keuanganRoutes } from './keuangan.routes'
+import { masterRoutes } from './master.routes'
 
 const router = createBrowserRouter([
   {
@@ -98,18 +99,7 @@ const router = createBrowserRouter([
           { path: 'penambahan-modal', element: <PenambahanModal /> },
         ],
       },
-      {
-        path: 'master',
-        element: <Outlet />,
-        children: [
-          { path: 'kategori-akun', element: <ListCategoryAccount /> },
-          { path: 'user', element: <UserManagement /> },
-          { path: 'role', element: <RoleManagement /> },
-          { path: 'unactive-user', element: <UnactiveUserManagement /> },
-          { path: 'bonus', element: <ListBonus /> },
-          { path: 'denda', element: <ListDenda /> },
-        ],
-      },
+      masterRoutes,
     ],
   },
 ])
