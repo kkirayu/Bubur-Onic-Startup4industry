@@ -125,7 +125,7 @@ export const CreateJurnal = () => {
       <div className="grid grid-cols-4 gap-4 px-10 mb-8">
         <div>
           <label htmlFor="">Nomor Jurnal</label>
-          <Input />
+          <Input disabled />
           <span className="text-gray-alurkerja-2 text-xs">
             Parena Akun (kosongkan jika akun parent)
           </span>
