@@ -24,6 +24,7 @@ import {
 import {
   AkunManagement,
   Aset,
+  CreateJournal,
   Hutang,
   Journal,
   KasBank,
@@ -102,6 +103,7 @@ const router = createBrowserRouter([
           { path: 'kas-bank', element: <KasBank /> },
           { path: 'piutang', element: <Piutang /> },
           { path: 'journal', element: <Journal /> },
+          { path: 'journal/create', element: <CreateJournal /> },
         ],
       },
       {
