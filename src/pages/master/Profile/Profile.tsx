@@ -165,7 +165,6 @@ const ProfilePage = () => {
             </div>
             <div className="w-fit ml-auto">
               <Button
-                block
                 onClick={() => hookFormReset.handleSubmit(onResetPassword)()}
                 disabled={loaders.SUBMIT_NEW_PASSWORD}
                 loading={loaders.SUBMIT_NEW_PASSWORD}

@@ -117,10 +117,14 @@ const Login = () => {
               {errors?.password?.message}
             </span>
           </div>
-          <Button loading={isLoading}>Login</Button>
+          <Button block={false} loading={isLoading}>
+            Login
+          </Button>
 
           <Link to="/register">
-            <Button variant="outlined">Register</Button>
+            <Button block={false} variant="outlined">
+              Register
+            </Button>
           </Link>
           <Link
             className=" text-main-blue-alurkerja text-sm"

@@ -21,14 +21,7 @@ import {
   CreateCompany,
   ListCompany,
 } from '@/pages/company'
-import {
-  AkunManagement,
-  Aset,
-  Hutang,
-  Journal,
-  KasBank,
-  Piutang,
-} from '@/pages/keuangan'
+
 import {
   BukuBesar,
   LabaRugi,
@@ -36,6 +29,7 @@ import {
   Neraca,
   PenambahanModal,
 } from '@/pages/laporan-keuangan'
+import { keuanganRoutes } from './keuangan.routes'
 
 const router = createBrowserRouter([
   {
@@ -92,18 +86,7 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: 'keuangan',
-        element: <Outlet />,
-        children: [
-          { path: 'manajemen-akun', element: <AkunManagement /> },
-          { path: 'aset', element: <Aset /> },
-          { path: 'hutang', element: <Hutang /> },
-          { path: 'kas-bank', element: <KasBank /> },
-          { path: 'piutang', element: <Piutang /> },
-          { path: 'journal', element: <Journal /> },
-        ],
-      },
+      keuanganRoutes,
       {
         path: 'laporan-keuangan',
         element: <Outlet />,

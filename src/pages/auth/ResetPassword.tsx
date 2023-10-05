@@ -112,7 +112,7 @@ const ResetPasswordPage = () => {
             </span>
           </div>
 
-          <Button loading={loading}>Reset Password</Button>
+          <Button block={false} loading={loading}>Reset Password</Button>
           <Link
             className="text-center text-main-blue-alurkerja text-sm"
             to="/login"

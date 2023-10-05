@@ -8,13 +8,7 @@ interface UseAuthStore {
   token: string | null
   setToken: (value: string) => void
   logout: () => void
-  login: ({
-    email,
-    password,
-  }: {
-    email: string
-    password: string
-  }) => Promise<any>
+
   registerUser: (data: {
     name: string
     email: string
@@ -31,34 +25,6 @@ const useAuthStore = create<UseAuthStore>((set) => ({
   logout: () => {
     set(() => ({ token: null }))
     localStorage.removeItem('token')
-  },
-  login: async ({ email, password }) => {
-    const payload = { email, password }
-    return new Promise((resolve, reject) => {
-      axiosInstance
-        .post<LoginResponseType>('/auth/login', payload)
-        .then((res) => {
-          if (res.status === 200) {
-            Swal.fire({
-              title: 'Berhasil Login!',
-              text: `Selamat datang ${res.data.data.name}`,
-              icon: 'success',
-              timer: 2000,
-              timerProgressBar: true,
-            }).then(() => {
-              const data = res.data.data
-              set(() => ({
-                token: data.access_token,
-              }))
-              localStorage.setItem('token', data.access_token)
-              resolve(data)
-            })
-          }
-        })
-        .catch((err) => {
-          reject(err)
-        })
-    })
   },
   registerUser: async ({ name, email, password, password_confirmation }) => {
     const payload = { email, password, name, password_confirmation }

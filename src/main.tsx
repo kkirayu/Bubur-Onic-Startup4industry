@@ -26,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <RouterProvider router={router} fallbackElement={<FullLoading />} />
         </ThemeContext.Provider>
       </AuthContext.Provider>
+      <ReactQueryDevtools initialIsOpen={import.meta.env.VITE_QUERY_DEBUG} />
     </QueryClientProvider>
   </React.StrictMode>
 )

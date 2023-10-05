@@ -174,7 +174,9 @@ const Register = () => {
               {errors?.password_confirmation?.message}
             </span>
           </div>
-          <Button loading={loading.register}>Register</Button>
+          <Button block={false} loading={loading.register}>
+            Register
+          </Button>
         </form>
         <div className="absolute right-0 bottom-0 mb-6 mr-6 mt-auto flex items-center gap-4">
           <img
