@@ -20,4 +20,15 @@ export class Dialog extends Component {
       arg?.callback?.()
     })
   }
+  static error = (arg?: DialogProps) => {
+    Swal.fire({
+      title: arg?.title ?? 'Gagal',
+      text: arg?.description || 'Gagal menyimpan',
+      icon: 'error',
+      timer: 2000,
+      timerProgressBar: true,
+    }).then(() => {
+      arg?.callback?.()
+    })
+  }
 }
