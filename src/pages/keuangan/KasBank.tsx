@@ -4,8 +4,8 @@ import { useState } from 'react'
 export const KasBank = () => {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
-  const [filterBy, setFilterBy] = useState<{ [x: string]: any }>({
-    "is_kas": 1
+  const [filterBy, setFilterBy] = useState<{ [x: string]: any } | undefined>({
+    is_kas: 1,
   })
   const [search, setSearch] = useState<string>()
 
@@ -13,11 +13,15 @@ export const KasBank = () => {
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        headerElement={<>
-          <div className="flex flex-row items-center justify-between gap-2 px-4 py-4 border-b"><h5 className="mb-0 mr-4 font-bold uppercase" data-testid="title">Kas Bank</h5>
-
-          </div>
-        </>}
+        headerElement={
+          <>
+            <div className="flex flex-row items-center justify-between gap-2 px-4 py-4 border-b">
+              <h5 className="mb-0 mr-4 font-bold uppercase" data-testid="title">
+                Kas Bank
+              </h5>
+            </div>
+          </>
+        }
         tableName="akun"
         module="akun"
         renderState={renderState}
