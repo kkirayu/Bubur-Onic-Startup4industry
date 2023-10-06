@@ -4,6 +4,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ErrorMessage } from '@hookform/error-message'
+import moment from 'moment'
 
 import { Button, Dialog } from '@/components'
 import { axiosInstance, useListAccount } from '@/api'
@@ -33,7 +34,7 @@ export const TransferUang = () => {
     },
     onSuccess: () => {
       Dialog.success({
-        description: 'Berhasil membuat jurnal',
+        description: 'Berhasil membuat jurnal transfer uang',
         callback: () => {
           navigate('/keuangan/journal')
         },
@@ -148,6 +149,7 @@ export const TransferUang = () => {
           <Input
             {...register('tanggal_transaksi', { required: true })}
             type="date"
+            defaultValue={moment(new Date()).format('YYYY-MM-DD')}
           />
           <span className="text-gray-alurkerja-2 text-xs">Kode Akun</span>
           <ErrorMessage
