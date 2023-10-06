@@ -23,6 +23,7 @@ export const Journal = () => {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
+        customButtonEdit={() => <></>}
         onClickCreate={() => navigate('create')}
         onClickDetail={(id) => navigate(`${id}`)}
         customCell={({ defaultCell, value, name }) => {

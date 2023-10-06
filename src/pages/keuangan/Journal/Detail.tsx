@@ -13,8 +13,8 @@ export const DetailJurnal = () => {
   const detailJournal = useContext(JournalContext)
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: (id: number) => {
-      return axiosInstance.post(`/journal/journal/${id}/post`)
+    mutationFn: ({ id, type }: { id: number; type: 'post' | 'un-post' }) => {
+      return axiosInstance.post(`/journal/journal/${id}/${type}`)
     },
     onSuccess: (data) => {
       const res = data.data
@@ -72,7 +72,9 @@ export const DetailJurnal = () => {
 
   const onSubmit = () => {
     if (detailJournal) {
-      mutate(detailJournal.id)
+      detailJournal.posted_by
+        ? mutate({ id: detailJournal.id, type: 'un-post' })
+        : mutate({ id: detailJournal.id, type: 'post' })
     }
   }
 
