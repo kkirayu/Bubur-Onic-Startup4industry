@@ -13,6 +13,7 @@ import {
   ListBonus,
   ListDenda,
   ListCategoryAccount,
+  ManagementKaryawan,
 } from '@/pages/master'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
 import {
