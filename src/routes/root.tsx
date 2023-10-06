@@ -5,16 +5,7 @@ import { AdminLayout } from '@/layouts'
 
 // pages
 import { NotFound, Error } from '@/pages'
-import {
-  Profile,
-  UserManagement,
-  RoleManagement,
-  TeamManagement,
-  UnactiveUserManagement,
-  ListBonus,
-  ListDenda,
-  ListCategoryAccount,
-} from '@/pages/master'
+import { Profile } from '@/pages/master'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
 import {
   DetailCompany,
