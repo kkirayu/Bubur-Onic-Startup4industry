@@ -7,6 +7,7 @@ import {
   TeamManagement,
   UnactiveUserManagement,
   UserManagement,
+  ManagementKaryawan,
 } from '@/pages/master'
 import { Outlet, RouteObject } from 'react-router-dom'
 
@@ -15,6 +16,7 @@ export const masterRoutes: RouteObject = {
   element: <Outlet />,
   children: [
     { path: 'kategori-akun', element: <ListCategoryAccount /> },
+    { path: 'Management-karyawan', element: <ManagementKaryawan/>},
     { path: 'akun', element: <ListAccount /> },
     { path: 'user', element: <UserManagement /> },
     { path: 'role', element: <RoleManagement /> },

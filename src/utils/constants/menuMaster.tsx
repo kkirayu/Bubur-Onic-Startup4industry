@@ -96,6 +96,98 @@ export const menuMaster = [
         label: 'Denda',
         icon: <BadgePercent size={20} />,
       },
+
+      {
+        href: '/master/Management-karyawan',
+        label: 'Management Karyawan',
+        icon: (
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M15 15C16.3807 15 17.5 13.8807 17.5 12.5C17.5 11.1193 16.3807 10 15 10C13.6193 10 12.5 11.1193 12.5 12.5C12.5 13.8807 13.6193 15 15 15Z"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M7.50002 9.16667C9.34097 9.16667 10.8334 7.67428 10.8334 5.83333C10.8334 3.99238 9.34097 2.5 7.50002 2.5C5.65907 2.5 4.16669 3.99238 4.16669 5.83333C4.16669 7.67428 5.65907 9.16667 7.50002 9.16667Z"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M8.33335 12.5H5.00002C4.11597 12.5 3.26812 12.8512 2.643 13.4763C2.01788 14.1014 1.66669 14.9493 1.66669 15.8333V17.5"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M18.0833 13.6667L17.3333 13.4167"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M12.6667 11.5833L11.9167 11.3333"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M13.8333 15.5833L14.0833 14.8333"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M15.9167 10.1667L16.1667 9.41669"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M16.3333 15.5833L16 14.75"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M14 10.25L13.6667 9.41669"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M11.9167 13.8333L12.75 13.5"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M17.25 11.5L18.0833 11.1667"
+              stroke="#A2A3B7"
+              strokeWidth="1.66667"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ),
+      },
     ],
   },
 ]
