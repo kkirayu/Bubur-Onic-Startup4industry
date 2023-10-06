@@ -33,7 +33,7 @@ export const TerimaUang = () => {
     },
     onSuccess: () => {
       Dialog.success({
-        description: 'Berhasil membuat jurnal terima uang',
+        description: 'Berhasil membuat jurnal',
         callback: () => {
           navigate('/keuangan/journal')
         },
@@ -52,10 +52,10 @@ export const TerimaUang = () => {
 
   const formValues = watch()
 
-  const totalCredit = useMemo(() => {
+  const totalDebit = useMemo(() => {
     let total = 0
     for (const [key, value] of Object.entries(formValues)) {
-      if (key.includes('credit')) {
+      if (key.includes('debit')) {
         total += +value
       }
     }
@@ -86,7 +86,7 @@ export const TerimaUang = () => {
   const addAccountRow = () => {
     setNumberOfAccount((prev) => prev + 1)
     // set default value for new field
-    setValue(`credit_${numberOfAccount}`, 0)
+    setValue(`debit_${numberOfAccount}`, 0)
   }
 
   const transformData = (
@@ -222,7 +222,7 @@ export const TerimaUang = () => {
                   htmlFor=""
                   className="font-semibold text-sm after:content-['*'] after:text-red-400 after:text-sm"
                 >
-                  Akun Kas Penerima
+                  Akun Kas Awal
                 </label>
                 <Select
                   options={listOptionAccount}
@@ -230,22 +230,22 @@ export const TerimaUang = () => {
                   isDisabled
                 />
               </td>
-              <td className="px-3 pt-6">
+              <td className="px-3 py-8"></td>
+              <td className="px-3 py-8">
                 <Input
-                  {...register(`debit_0`, { setValueAs: (v) => +v })}
+                  {...register(`credit_0`, { setValueAs: (v) => +v })}
                   type="number"
-                  placeholder="Debit"
+                  placeholder="Credit"
                   defaultValue={0}
                 />
               </td>
-              <td className="px-3 py-8"></td>
               <td className="px-3 py-8">
                 <Input
                   {...register(`description_0`)}
                   placeholder="Description"
                 />
               </td>
-              <td className="text-center">{watch('debit_0')}.00</td>
+              <td className="text-center">{watch('credit_0')}.00</td>
             </tr>
             {Array.from(Array(numberOfAccount), (_, i) => (
               <tr key={`account-row-${i + 1}`}>
@@ -254,22 +254,22 @@ export const TerimaUang = () => {
                     htmlFor=""
                     className="font-semibold text-sm after:content-['*'] after:text-red-400 after:text-sm"
                   >
-                    Akun Kas Terima Dari
+                    Akun Kas Tujuan
                   </label>
                   <Select
                     options={listOptionAccount}
                     onChange={(v: any) => setValue(`account_${i + 1}`, v.id)}
                   />
                 </td>
-                <td className="px-3"></td>
                 <td className="px-3 pt-6">
                   <Input
-                    {...register(`credit_${i + 1}`, { setValueAs: (v) => +v })}
+                    {...register(`debit_${i + 1}`, { setValueAs: (v) => +v })}
                     type="number"
-                    placeholder="Credit"
+                    placeholder="Debit"
                     defaultValue={0}
                   />
                 </td>
+                <td className="px-3 pt-6"></td>
                 <td className="px-3 pt-6">
                   <Input
                     {...register(`description_${i + 1}`)}
@@ -277,7 +277,7 @@ export const TerimaUang = () => {
                   />
                 </td>
                 <td className="text-center">
-                  {watch(`credit_${i + 1}`)}
+                  {watch(`debit_${i + 1}`)}
                   .00
                 </td>
               </tr>
@@ -287,14 +287,14 @@ export const TerimaUang = () => {
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5 font-semibold">Total Credit ($)</td>
-              <td className="px-3 py-2.5">{totalCredit}.00</td>
+              <td className="px-3 py-2.5">{watch('credit_0')}.00</td>
             </tr>
             <tr className="border-t border-b border-gray-100">
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5 font-semibold">Total Debit ($)</td>
-              <td className="px-3 py-2.5">{watch('debit_0')}.00</td>
+              <td className="px-3 py-2.5">{totalDebit}.00</td>
             </tr>
           </tbody>
         </table>
