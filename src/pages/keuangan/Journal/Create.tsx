@@ -22,6 +22,7 @@ export const CreateJurnal = () => {
     setValue,
     handleSubmit,
     formState: { errors },
+    unregister,
   } = useForm()
   const { listAccount } = useListAccount()
   const navigate = useNavigate()
@@ -47,7 +48,7 @@ export const CreateJurnal = () => {
     },
   })
 
-  const [numberOfAccount, setNumberOfAccount] = useState(1)
+  const [row, setRow] = useState([0])
 
   const formValues = watch()
 
@@ -80,24 +81,31 @@ export const CreateJurnal = () => {
   }, [listAccount])
 
   const addAccountRow = () => {
-    setNumberOfAccount((prev) => prev + 1)
+    // selalu increment index meskipun row ada yang dihapus
+    setRow((prev) => [...prev, prev[prev.length - 1] + 1])
     // set default value for new field
-    setValue(`debit_${numberOfAccount}`, 0)
-    setValue(`credit_${numberOfAccount}`, 0)
+    setValue(`debit_${row.length}`, 0)
+    setValue(`credit_${row.length}`, 0)
+  }
+
+  const removeAccoutRow = (idx: number) => {
+    unregister(`debit_${idx}`)
+    unregister(`credit_${idx}`)
+    unregister(`account_${idx}`)
+    unregister(`description_${idx}`)
+    setRow((prev) => prev.filter((prevIdx) => prevIdx !== idx))
   }
 
   const transformData = (
     inputData: FieldValues
   ): { id: number; credit: number; debit: number; description: string }[] => {
-    const accountID = Object.keys(inputData)
-      .filter((key) => key.startsWith('account_'))
-      .map((key) => inputData[key])
+    const result = row.map((idx: number) => {
+      const idKey = `account_${idx}`
+      const kreditKey = `credit_${idx}`
+      const debitKey = `debit_${idx}`
+      const descriptionKey = `description_${idx}`
 
-    const result = accountID.map((id: number, i) => {
-      const kreditKey = `credit_${i}`
-      const debitKey = `debit_${i}`
-      const descriptionKey = `description_${i}`
-
+      const id: number = inputData[idKey] || 0
       const credit: number = inputData[kreditKey] || 0
       const debit: number = inputData[debitKey] || 0
       const description: string = inputData[descriptionKey] || ''
@@ -120,6 +128,7 @@ export const CreateJurnal = () => {
       tanggal_transaksi: form.tanggal_transaksi,
       akuns: transformData(form),
     }
+
     mutate(payload)
   }
 
@@ -209,46 +218,52 @@ export const CreateJurnal = () => {
               <th className="px-3 py-4">credit</th>
               <th className="px-3 py-4">description</th>
               <th className="px-3 py-4">amount</th>
+              <th className="px-3 py-4 text-center">aksi</th>
             </tr>
           </thead>
           <tbody>
-            {Array.from(Array(numberOfAccount), (_, i) => (
-              <tr key={`account-row-${i + 1}`}>
+            {row.map((idx) => (
+              <tr key={`account-row-${idx + 1}`}>
                 <td className="px-3 py-2.5">
                   <Select
                     options={listOptionAccount}
-                    onChange={(v: any) => setValue(`account_${i}`, v.id)}
+                    onChange={(v: any) => setValue(`account_${idx}`, v.id)}
                   />
                 </td>
                 <td className="px-3 py-2.5">
                   <Input
-                    {...register(`debit_${i}`, { setValueAs: (v) => +v })}
+                    {...register(`debit_${idx}`, { setValueAs: (v) => +v })}
                     type="number"
                     placeholder="Debit"
                     defaultValue={0}
-                    disabled={watch(`credit_${i}`) > 0}
+                    disabled={watch(`credit_${idx}`) > 0}
                   />
                 </td>
                 <td className="px-3 py-2.5">
                   <Input
-                    {...register(`credit_${i}`, { setValueAs: (v) => +v })}
+                    {...register(`credit_${idx}`, { setValueAs: (v) => +v })}
                     type="number"
                     placeholder="Credit"
                     defaultValue={0}
-                    disabled={watch(`debit_${i}`) > 0}
+                    disabled={watch(`debit_${idx}`) > 0}
                   />
                 </td>
                 <td className="px-3 py-2.5">
                   <Input
-                    {...register(`description_${i}`)}
+                    {...register(`description_${idx}`)}
                     placeholder="Description"
                   />
                 </td>
                 <td className="text-center">
-                  {watch(`debit_${i}`) > 0
-                    ? watch(`debit_${i}`)
-                    : watch(`credit_${i}`)}
+                  {watch(`debit_${idx}`) > 0
+                    ? watch(`debit_${idx}`)
+                    : watch(`credit_${idx}`)}
                   .00
+                </td>
+                <td className="text-center">
+                  <Button color="red" onClick={() => removeAccoutRow(idx)}>
+                    Hapus
+                  </Button>
                 </td>
               </tr>
             ))}

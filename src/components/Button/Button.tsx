@@ -8,6 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium'
   block?: boolean
   loading?: boolean
+  color?: 'blue' | 'red'
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -18,6 +19,7 @@ const Button: FC<ButtonProps> = (props) => {
     block = true,
     loading = false,
     disabled = false,
+    color = 'blue',
   } = props
 
   const buttonSize = () =>
@@ -25,7 +27,11 @@ const Button: FC<ButtonProps> = (props) => {
 
   const buttonVariant = () => {
     if (variant === 'filled') {
-      return 'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2 disabled:cursor-not-allowed'
+      if (color === 'blue') {
+        return 'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2 disabled:cursor-not-allowed'
+      } else if (color === 'red') {
+        return 'bg-red-alurkerja text-white disabled:bg-gray-alurkerja-2 disabled:cursor-not-allowed'
+      }
     } else if (variant === 'outlined') {
       return 'text-main-blue-alurkerja border border-main-blue-alurkerja'
     } else {
@@ -41,7 +47,7 @@ const Button: FC<ButtonProps> = (props) => {
         buttonBlock(),
         buttonSize(),
         buttonVariant(),
-        loading && 'flex items-center justify-center gap-1'
+        loading && 'flex items-center justify-center gap-1 '
       )}
       disabled={loading || disabled}
       {...props}
