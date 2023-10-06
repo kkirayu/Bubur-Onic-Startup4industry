@@ -20,7 +20,7 @@ interface UseAuthStore {
 }
 
 const useAuthStore = create<UseAuthStore>((set) => ({
-  token: localStorage.getItem('token'),
+  token: null,
   setToken: (value: string) => set(() => ({ token: value })),
   logout: () => {
     set(() => ({ token: null }))

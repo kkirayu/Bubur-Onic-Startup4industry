@@ -13,7 +13,8 @@ import { AxiosResponse } from 'axios'
 export default function AdminLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { token, logout, currentUser, setCurrentUser } = useAuthStore()
+  const { logout, currentUser, setCurrentUser, setToken } = useAuthStore()
+  const token = localStorage.getItem('token')
 
   const [isAppReady, setIsAppReady] = useState(false)
 
@@ -28,6 +29,7 @@ export default function AdminLayout() {
       handleUnauthenticated()
       setIsAppReady(true)
     } else {
+      setToken(token)
       axiosInstance.interceptors.request.use(
         async (config) => {
           if (token) {
