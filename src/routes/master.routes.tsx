@@ -4,6 +4,7 @@ import {
   ListCategoryAccount,
   ListDenda,
   RoleManagement,
+  TeamManagement,
   UnactiveUserManagement,
   UserManagement,
 } from '@/pages/master'
@@ -17,6 +18,7 @@ export const masterRoutes: RouteObject = {
     { path: 'akun', element: <ListAccount /> },
     { path: 'user', element: <UserManagement /> },
     { path: 'role', element: <RoleManagement /> },
+    { path: 'team', element: <TeamManagement /> },
     { path: 'unactive-user', element: <UnactiveUserManagement /> },
     { path: 'bonus', element: <ListBonus /> },
     { path: 'denda', element: <ListDenda /> },
