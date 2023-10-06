@@ -168,6 +168,7 @@ export const DetailJurnal = () => {
               <tr key={`account-row-${i + 1}`}>
                 <td className="px-3 py-2.5">
                   <Select
+                    isDisabled
                     value={listOptionAccount.filter(
                       (acc) => acc.id === transaction.akun
                     )}
