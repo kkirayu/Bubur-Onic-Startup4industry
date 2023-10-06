@@ -33,7 +33,7 @@ export const Pembayaran = () => {
     },
     onSuccess: () => {
       Dialog.success({
-        description: 'Berhasil membuat jurnal',
+        description: 'Berhasil membuat jurnal pembayaran',
         callback: () => {
           navigate('/keuangan/journal')
         },
@@ -51,16 +51,6 @@ export const Pembayaran = () => {
   const [numberOfAccount, setNumberOfAccount] = useState(1)
 
   const formValues = watch()
-
-  const totalCredit = useMemo(() => {
-    let total = 0
-    for (const [key, value] of Object.entries(formValues)) {
-      if (key.includes('credit')) {
-        total += +value
-      }
-    }
-    return total
-  }, [formValues])
 
   const totalDebit = useMemo(() => {
     let total = 0
@@ -96,7 +86,6 @@ export const Pembayaran = () => {
     setNumberOfAccount((prev) => prev + 1)
     // set default value for new field
     setValue(`debit_${numberOfAccount}`, 0)
-    setValue(`credit_${numberOfAccount}`, 0)
   }
 
   const transformData = (
@@ -107,7 +96,7 @@ export const Pembayaran = () => {
       .map((key) => inputData[key])
 
     const result = accountID.map((id: number, i) => {
-      const kreditKey = `credit_${i}`
+      const kreditKey = `credit`
       const debitKey = `debit_${i}`
       const descriptionKey = `description_${i}`
 
@@ -138,7 +127,7 @@ export const Pembayaran = () => {
 
   return (
     <section className="bg-white rounded py-6">
-      <h3 className="font-bold text-xl mb-10 px-6">Transfer Uang</h3>
+      <h3 className="font-bold text-xl mb-10 px-6">Pembayaran</h3>
       <div className="grid grid-cols-4 gap-4 px-10 mb-8">
         <div>
           <label htmlFor="">Nomor Jurnal</label>
@@ -241,12 +230,17 @@ export const Pembayaran = () => {
               </td>
               <td className="px-3 py-8"></td>
               <td className="px-3 py-8">
-                <Input type="number" placeholder="Credit" defaultValue={0} />
+                <Input
+                  {...register(`credit`, { setValueAs: (v) => +v })}
+                  type="number"
+                  placeholder="Credit"
+                  defaultValue={0}
+                />
               </td>
               <td className="px-3 py-8">
                 <Input placeholder="Description" />
               </td>
-              <td className="text-center">0 .00</td>
+              <td className="text-center">{watch('credit')}.00</td>
             </tr>
             {Array.from(Array(numberOfAccount), (_, i) => (
               <tr key={`account-row-${i + 1}`}>
@@ -255,7 +249,7 @@ export const Pembayaran = () => {
                     htmlFor=""
                     className="font-semibold text-sm after:content-['*'] after:text-red-400 after:text-sm"
                   >
-                    Akun Tujuan
+                    Akun Kas Tujuan
                   </label>
                   <Select
                     options={listOptionAccount}
@@ -291,7 +285,7 @@ export const Pembayaran = () => {
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5 font-semibold">Total Credit ($)</td>
-              <td className="px-3 py-2.5">{totalCredit}.00</td>
+              <td className="px-3 py-2.5">{watch('credit')}.00</td>
             </tr>
             <tr className="border-t border-b border-gray-100">
               <td className="px-3 py-2.5"></td>
