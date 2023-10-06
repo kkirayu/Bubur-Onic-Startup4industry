@@ -1,7 +1,6 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 
-const NotFoundPage = () => {
+export const NotFound = () => {
   return (
     <div className="lg:p-8 h-screen">
       <div className="flex items-center text-lg font-medium">Bubur Onic</div>
@@ -16,5 +15,3 @@ const NotFoundPage = () => {
     </div>
   )
 }
-
-export default NotFoundPage

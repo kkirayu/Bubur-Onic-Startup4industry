@@ -7,7 +7,7 @@ import { axiosInstance } from '@/api'
 import Swal from 'sweetalert2'
 import { useState } from 'react'
 
-const ProfilePage = () => {
+export const Profile = () => {
   const { currentUser } = useAuthStore()
   const hookFormProfile = useForm()
   const hookFormReset = useForm({
@@ -184,5 +184,3 @@ const ProfilePage = () => {
     </div>
   )
 }
-
-export default ProfilePage

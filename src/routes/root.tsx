@@ -4,8 +4,7 @@ import { Outlet, createBrowserRouter } from 'react-router-dom'
 import { AdminLayout } from '@/layouts'
 
 // pages
-import { NotFound, Error } from '@/pages'
-import { Profile } from '@/pages/master'
+import { NotFound, Error, Profile } from '@/pages'
 import { Login, Register, ForgotPassword, ResetPassword } from '@/pages/auth'
 import {
   DetailCompany,
@@ -13,7 +12,6 @@ import {
   CreateCompany,
   ListCompany,
 } from '@/pages/company'
-
 import {
   BukuBesar,
   LabaRugi,
@@ -21,6 +19,8 @@ import {
   Neraca,
   PenambahanModal,
 } from '@/pages/laporan-keuangan'
+
+// routes
 import { keuanganRoutes } from './keuangan.routes'
 import { masterRoutes } from './master.routes'
 
