@@ -8,14 +8,14 @@ import { ErrorMessage } from '@hookform/error-message'
 import { Button, Dialog } from '@/components'
 import { axiosInstance, useListAccount } from '@/api'
 
-interface PayloadPembayaran {
+interface PayloadTerimaUang {
   deskripsi: string
   tanggal_transaksi: string
   judul: string
   akuns?: { id: number; debit: number; credit: number; description: string }[]
 }
 
-export const Pembayaran = () => {
+export const TerimaUang = () => {
   const {
     register,
     watch,
@@ -28,12 +28,12 @@ export const Pembayaran = () => {
   const { account_id } = useParams()
 
   const { mutate, isLoading } = useMutation({
-    mutationFn: (payload: PayloadPembayaran) => {
+    mutationFn: (payload: PayloadTerimaUang) => {
       return axiosInstance.post('/journal/journal/create-journal', payload)
     },
     onSuccess: () => {
       Dialog.success({
-        description: 'Berhasil membuat jurnal pembayaran',
+        description: 'Berhasil membuat jurnal terima uang',
         callback: () => {
           navigate('/keuangan/journal')
         },
@@ -52,10 +52,10 @@ export const Pembayaran = () => {
 
   const formValues = watch()
 
-  const totalDebit = useMemo(() => {
+  const totalCredit = useMemo(() => {
     let total = 0
     for (const [key, value] of Object.entries(formValues)) {
-      if (key.includes('debit')) {
+      if (key.includes('credit')) {
         total += +value
       }
     }
@@ -72,6 +72,7 @@ export const Pembayaran = () => {
 
   const currentAccount = useMemo(() => {
     if (account_id) {
+      setValue('account_0', +account_id)
       return listAccount
         ?.map((acc: any) => ({
           ...acc,
@@ -85,7 +86,7 @@ export const Pembayaran = () => {
   const addAccountRow = () => {
     setNumberOfAccount((prev) => prev + 1)
     // set default value for new field
-    setValue(`debit_${numberOfAccount}`, 0)
+    setValue(`credit_${numberOfAccount}`, 0)
   }
 
   const transformData = (
@@ -96,7 +97,7 @@ export const Pembayaran = () => {
       .map((key) => inputData[key])
 
     const result = accountID.map((id: number, i) => {
-      const kreditKey = `credit`
+      const kreditKey = `credit_${i}`
       const debitKey = `debit_${i}`
       const descriptionKey = `description_${i}`
 
@@ -116,18 +117,19 @@ export const Pembayaran = () => {
   }
 
   const onSubmit = (form: FieldValues) => {
-    const payload: PayloadPembayaran = {
+    const payload: PayloadTerimaUang = {
       deskripsi: form.deskripsi,
       judul: form.judul,
       tanggal_transaksi: form.tanggal_transaksi,
       akuns: transformData(form),
     }
+
     mutate(payload)
   }
 
   return (
     <section className="bg-white rounded py-6">
-      <h3 className="font-bold text-xl mb-10 px-6">Pembayaran</h3>
+      <h3 className="font-bold text-xl mb-10 px-6">Terima Uang</h3>
       <div className="grid grid-cols-4 gap-4 px-10 mb-8">
         <div>
           <label htmlFor="">Nomor Jurnal</label>
@@ -220,7 +222,7 @@ export const Pembayaran = () => {
                   htmlFor=""
                   className="font-semibold text-sm after:content-['*'] after:text-red-400 after:text-sm"
                 >
-                  Akun Kas Awal
+                  Akun Kas Penerima
                 </label>
                 <Select
                   options={listOptionAccount}
@@ -228,19 +230,22 @@ export const Pembayaran = () => {
                   isDisabled
                 />
               </td>
-              <td className="px-3 py-8"></td>
-              <td className="px-3 py-8">
+              <td className="px-3 pt-6">
                 <Input
-                  {...register(`credit`, { setValueAs: (v) => +v })}
+                  {...register(`debit_0`, { setValueAs: (v) => +v })}
                   type="number"
-                  placeholder="Credit"
+                  placeholder="Debit"
                   defaultValue={0}
                 />
               </td>
+              <td className="px-3 py-8"></td>
               <td className="px-3 py-8">
-                <Input placeholder="Description" />
+                <Input
+                  {...register(`description_0`)}
+                  placeholder="Description"
+                />
               </td>
-              <td className="text-center">{watch('credit')}.00</td>
+              <td className="text-center">{watch('debit_0')}.00</td>
             </tr>
             {Array.from(Array(numberOfAccount), (_, i) => (
               <tr key={`account-row-${i + 1}`}>
@@ -249,30 +254,30 @@ export const Pembayaran = () => {
                     htmlFor=""
                     className="font-semibold text-sm after:content-['*'] after:text-red-400 after:text-sm"
                   >
-                    Akun Kas Tujuan
+                    Akun Kas Terima Dari
                   </label>
                   <Select
                     options={listOptionAccount}
-                    onChange={(v: any) => setValue(`account_${i}`, v.id)}
+                    onChange={(v: any) => setValue(`account_${i + 1}`, v.id)}
                   />
                 </td>
+                <td className="px-3"></td>
                 <td className="px-3 pt-6">
                   <Input
-                    {...register(`debit_${i}`, { setValueAs: (v) => +v })}
+                    {...register(`credit_${i + 1}`, { setValueAs: (v) => +v })}
                     type="number"
-                    placeholder="Debit"
+                    placeholder="Credit"
                     defaultValue={0}
                   />
                 </td>
-                <td className="px-3 pt-6"></td>
                 <td className="px-3 pt-6">
                   <Input
-                    {...register(`description_${i}`)}
+                    {...register(`description_${i + 1}`)}
                     placeholder="Description"
                   />
                 </td>
                 <td className="text-center">
-                  {watch(`credit_${i}`)}
+                  {watch(`credit_${i + 1}`)}
                   .00
                 </td>
               </tr>
@@ -282,14 +287,14 @@ export const Pembayaran = () => {
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5 font-semibold">Total Credit ($)</td>
-              <td className="px-3 py-2.5">{watch('credit')}.00</td>
+              <td className="px-3 py-2.5">{totalCredit}.00</td>
             </tr>
             <tr className="border-t border-b border-gray-100">
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5 font-semibold">Total Debit ($)</td>
-              <td className="px-3 py-2.5">{totalDebit}.00</td>
+              <td className="px-3 py-2.5">{watch('debit_0')}.00</td>
             </tr>
           </tbody>
         </table>

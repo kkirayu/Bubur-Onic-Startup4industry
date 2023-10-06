@@ -10,6 +10,7 @@ import {
   CreateJurnal,
   DetailJurnal,
   LayoutJournal,
+  TerimaUang,
 } from '@/pages/keuangan'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -55,6 +56,10 @@ export const keuanganRoutes: RouteObject = {
         {
           path: ':account_id/pembayaran',
           element: <Pembayaran />,
+        },
+        {
+          path: ':account_id/terima-uang',
+          element: <TerimaUang />,
         },
       ],
     },

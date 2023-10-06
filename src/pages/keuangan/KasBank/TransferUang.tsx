@@ -262,7 +262,6 @@ export const TransferUang = () => {
                     type="number"
                     placeholder="Debit"
                     defaultValue={0}
-                    disabled={watch(`credit_${i}`) > 0}
                   />
                 </td>
                 <td className="px-3 pt-6"></td>
@@ -273,9 +272,7 @@ export const TransferUang = () => {
                   />
                 </td>
                 <td className="text-center">
-                  {watch(`debit_${i}`) > 0
-                    ? watch(`debit_${i}`)
-                    : watch(`credit_${i}`)}
+                  {watch(`debit_${i}`)}
                   .00
                 </td>
               </tr>
