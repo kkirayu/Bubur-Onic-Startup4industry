@@ -9,6 +9,7 @@ import {
   Profile,
   UserManagement,
   RoleManagement,
+  TeamManagement,
   UnactiveUserManagement,
   ListBonus,
   ListDenda,
