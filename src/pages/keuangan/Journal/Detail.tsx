@@ -16,9 +16,12 @@ export const DetailJurnal = () => {
     mutationFn: (id: number) => {
       return axiosInstance.post(`/journal/journal/${id}/post`)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const res = data.data
       Dialog.success({
-        description: 'Berhasil memposting journal',
+        description: !res.posted_by
+          ? 'Berhasil memposting journal'
+          : 'Berhasil unpost journal',
         callback: () => {
           navigate('/keuangan/journal')
         },
