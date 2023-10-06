@@ -1,6 +1,6 @@
 export { AkunManagement } from './AkunManagement'
 export { Aset } from './Aset'
 export { Hutang } from './Hutang'
-export { Journal, CreateJurnal } from './Journal'
+export * from './Journal'
 export * from './KasBank'
 export { Piutang } from './Piutang'

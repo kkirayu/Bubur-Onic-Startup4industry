@@ -1,14 +1,17 @@
 import {
   AkunManagement,
   Aset,
-  CreateJurnal,
   Hutang,
   Journal,
   KasBank,
   Pembayaran,
   Piutang,
   TransferUang,
+  CreateJurnal,
+  DetailJurnal,
+  LayoutJournal,
 } from '@/pages/keuangan'
+
 import { Outlet, RouteObject } from 'react-router-dom'
 
 export const keuanganRoutes: RouteObject = {
@@ -25,6 +28,16 @@ export const keuanganRoutes: RouteObject = {
       children: [
         { index: true, element: <Journal /> },
         { path: 'create', element: <CreateJurnal /> },
+        {
+          path: ':id',
+          element: <LayoutJournal />,
+          children: [
+            {
+              index: true,
+              element: <DetailJurnal />,
+            },
+          ],
+        },
       ],
     },
     {

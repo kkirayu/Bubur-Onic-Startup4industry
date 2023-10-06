@@ -24,6 +24,26 @@ export const Journal = () => {
         search={search}
         setSearch={setSearch}
         onClickCreate={() => navigate('create')}
+        onClickDetail={(id) => navigate(`${id}`)}
+        customCell={({ defaultCell, value, name }) => {
+          if (name === 'posted_at') {
+            return (
+              <>
+                {value ? (
+                  <span className="text-main-blue-alurkerja bg-light-blue-alurkerja rounded-full px-3 py-0.5">
+                    Posted
+                  </span>
+                ) : (
+                  <span className="text-white bg-gray-alurkerja-2 rounded-full px-3 py-0.5">
+                    Draft
+                  </span>
+                )}
+              </>
+            )
+          }
+
+          return defaultCell
+        }}
       />
     </div>
   )
