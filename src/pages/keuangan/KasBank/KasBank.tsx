@@ -35,13 +35,13 @@ export const KasBank = () => {
         customActionCell={(row) => {
           return (
             <div className="flex gap-x-2 whitespace-nowrap">
-              <Button onClick={() => navigate(`${row.akun_id}/transfer-uang`)}>
+              <Button onClick={() => navigate(`${row.id}/transfer-uang`)}>
                 Transfer Uang
               </Button>
-              <Button onClick={() => navigate(`${row.akun_id}/terima-uang`)}>
+              <Button onClick={() => navigate(`${row.id}/terima-uang`)}>
                 Terima Uang
               </Button>
-              <Button onClick={() => navigate(`${row.akun_id}/pembayaran`)}>
+              <Button onClick={() => navigate(`${row.id}/pembayaran`)}>
                 Pembayaran
               </Button>
             </div>
