@@ -17,8 +17,9 @@ export const KasBank = () => {
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        specPath="/api/kas/kas"
+        specPath="/api/akun/akun"
         renderState={renderState}
+        hideCreateButton
         setRenderState={setRenderState}
         pageConfig={pageConfig}
         setPageConfig={setPageConfig}
@@ -27,7 +28,7 @@ export const KasBank = () => {
         search={search}
         setSearch={setSearch}
         column={[
-          { label: 'Nama', key: 'kode_kas' },
+          { label: 'Nama', key: 'nama' },
           { label: 'Deskripsi', key: 'deskripsi' },
           { label: 'Saldo', key: 'saldo' },
         ]}
