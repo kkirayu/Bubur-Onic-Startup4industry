@@ -54,6 +54,24 @@ function RoleManagement() {
         setSearch={setSearch}
         customButtonCreate={() => <></>}
         extraActionButton={(data) => <ButtonAddPermission id={data.id} />}
+        customField={({ defaultField, value, field }) => {
+          if (field.name === 'permissions' && value) {
+            return (
+              <Select
+                options={[
+                  {
+                    label: 'permission 1',
+                    value: 'c1397806-f169-47b8-a667-746f0c2c4988',
+                  },
+                ]}
+                defaultValue={convertToOption(value)}
+                isMulti
+              />
+            )
+          }
+
+          return defaultField
+        }}
         customCell={({ defaultCell, name, value }) => {
           if (name === 'permissions') {
             return (
