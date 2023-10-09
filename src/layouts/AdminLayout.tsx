@@ -13,7 +13,7 @@ import { AxiosResponse } from 'axios'
 export default function AdminLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { logout, currentUser, setCurrentUser, setToken } = useAuthStore()
+  const { logout, currentUser, setCurrentUser } = useAuthStore()
   const token = localStorage.getItem('token')
 
   const [isAppReady, setIsAppReady] = useState(false)
@@ -83,7 +83,9 @@ export default function AdminLayout() {
               </div>
               <div
                 className="hover:bg-light-blue-alurkerja hover:text-main-blue-alurkerja px-4 py-2 cursor-pointer flex items-center gap-1"
-                onClick={() => logout()}
+                onClick={() => {
+                  logout()
+                }}
               >
                 <LogOut size={18} />
                 Logout
