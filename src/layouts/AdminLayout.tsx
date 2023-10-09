@@ -22,20 +22,8 @@ export default function AdminLayout() {
 
   useEffect(() => {
     if (token) {
-      axiosInstance.interceptors.response.use(
-        (response) => {
-          // Any status code that lie within the range of 2xx cause this function to trigger
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
-          return response
-        },
-        (error) => {
-          // Any status codes that falls outside the range of 2xx cause this function to trigger
-          if (error.response.status === 401) {
-            logout()
-          }
-          return Promise.reject(error)
-        }
-      )
       axiosInstance
         .get<AxiosResponse<UserType>>('/auth/info')
         .then((res) => {

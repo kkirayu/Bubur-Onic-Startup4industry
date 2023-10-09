@@ -1,8 +1,9 @@
 import { TableLowcode } from 'alurkerja-ui'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { Button, Dialog } from '@/components'
 import { axiosInstance } from '@/api'
-import { useMutation } from '@tanstack/react-query'
+import { PermissionsEntity } from '@/utils'
 
 function RoleManagement() {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
@@ -14,14 +15,15 @@ function RoleManagement() {
     const { mutate, isLoading } = useMutation({
       mutationFn: () => {
         return axiosInstance.post(`/crud/role/${id}/permissions`, {
-          permissions: [
-            'd4f82258-6400-445a-9dd8-6cbd6623efef',
-            'dad482f8-3008-461b-acb8-4bcbd573aa2b',
-          ],
+          permissions: ['c1397806-f169-47b8-a667-746f0c2c4988'],
         })
       },
       onSuccess: () => {
-        Dialog.success()
+        Dialog.success({
+          callback: () => {
+            setRenderState((prev) => prev + 1)
+          },
+        })
       },
     })
 
@@ -47,6 +49,22 @@ function RoleManagement() {
         setSearch={setSearch}
         customButtonCreate={() => <></>}
         extraActionButton={(data) => <ButtonAddPermission id={data.id} />}
+        customCell={({ defaultCell, name, value }) => {
+          if (name === 'permissions') {
+            return (
+              <div>
+                {value.map((permission: PermissionsEntity, i: number) => (
+                  <Fragment key={i}>
+                    <span className="text-main-blue-alurkerja bg-light-blue-alurkerja rounded-full px-3 py-0.5">
+                      {permission.name}
+                    </span>
+                  </Fragment>
+                ))}
+              </div>
+            )
+          }
+          return defaultCell
+        }}
       />
     </section>
   )

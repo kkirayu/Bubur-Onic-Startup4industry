@@ -9,7 +9,7 @@ type DialogProps = {
 
 export class Dialog extends Component {
   static success = (arg?: DialogProps) => {
-    Swal.fire({
+    return Swal.fire({
       title: arg?.title ?? 'Success',
       text: arg?.description || 'Data Submitted!',
 
