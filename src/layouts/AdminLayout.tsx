@@ -20,26 +20,8 @@ export default function AdminLayout() {
 
   const [toggled, setToggled] = useState(false)
 
-  const handleUnauthenticated = async () => {
-    logout()
-    navigate('/login')
-  }
-
   useEffect(() => {
     if (token) {
-      setToken(token)
-      axiosInstance.interceptors.request.use(
-        async (config) => {
-          if (token) {
-            config.headers.Authorization = `Bearer ${token}`
-          }
-          return config
-        },
-        (err) => {
-          return Promise.reject(err)
-        }
-      )
-
       axiosInstance.interceptors.response.use(
         (response) => {
           // Any status code that lie within the range of 2xx cause this function to trigger
@@ -49,12 +31,11 @@ export default function AdminLayout() {
         (error) => {
           // Any status codes that falls outside the range of 2xx cause this function to trigger
           if (error.response.status === 401) {
-            handleUnauthenticated()
+            logout()
           }
           return Promise.reject(error)
         }
       )
-
       axiosInstance
         .get<AxiosResponse<UserType>>('/auth/info')
         .then((res) => {
@@ -64,7 +45,7 @@ export default function AdminLayout() {
           setIsAppReady(true)
         })
     } else {
-      handleUnauthenticated()
+      navigate('/login')
     }
   }, [token])
 
@@ -114,7 +95,7 @@ export default function AdminLayout() {
               </div>
               <div
                 className="hover:bg-light-blue-alurkerja hover:text-main-blue-alurkerja px-4 py-2 cursor-pointer flex items-center gap-1"
-                onClick={() => handleUnauthenticated()}
+                onClick={() => logout()}
               >
                 <LogOut size={18} />
                 Logout

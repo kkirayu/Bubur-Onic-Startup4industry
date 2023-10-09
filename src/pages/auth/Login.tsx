@@ -32,6 +32,9 @@ const Login = () => {
     onSuccess: (res) => {
       localStorage.setItem('token', res.data.data.access_token)
       setToken(res.data.data.access_token)
+      axiosInstance.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${res.data.data.access_token}`
       Dialog.success({
         title: 'Berhasil Login!',
         description: `Selamat datang ${res.data.data.name}`,
