@@ -1,4 +1,2 @@
-import ManagementKaryawan from './ManagementKaryawan'
-
-export default ManagementKaryawan
-
+export * from './ManagementKaryawan'
+export * from '././Create'
