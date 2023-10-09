@@ -19,7 +19,6 @@ export const keuanganRoutes: RouteObject = {
   path: 'keuangan',
   element: <Outlet />,
   children: [
-    { path: 'manajemen-akun', element: <AkunManagement /> },
     { path: 'aset', element: <Aset /> },
     { path: 'hutang', element: <Hutang /> },
     { path: 'piutang', element: <Piutang /> },

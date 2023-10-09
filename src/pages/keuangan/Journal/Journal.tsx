@@ -26,6 +26,14 @@ export const Journal = () => {
         customButtonEdit={() => <></>}
         onClickCreate={() => navigate('create')}
         onClickDetail={(id) => navigate(`${id}`)}
+        column={[
+          { label: 'Kode Jurnal', key: 'kode_jurnal' },
+          { label: 'Judul', key: 'judul' },
+          { label: 'Deskripsi', key: 'deskripsi' },
+          { label: 'Status', key: 'posted_at' },
+          { label: 'Kredit', key: 'total_kredit' },
+          { label: 'Debit', key: 'total_debit' },
+        ]}
         customCell={({ defaultCell, value, name }) => {
           if (name === 'posted_at') {
             return (
