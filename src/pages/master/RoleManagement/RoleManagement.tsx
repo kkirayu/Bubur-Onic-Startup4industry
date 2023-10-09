@@ -1,4 +1,4 @@
-import { TableLowcode } from 'alurkerja-ui'
+import { Select, TableLowcode } from 'alurkerja-ui'
 import { Fragment, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Dialog } from '@/components'
@@ -11,6 +11,10 @@ function RoleManagement() {
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
 
+  const convertToOption = (list: any[]) => {
+    return list.map((item) => ({ label: item.name, value: item.id, ...item }))
+  }
+
   const ButtonAddPermission = ({ id }: { id: number }) => {
     const { mutate, isLoading } = useMutation({
       mutationFn: () => {
@@ -20,6 +24,7 @@ function RoleManagement() {
       },
       onSuccess: () => {
         Dialog.success({
+          description: 'Berhasil menambahkan permission',
           callback: () => {
             setRenderState((prev) => prev + 1)
           },
@@ -49,6 +54,24 @@ function RoleManagement() {
         setSearch={setSearch}
         customButtonCreate={() => <></>}
         extraActionButton={(data) => <ButtonAddPermission id={data.id} />}
+        customField={({ defaultField, value, field }) => {
+          if (field.name === 'permissions' && value) {
+            return (
+              <Select
+                options={[
+                  {
+                    label: 'permission 1',
+                    value: 'c1397806-f169-47b8-a667-746f0c2c4988',
+                  },
+                ]}
+                defaultValue={convertToOption(value)}
+                isMulti
+              />
+            )
+          }
+
+          return defaultField
+        }}
         customCell={({ defaultCell, name, value }) => {
           if (name === 'permissions') {
             return (
