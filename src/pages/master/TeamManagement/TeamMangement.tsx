@@ -11,7 +11,6 @@ export function TeamManagement() {
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        tableName="team"
         specPath="/api/team/team"
         renderState={renderState}
         setRenderState={setRenderState}
