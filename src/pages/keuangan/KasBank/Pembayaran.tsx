@@ -288,14 +288,14 @@ export const Pembayaran = () => {
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
-              <td className="px-3 py-2.5 font-semibold">Total Credit ($)</td>
+              <td className="px-3 py-2.5 font-semibold">Total Credit (Rp)</td>
               <td className="px-3 py-2.5">{watch('credit_0')}.00</td>
             </tr>
             <tr className="border-t border-b border-gray-100">
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
               <td className="px-3 py-2.5"></td>
-              <td className="px-3 py-2.5 font-semibold">Total Debit ($)</td>
+              <td className="px-3 py-2.5 font-semibold">Total Debit (Rp)</td>
               <td className="px-3 py-2.5">{totalDebit}.00</td>
             </tr>
           </tbody>
