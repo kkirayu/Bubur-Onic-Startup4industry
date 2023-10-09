@@ -16,7 +16,7 @@ export const masterRoutes: RouteObject = {
   element: <Outlet />,
   children: [
     { path: 'kategori-akun', element: <ListCategoryAccount /> },
-    { path: 'Management-karyawan', element: <ManagementKaryawan/>},
+    { path: 'Management-karyawan', element: <ManagementKaryawan /> },
     { path: 'akun', element: <ListAccount /> },
     { path: 'user', element: <UserManagement /> },
     { path: 'role', element: <RoleManagement /> },

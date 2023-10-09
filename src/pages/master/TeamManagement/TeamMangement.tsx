@@ -1,7 +1,7 @@
 import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 
-function TeamManagement() {
+export function TeamManagement() {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -21,10 +21,7 @@ function TeamManagement() {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
-        customButtonCreate={() => <></>}
       />
     </section>
   )
 }
-
-export default TeamManagement
