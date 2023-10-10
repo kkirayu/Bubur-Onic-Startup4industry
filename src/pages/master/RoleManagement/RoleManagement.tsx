@@ -3,6 +3,7 @@ import { Fragment, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { PermissionsEntity } from '@/utils'
+import { Button } from '@/components'
 
 export function RoleManagement() {
   const navigate = useNavigate()
@@ -25,7 +26,15 @@ export function RoleManagement() {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
-        onClickEdit={(_, id) => navigate(`${id}/edit`)}
+        extraActionButton={(row) => {
+          return (
+            <div className="whitespace-nowrap">
+              <Button onClick={() => navigate(`${row.id}/edit`)}>
+                Tambah Permission
+              </Button>
+            </div>
+          )
+        }}
         customButtonCreate={() => <></>}
         customCell={({ defaultCell, name, value }) => {
           if (name === 'permissions') {
