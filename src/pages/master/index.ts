@@ -1,5 +1,4 @@
 import UserManagement from './UserManagement'
-import RoleManagement from './RoleManagement'
 import UnactiveUserManagement from './UnactiveUserManagement'
 
 export { ListBonus } from './BonusManagement'
@@ -8,5 +7,6 @@ export * from './ManagementKaryawan'
 export * from './ListCategoryAccount'
 export * from './ListAccount'
 export * from './TeamManagement'
+export * from './RoleManagement'
 
-export { UserManagement, RoleManagement, UnactiveUserManagement }
+export { UserManagement, UnactiveUserManagement }

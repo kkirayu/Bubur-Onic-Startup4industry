@@ -9,6 +9,7 @@ import {
   UserManagement,
   ManagementKaryawan,
   CreateKaryawan,
+  EditRole,
 } from '@/pages/master'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -23,6 +24,7 @@ export const masterRoutes: RouteObject = {
     { path: 'akun', element: <ListAccount /> },
     { path: 'user', element: <UserManagement /> },
     { path: 'role', element: <RoleManagement /> },
+    { path: 'role/:id/edit', element: <EditRole /> },
     { path: 'team', element: <TeamManagement /> },
     { path: 'unactive-user', element: <UnactiveUserManagement /> },
     { path: 'bonus', element: <ListBonus /> },

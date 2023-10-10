@@ -1,3 +1,2 @@
-import RoleManagement from './RoleManagement'
-
-export default RoleManagement
+export * from './RoleManagement'
+export * from './Edit'
