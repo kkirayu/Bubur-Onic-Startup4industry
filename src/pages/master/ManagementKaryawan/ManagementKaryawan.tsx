@@ -25,6 +25,7 @@ export function ManagementKaryawan() {
         search={search}
         setSearch={setSearch}
         onClickCreate={() => navigate('create')}
+        onClickDetail={(id) => navigate(`${id}`)}
       />
     </section>
   )

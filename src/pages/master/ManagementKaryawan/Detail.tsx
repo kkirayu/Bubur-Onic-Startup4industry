@@ -1,74 +1,38 @@
 import { Input, Select, Switch } from 'alurkerja-ui'
-import { FieldValues, useForm } from 'react-hook-form'
 
-import { Button, Dialog } from '@/components'
+import { Button } from '@/components'
 import { axiosInstance, useListTeam } from '@/api'
-import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { useNavigate, useParams } from 'react-router-dom'
 
-interface CreatePayload {
-  name: string
-  password: string
-  email: string
-  perusahaan_id?: number
-  cabang_id?: number
-  alamat: string
-  jenis_kelamin: string
-  agama: string
-  tanggal_lahir: string
-  tanggal_masuk: string
-  tanggal_keluar?: null
-  status_kawin: boolean
-  nomor_ktp: string
-  npwp: string
-  gaji_pokok: number
-  uang_hadir: number
-  tunjangan_jabatan: number
-  tunjangan_tambahan: number
-  extra_rajin: number
-  thr: number
-  tunjangan_lembur: number
-  quota_cuti_tahunan: number
-  team_id: number
-}
-
-export const CreateKaryawan = () => {
-  const { setValue, handleSubmit } = useForm()
+export const DetailKaryawan = () => {
   const { listOptionTeam } = useListTeam()
   const navigate = useNavigate()
+  const { id } = useParams()
 
-  const { mutate, isLoading } = useMutation({
-    mutationFn: (payload: CreatePayload) => {
-      return axiosInstance.post(
-        '/pegawai/profil-pegawai/store_with_user',
-        payload
-      )
-    },
-    onSuccess: () => {
-      Dialog.success({
-        description: 'Berhasil membuat profile karyawan',
-        callback: () => {
-          navigate('/master/Management-karyawan')
-        },
-      })
-    },
-    onError: (err: any) => {
-      if (err.response.status === 422) {
-        Dialog.error({ description: err.response.data.message })
-      } else {
-        Dialog.error()
-      }
+  const { data } = useQuery({
+    queryKey: [`${id}`],
+    queryFn: async () => {
+      return axiosInstance
+        .get(`/pegawai/profil-pegawai/${id}`)
+        .then((res) => res.data?.data)
     },
   })
 
-  const onSubmit = (body: FieldValues) => {
-    const payload: CreatePayload = {
-      ...body,
-      perusahaan_id: undefined,
-      cabang_id: undefined,
-    } as CreatePayload
-    mutate(payload)
-  }
+  const listAgama = [
+    { label: 'Islam', value: 'Islam' },
+    { label: 'Kristen', value: 'Kristen' },
+    { label: 'Katolik', value: 'Katolik' },
+    { label: 'Hindu', value: 'Hindu' },
+    { label: 'Buddha', value: 'Buddha' },
+    { label: 'Khonghucu', value: 'Khonghucu' },
+    { label: 'Lainnya', value: 'Lainnya' },
+  ]
+
+  const listJenisKelamin = [
+    { label: 'Laki-laki', value: 'Laki-laki' },
+    { label: 'Perempuan', value: 'Perempuan' },
+  ]
 
   return (
     <main className="bg-white rounded py-6">
@@ -87,20 +51,8 @@ export const CreateKaryawan = () => {
             <Input
               name="email"
               type="email"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
-            />
-          </div>
-          <div>
-            <label
-              htmlFor=""
-              className="after:content-['*'] after:text-red-400 after:text-sm"
-            >
-              Password
-            </label>
-            <Input
-              name="password"
-              type="password"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.user.email}
             />
           </div>
         </div>
@@ -118,8 +70,9 @@ export const CreateKaryawan = () => {
             </label>
             <Input
               name="nomor_ktp"
-              type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              type="text"
+              readOnly
+              value={data?.nomor_ktp}
             />
           </div>
           <div>
@@ -129,11 +82,7 @@ export const CreateKaryawan = () => {
             >
               Nama
             </label>
-            <Input
-              name="name"
-              type="text"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
-            />
+            <Input name="name" type="text" readOnly value={data?.user.name} />
           </div>
           <div>
             <label
@@ -143,16 +92,9 @@ export const CreateKaryawan = () => {
               Agama
             </label>
             <Select
-              options={[
-                { label: 'Islam', value: 'Islam' },
-                { label: 'Kristen', value: 'Kristen' },
-                { label: 'Katolik', value: 'Katolik' },
-                { label: 'Hindu', value: 'Hindu' },
-                { label: 'Buddha', value: 'Buddha' },
-                { label: 'Khonghucu', value: 'Khonghucu' },
-                { label: 'Lainnya', value: 'Lainnya' },
-              ]}
-              onChange={(v: any) => setValue('agama', v.value)}
+              options={listAgama}
+              isDisabled
+              value={listAgama.filter((agama) => agama.value === data?.agama)}
             />
           </div>
           <div>
@@ -163,11 +105,11 @@ export const CreateKaryawan = () => {
               Jenis Kelamin
             </label>
             <Select
-              options={[
-                { label: 'Laki-laki', value: 'Laki-laki' },
-                { label: 'Perempuan', value: 'Perempuan' },
-              ]}
-              onChange={(v: any) => setValue('jenis_kelamin', v.value)}
+              options={listJenisKelamin}
+              isDisabled
+              value={listJenisKelamin.filter(
+                (jk) => jk.value === data?.jenis_kelamin
+              )}
             />
           </div>
           <div>
@@ -180,7 +122,8 @@ export const CreateKaryawan = () => {
             <Input
               name="tanggal_lahir"
               type="date"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.tanggal_lahir}
             />
           </div>
           <div>
@@ -195,7 +138,8 @@ export const CreateKaryawan = () => {
                 { label: 'Sudah Menikah', value: true },
                 { label: 'Belum Menikah', value: false },
               ]}
-              onChange={(v) => setValue('status_kawin', v)}
+              defaultValue={data?.status_kawin}
+              disabled
             />
           </div>
           <div>
@@ -208,7 +152,8 @@ export const CreateKaryawan = () => {
             <Input
               name="tanggal_masuk"
               type="date"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.tanggal_masuk}
             />
           </div>
           <div>
@@ -221,7 +166,8 @@ export const CreateKaryawan = () => {
             <Input
               name="tanggal_keluar"
               type="date"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.tanggal_keluar}
             />
           </div>
           <div>
@@ -233,7 +179,10 @@ export const CreateKaryawan = () => {
             </label>
             <Select
               options={listOptionTeam}
-              onChange={(v: any) => setValue('team_id', +v.id)}
+              isDisabled
+              value={listOptionTeam?.filter(
+                (option) => option.value === data?.team_id
+              )}
             />
           </div>
           <div>
@@ -243,11 +192,7 @@ export const CreateKaryawan = () => {
             >
               Nomor NPWP
             </label>
-            <Input
-              name="npwp"
-              type="text"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
-            />
+            <Input name="npwp" type="text" readOnly value={data?.npwp} />
           </div>
           <div></div>
           <div></div>
@@ -262,7 +207,8 @@ export const CreateKaryawan = () => {
               name="alamat"
               type="text"
               textArea
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.alamat}
             />
           </div>
         </div>
@@ -281,7 +227,8 @@ export const CreateKaryawan = () => {
             <Input
               name="gaji_pokok"
               type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.gaji_pokok}
             />
           </div>
           <div>
@@ -291,11 +238,7 @@ export const CreateKaryawan = () => {
             >
               THR
             </label>
-            <Input
-              name="thr"
-              type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
-            />
+            <Input name="thr" type="number" readOnly value={data?.thr} />
           </div>
           <div>
             <label
@@ -307,7 +250,8 @@ export const CreateKaryawan = () => {
             <Input
               name="uang_hadir"
               type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.uang_hadir}
             />
           </div>
           <div>
@@ -320,7 +264,8 @@ export const CreateKaryawan = () => {
             <Input
               name="tunjangan_jabatan"
               type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.tunjangan_jabatan}
             />
           </div>
           <div>
@@ -333,7 +278,8 @@ export const CreateKaryawan = () => {
             <Input
               name="tunjangan_tambahan"
               type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.tunjangan_tambahan}
             />
           </div>
           <div>
@@ -346,7 +292,8 @@ export const CreateKaryawan = () => {
             <Input
               name="extra_rajin"
               type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.extra_rajin}
             />
           </div>
           <div>
@@ -359,7 +306,8 @@ export const CreateKaryawan = () => {
             <Input
               name="tunjangan_lembur"
               type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.tunjangan_lembur}
             />
           </div>
           <div></div>
@@ -374,14 +322,15 @@ export const CreateKaryawan = () => {
             <Input
               name="quota_cuti_tahunan"
               type="number"
-              onChange={(e) => setValue(e.target.name, e.target.value)}
+              readOnly
+              value={data?.quota_cuti_tahunan}
             />
           </div>
         </div>
       </section>
       <div className="px-10 w-fit ml-auto">
-        <Button loading={isLoading} onClick={() => handleSubmit(onSubmit)()}>
-          Simpan
+        <Button onClick={() => navigate('/master/management-karyawan')}>
+          Kembali
         </Button>
       </div>
     </main>

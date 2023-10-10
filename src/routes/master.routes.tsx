@@ -10,6 +10,7 @@ import {
   ManagementKaryawan,
   CreateKaryawan,
   EditRole,
+  DetailKaryawan,
 } from '@/pages/master'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -19,8 +20,9 @@ export const masterRoutes: RouteObject = {
   element: <Outlet />,
   children: [
     { path: 'kategori-akun', element: <ListCategoryAccount /> },
-    { path: 'Management-karyawan', element: <ManagementKaryawan /> },
-    { path: 'Management-karyawan/create', element: <CreateKaryawan /> },
+    { path: 'management-karyawan', element: <ManagementKaryawan /> },
+    { path: 'management-karyawan/create', element: <CreateKaryawan /> },
+    { path: 'management-karyawan/:id', element: <DetailKaryawan /> },
     { path: 'akun', element: <ListAccount /> },
     { path: 'user', element: <UserManagement /> },
     { path: 'role', element: <RoleManagement /> },
