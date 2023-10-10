@@ -118,7 +118,7 @@ export const CreateKaryawan = () => {
             </label>
             <Input
               name="nomor_ktp"
-              type="number"
+              type="text"
               onChange={(e) => setValue(e.target.name, e.target.value)}
             />
           </div>
