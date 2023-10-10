@@ -1,43 +1,80 @@
-import { Select, TableLowcode } from 'alurkerja-ui'
-import { Fragment, useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
-import { Button, Dialog } from '@/components'
-import { axiosInstance } from '@/api'
+import { Modal, Select, TableLowcode } from 'alurkerja-ui'
+import { axiosInstance, useListPermission } from '@/api'
 import { PermissionsEntity } from '@/utils'
+import { Fragment, useCallback, useState } from 'react'
+import { Button, Dialog } from '@/components'
+import { useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
 
 function RoleManagement() {
+  const { listOptionPermission } = useListPermission()
+  const { setValue, getValues } = useForm()
+
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
 
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (id: string) => {
+      return axiosInstance.post(`/crud/role/${id}/permissions`, {
+        permissions: getValues('permissions'),
+      })
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil mengedit permission',
+        callback: () => {
+          setRenderState((prev) => prev + 1)
+        },
+      })
+    },
+  })
+
   const convertToOption = (list: any[]) => {
     return list.map((item) => ({ label: item.name, value: item.id, ...item }))
   }
 
-  const ButtonAddPermission = ({ id }: { id: number }) => {
-    const { mutate, isLoading } = useMutation({
-      mutationFn: () => {
-        return axiosInstance.post(`/crud/role/${id}/permissions`, {
-          permissions: ['c1397806-f169-47b8-a667-746f0c2c4988'],
-        })
-      },
-      onSuccess: () => {
-        Dialog.success({
-          description: 'Berhasil menambahkan permission',
-          callback: () => {
-            setRenderState((prev) => prev + 1)
-          },
-        })
-      },
-    })
-
-    return (
-      <Button loading={isLoading} onClick={() => mutate()}>
-        Tambah Permission
-      </Button>
-    )
-  }
+  const ButtonEdit = useCallback(
+    ({
+      triggerButton,
+      row,
+      isLoading,
+    }: {
+      triggerButton: JSX.Element
+      row: any
+      isLoading: boolean
+    }) => {
+      return (
+        <Modal title="Edit Role" triggerButton={triggerButton}>
+          <div className="p-4 space-y-4">
+            <Select
+              options={listOptionPermission}
+              defaultValue={convertToOption(row.permissions)}
+              isMulti
+              onChange={(v: any) =>
+                setValue(
+                  'permissions',
+                  v.map((permission: PermissionsEntity) => permission.id)
+                )
+              }
+            />
+            <div className="w-fit ml-auto">
+              <Button
+                loading={isLoading}
+                onClick={() => {
+                  mutate(row.id)
+                }}
+              >
+                Submit
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )
+    },
+    []
+  )
 
   return (
     <section className="bg-white">
@@ -53,25 +90,9 @@ function RoleManagement() {
         search={search}
         setSearch={setSearch}
         customButtonCreate={() => <></>}
-        extraActionButton={(data) => <ButtonAddPermission id={data.id} />}
-        customField={({ defaultField, value, field }) => {
-          if (field.name === 'permissions' && value) {
-            return (
-              <Select
-                options={[
-                  {
-                    label: 'permission 1',
-                    value: 'c1397806-f169-47b8-a667-746f0c2c4988',
-                  },
-                ]}
-                defaultValue={convertToOption(value)}
-                isMulti
-              />
-            )
-          }
-
-          return defaultField
-        }}
+        customButtonEdit={(_modal, Button, row) => (
+          <ButtonEdit triggerButton={Button} row={row} isLoading={isLoading} />
+        )}
         customCell={({ defaultCell, name, value }) => {
           if (name === 'permissions') {
             return (
