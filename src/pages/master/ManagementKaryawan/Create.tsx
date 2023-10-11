@@ -1,6 +1,75 @@
-import { Input, Select } from 'alurkerja-ui'
+import { Input, Select, Switch } from 'alurkerja-ui'
+import { FieldValues, useForm } from 'react-hook-form'
+
+import { Button, Dialog } from '@/components'
+import { axiosInstance, useListTeam } from '@/api'
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+
+interface CreatePayload {
+  name: string
+  password: string
+  email: string
+  perusahaan_id?: number
+  cabang_id?: number
+  alamat: string
+  jenis_kelamin: string
+  agama: string
+  tanggal_lahir: string
+  tanggal_masuk: string
+  tanggal_keluar?: null
+  status_kawin: boolean
+  nomor_ktp: string
+  npwp: string
+  gaji_pokok: number
+  uang_hadir: number
+  tunjangan_jabatan: number
+  tunjangan_tambahan: number
+  extra_rajin: number
+  thr: number
+  tunjangan_lembur: number
+  quota_cuti_tahunan: number
+  team_id: number
+}
 
 export const CreateKaryawan = () => {
+  const { setValue, handleSubmit } = useForm()
+  const { listOptionTeam } = useListTeam()
+  const navigate = useNavigate()
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (payload: CreatePayload) => {
+      return axiosInstance.post(
+        '/pegawai/profil-pegawai/store_with_user',
+        payload
+      )
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil membuat profile karyawan',
+        callback: () => {
+          navigate('/master/Management-karyawan')
+        },
+      })
+    },
+    onError: (err: any) => {
+      if (err.response.status === 422) {
+        Dialog.error({ description: err.response.data.message })
+      } else {
+        Dialog.error()
+      }
+    },
+  })
+
+  const onSubmit = (body: FieldValues) => {
+    const payload: CreatePayload = {
+      ...body,
+      perusahaan_id: undefined,
+      cabang_id: undefined,
+    } as CreatePayload
+    mutate(payload)
+  }
+
   return (
     <main className="bg-white rounded py-6">
       <h3 className="font-bold text-xl mb-10 px-6">Tambah Pegawai</h3>
@@ -15,7 +84,11 @@ export const CreateKaryawan = () => {
             >
               Email
             </label>
-            <Input type="email" />
+            <Input
+              name="email"
+              type="email"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -24,7 +97,11 @@ export const CreateKaryawan = () => {
             >
               Password
             </label>
-            <Input type="password" />
+            <Input
+              name="password"
+              type="password"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
         </div>
       </section>
@@ -39,7 +116,11 @@ export const CreateKaryawan = () => {
             >
               Nomor KTP
             </label>
-            <Input type="text" />
+            <Input
+              name="nomor_ktp"
+              type="text"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -48,7 +129,11 @@ export const CreateKaryawan = () => {
             >
               Nama
             </label>
-            <Input type="text" />
+            <Input
+              name="name"
+              type="text"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -57,7 +142,18 @@ export const CreateKaryawan = () => {
             >
               Agama
             </label>
-            <Select options={[{}]} />
+            <Select
+              options={[
+                { label: 'Islam', value: 'Islam' },
+                { label: 'Kristen', value: 'Kristen' },
+                { label: 'Katolik', value: 'Katolik' },
+                { label: 'Hindu', value: 'Hindu' },
+                { label: 'Buddha', value: 'Buddha' },
+                { label: 'Khonghucu', value: 'Khonghucu' },
+                { label: 'Lainnya', value: 'Lainnya' },
+              ]}
+              onChange={(v: any) => setValue('agama', v.value)}
+            />
           </div>
           <div>
             <label
@@ -66,7 +162,13 @@ export const CreateKaryawan = () => {
             >
               Jenis Kelamin
             </label>
-            <Select options={[{}]} />
+            <Select
+              options={[
+                { label: 'Laki-laki', value: 'Laki-laki' },
+                { label: 'Perempuan', value: 'Perempuan' },
+              ]}
+              onChange={(v: any) => setValue('jenis_kelamin', v.value)}
+            />
           </div>
           <div>
             <label
@@ -75,7 +177,11 @@ export const CreateKaryawan = () => {
             >
               Tanggal Lahir
             </label>
-            <Input type="date" />
+            <Input
+              name="tanggal_lahir"
+              type="date"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -84,7 +190,13 @@ export const CreateKaryawan = () => {
             >
               Status Kawin
             </label>
-            <Select options={[{}]} />
+            <Switch
+              options={[
+                { label: 'Sudah Menikah', value: true },
+                { label: 'Belum Menikah', value: false },
+              ]}
+              onChange={(v) => setValue('status_kawin', v)}
+            />
           </div>
           <div>
             <label
@@ -93,7 +205,11 @@ export const CreateKaryawan = () => {
             >
               Tanggal Masuk
             </label>
-            <Input type="date" />
+            <Input
+              name="tanggal_masuk"
+              type="date"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -102,9 +218,24 @@ export const CreateKaryawan = () => {
             >
               Tangal Keluar
             </label>
-            <Input type="date" />
+            <Input
+              name="tanggal_keluar"
+              type="date"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
-          <div></div>
+          <div>
+            <label
+              htmlFor=""
+              className="after:content-['*'] after:text-red-400 after:text-sm"
+            >
+              Team
+            </label>
+            <Select
+              options={listOptionTeam}
+              onChange={(v: any) => setValue('team_id', +v.id)}
+            />
+          </div>
           <div>
             <label
               htmlFor=""
@@ -112,7 +243,11 @@ export const CreateKaryawan = () => {
             >
               Nomor NPWP
             </label>
-            <Input type="text" />
+            <Input
+              name="npwp"
+              type="text"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div></div>
           <div></div>
@@ -121,9 +256,14 @@ export const CreateKaryawan = () => {
               htmlFor=""
               className="after:content-['*'] after:text-red-400 after:text-sm"
             >
-              Nomor NPWP
+              Alamat KTP
             </label>
-            <Input type="text" textArea />
+            <Input
+              name="alamat"
+              type="text"
+              textArea
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
         </div>
       </section>
@@ -138,7 +278,11 @@ export const CreateKaryawan = () => {
             >
               Gaji Pokok
             </label>
-            <Input type="number" />
+            <Input
+              name="gaji_pokok"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -147,7 +291,11 @@ export const CreateKaryawan = () => {
             >
               THR
             </label>
-            <Input type="number" />
+            <Input
+              name="thr"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -156,7 +304,11 @@ export const CreateKaryawan = () => {
             >
               Uang Hadir
             </label>
-            <Input type="number" />
+            <Input
+              name="uang_hadir"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -165,7 +317,11 @@ export const CreateKaryawan = () => {
             >
               Tunjangan Jabatan
             </label>
-            <Input type="number" />
+            <Input
+              name="tunjangan_jabatan"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -174,7 +330,11 @@ export const CreateKaryawan = () => {
             >
               Tunjangan Tambahan
             </label>
-            <Input type="number" />
+            <Input
+              name="tunjangan_tambahan"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -183,7 +343,11 @@ export const CreateKaryawan = () => {
             >
               Extra Rajin
             </label>
-            <Input type="number" />
+            <Input
+              name="extra_rajin"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div>
             <label
@@ -192,7 +356,11 @@ export const CreateKaryawan = () => {
             >
               Tunjangan Lembur
             </label>
-            <Input type="number" />
+            <Input
+              name="tunjangan_lembur"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
           <div></div>
           <div></div>
@@ -203,10 +371,19 @@ export const CreateKaryawan = () => {
             >
               Kuota Cuti Tahunan
             </label>
-            <Input type="number" />
+            <Input
+              name="quota_cuti_tahunan"
+              type="number"
+              onChange={(e) => setValue(e.target.name, e.target.value)}
+            />
           </div>
         </div>
       </section>
+      <div className="px-10 w-fit ml-auto">
+        <Button loading={isLoading} onClick={() => handleSubmit(onSubmit)()}>
+          Simpan
+        </Button>
+      </div>
     </main>
   )
 }
