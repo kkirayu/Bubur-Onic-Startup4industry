@@ -97,7 +97,7 @@ export const menuMaster = [
         icon: <BadgePercent size={20} />,
       },
       {
-        href: '/master/Management-karyawan',
+        href: '/master/management-karyawan',
         label: 'Management Karyawan',
         icon: (
           <svg
