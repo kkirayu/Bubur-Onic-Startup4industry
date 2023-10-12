@@ -3,15 +3,36 @@ import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { Button } from '@/components'
+import { getListCompany } from '@/api'
+import { useNavigate } from 'react-router-dom'
+import moment from 'moment'
 
 export function Dashboard() {
-  const { setValue } = useForm()
+  const { setValue, watch } = useForm({
+    defaultValues: {
+      company: '',
+      type: 'all',
+    },
+  })
+  const navigate = useNavigate()
+  const { listOption: listOptionCompany, isLoading: loadingListCompany } =
+    getListCompany()
 
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
+    new Date(),
+    new Date(),
   ])
-  const [startDate, endDate] = dateRange
+
+  const onClickView = () => {
+    navigate({
+      pathname: 'journal',
+      search: `?company=${watch('company')}&type=${watch(
+        'type'
+      )}&start=${moment(dateRange[0]).format('DD/MM/YYYY')}&end=${moment(
+        dateRange[1]
+      ).format('DD/MM/YYYY')}`,
+    })
+  }
 
   return (
     <div className="px-4 bg-white">
@@ -51,7 +72,13 @@ export function Dashboard() {
                       >
                         Journal Dari Perusahaan
                       </label>
-                      <Select options={[{}]} />
+                      <Select
+                        isLoading={loadingListCompany}
+                        options={listOptionCompany}
+                        onChange={(selected: any) =>
+                          setValue('company', selected.value)
+                        }
+                      />
                       <div className="text-xs text-gray-alurkerja-2">
                         Journal Dari Perusahaan Yang di handle
                       </div>
@@ -63,7 +90,20 @@ export function Dashboard() {
                       >
                         Jenis Laporan Journal
                       </label>
-                      <Select options={[{}]} />
+                      <Select
+                        options={[
+                          { label: 'Semua Jurnal', value: 'all' },
+                          { label: 'Jurnal Transaksi Kas', value: 'kas' },
+                          {
+                            label: 'Jurnal Transaksi Non Kas',
+                            value: 'non-kas',
+                          },
+                        ]}
+                        defaultValue={{ label: 'Semua Jurnal', value: 'all' }}
+                        onChange={(selected: any) =>
+                          setValue('type', selected.value)
+                        }
+                      />
                       <div className="text-xs text-gray-alurkerja-2">
                         Jenis Laporan journal
                       </div>
@@ -78,8 +118,8 @@ export function Dashboard() {
                       <DatePicker
                         className="w-full border p-2 rounded"
                         selectsRange={true}
-                        startDate={startDate}
-                        endDate={endDate}
+                        startDate={dateRange[0]}
+                        endDate={dateRange[1]}
                         onChange={(update) => {
                           setDateRange(update)
                         }}
@@ -93,7 +133,7 @@ export function Dashboard() {
                 </div>
                 <div className="flex items-center justify-between p-5">
                   <Button variant="outlined">Cancel</Button>
-                  <Button>Lihat Laporan</Button>
+                  <Button onClick={() => onClickView()}>Lihat Laporan</Button>
                 </div>
               </div>
             </Modal>

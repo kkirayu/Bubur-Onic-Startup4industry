@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { axiosInstance } from '@/api'
-import { DetailCompanyResponse, CompanyType } from 'utils'
+import { Company } from '@/utils'
 import { Button } from '@/components'
 
 export const DetailCompany = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const [company, setCompany] = useState<CompanyType>()
+  const [company, setCompany] = useState<Company>()
 
   useEffect(() => {
     const abortController = new AbortController()
     const signal = abortController.signal
     if (id) {
       axiosInstance
-        .get<DetailCompanyResponse>('/saas/perusahaan/' + id, {
+        .get('/saas/perusahaan/' + id, {
           signal: signal,
         })
         .then((res) => {

@@ -1,6 +1,6 @@
 export * from './loginResponseType'
 export * from './UserType'
-export * from './companyType'
+export * from './company.type'
 export * from './permissionsType'
 
 export type Pagination = {

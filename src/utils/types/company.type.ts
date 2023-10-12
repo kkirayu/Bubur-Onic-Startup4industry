@@ -1,4 +1,4 @@
-export interface CompanyType {
+export interface Company {
   id: number
   created_at: string
   created_by: string | null
@@ -25,9 +25,4 @@ export interface Cabang {
   perusahaan_id: number
   updated_at: string
   updated_by: string | null
-}
-
-export interface DetailCompanyResponse {
-  data: CompanyType
-  message: string
 }
