@@ -12,17 +12,11 @@ import {
   CreateCompany,
   ListCompany,
 } from '@/pages/company'
-import {
-  BukuBesar,
-  LabaRugi,
-  ListJournal,
-  Neraca,
-  PenambahanModal,
-} from '@/pages/laporan-keuangan'
 
 // routes
 import { keuanganRoutes } from './keuangan.routes'
 import { masterRoutes } from './master.routes'
+import { laporanKeuanganRoutes } from './laporanKeuangan.routes'
 
 const router = createBrowserRouter([
   {
@@ -80,17 +74,7 @@ const router = createBrowserRouter([
         ],
       },
       keuanganRoutes,
-      {
-        path: 'laporan-keuangan',
-        element: <Outlet />,
-        children: [
-          { path: 'daftar-jurnal', element: <ListJournal /> },
-          { path: 'buku-besar', element: <BukuBesar /> },
-          { path: 'neraca', element: <Neraca /> },
-          { path: 'laba-rugi', element: <LabaRugi /> },
-          { path: 'penambahan-modal', element: <PenambahanModal /> },
-        ],
-      },
+      laporanKeuanganRoutes,
       masterRoutes,
     ],
   },

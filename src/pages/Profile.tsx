@@ -116,7 +116,7 @@ export const Profile = () => {
           title="Reset Password"
           triggerButton={<Button variant="outlined">Ubah Password</Button>}
         >
-          <div className="px-4 pt-4 space-y-6">
+          <div className="p-6 pt-4 space-y-6">
             <div>
               <label htmlFor="current_password">
                 Password Lama <span className="text-red-600 text-sm">*</span>

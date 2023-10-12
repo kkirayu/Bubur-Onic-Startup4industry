@@ -1,4 +1,6 @@
 import type { MenuConfig } from 'alurkerja-ui'
+import { Home } from 'lucide-react'
+
 import { menuKeuangan } from './menuKeuangan'
 import { menuLaporanKeuangan } from './menuLaporanKeuangan'
 import { menuMaster } from './menuMaster'

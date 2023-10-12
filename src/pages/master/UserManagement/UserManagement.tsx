@@ -71,7 +71,7 @@ function UserManagement() {
               </button>
             }
           >
-            <div className="p-4">
+            <div className="p-6 pt-4">
               <ReactHookWrapper control={control}>
                 <Switch
                   onChange={(v: boolean | undefined) => setValue('status', v)}
