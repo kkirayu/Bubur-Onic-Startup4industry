@@ -1,9 +1,8 @@
 import { Input, Select, Switch } from 'alurkerja-ui'
-
-import { Button } from '@/components'
-import { axiosInstance, getListTeam } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Button } from '@/components'
+import { axiosInstance, getListTeam } from '@/api'
 
 export const DetailKaryawan = () => {
   const { listOption: listOptionTeam } = getListTeam()

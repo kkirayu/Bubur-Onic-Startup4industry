@@ -1,5 +1,5 @@
 import { Modal, Select } from 'alurkerja-ui'
-import { useForm } from 'react-hook-form'
+import { FieldValues, useForm } from 'react-hook-form'
 import { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { Button } from '@/components'
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 
 export function Dashboard() {
-  const { setValue, watch } = useForm({
+  const { setValue, handleSubmit, setError } = useForm({
     defaultValues: {
       company: '',
       type: 'all',
@@ -23,15 +23,19 @@ export function Dashboard() {
     new Date(),
   ])
 
-  const onClickView = () => {
-    navigate({
-      pathname: 'journal',
-      search: `?company=${watch('company')}&type=${watch(
-        'type'
-      )}&start=${moment(dateRange[0]).format('DD/MM/YYYY')}&end=${moment(
-        dateRange[1]
-      ).format('DD/MM/YYYY')}`,
-    })
+  const onClickJournal = (data: FieldValues) => {
+    if (data.company === '') {
+      setError('company', { type: 'required', message: 'company required' })
+    } else {
+      navigate({
+        pathname: 'journal',
+        search: `?company=${data.company}&type=${data.type}&start=${moment(
+          dateRange[0]
+        ).format('DD/MM/YYYY')}&end=${moment(dateRange[1]).format(
+          'DD/MM/YYYY'
+        )}`,
+      })
+    }
   }
 
   return (
@@ -133,7 +137,9 @@ export function Dashboard() {
                 </div>
                 <div className="flex items-center justify-between p-5">
                   <Button variant="outlined">Cancel</Button>
-                  <Button onClick={() => onClickView()}>Lihat Laporan</Button>
+                  <Button onClick={() => handleSubmit(onClickJournal)()}>
+                    Lihat Laporan
+                  </Button>
                 </div>
               </div>
             </Modal>
