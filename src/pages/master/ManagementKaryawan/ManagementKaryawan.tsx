@@ -16,6 +16,11 @@ export function ManagementKaryawan() {
         baseUrl={import.meta.env.VITE_API_BASEURL}
         tableName="Management Karyawan"
         specPath="/api/pegawai/profil-pegawai"
+        column={[
+            { label: 'Nama', key: 'user_id' },
+            { label: 'Kode Pegawai', key: 'kode_pegawai' },
+            { label: 'Team', key: 'team_id' },
+        ]}
         renderState={renderState}
         setRenderState={setRenderState}
         pageConfig={pageConfig}
