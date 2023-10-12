@@ -44,8 +44,6 @@ export function Dashboard() {
     }
   }
 
-  console.log(errors)
-
   return (
     <div className="px-4 bg-white">
       <div className="pt-5 pb-6 pl-4 border-b mb-5">
