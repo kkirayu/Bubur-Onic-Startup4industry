@@ -8,7 +8,13 @@ import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 
 export function Dashboard() {
-  const { setValue, handleSubmit, setError } = useForm({
+  const {
+    setValue,
+    handleSubmit,
+    setError,
+    formState: { errors },
+    clearErrors,
+  } = useForm({
     defaultValues: {
       company: '',
       type: 'all',
@@ -24,9 +30,7 @@ export function Dashboard() {
   ])
 
   const onClickJournal = (data: FieldValues) => {
-    if (data.company === '') {
-      setError('company', { type: 'required', message: 'company required' })
-    } else {
+    if (data.company !== '') {
       navigate({
         pathname: 'journal',
         search: `?company=${data.company}&type=${data.type}&start=${moment(
@@ -35,8 +39,12 @@ export function Dashboard() {
           'DD/MM/YYYY'
         )}`,
       })
+    } else {
+      setError('company', { type: 'required', message: 'company required' })
     }
   }
+
+  console.log(errors)
 
   return (
     <div className="px-4 bg-white">
@@ -77,14 +85,22 @@ export function Dashboard() {
                         Journal Dari Perusahaan
                       </label>
                       <Select
+                        invalid={errors.company ? true : false}
                         isLoading={loadingListCompany}
                         options={listOptionCompany}
-                        onChange={(selected: any) =>
+                        onChange={(selected: any) => {
                           setValue('company', selected.value)
-                        }
+                          clearErrors('company')
+                        }}
                       />
                       <div className="text-xs text-gray-alurkerja-2">
-                        Journal Dari Perusahaan Yang di handle
+                        {errors?.company ? (
+                          <span className="text-red-alurkerja">
+                            {errors?.company.message}
+                          </span>
+                        ) : (
+                          'Journal Dari Perusahaan Yang di handle'
+                        )}
                       </div>
                     </div>
                     <div>
