@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { axiosInstance } from './'
+import { AxiosResponse } from 'axios'
+import { axiosInstance } from '.'
+import { ListResponse } from '@/utils'
 
-interface ListAccount {
+interface Account {
   id: number
   kode_akun: string
   perusahaan_id: number
@@ -34,15 +36,16 @@ interface KategoriAkun {
   deleted_by: number | null
 }
 
-export const useListAccount = () => {
-  const { isLoading, data, error } = useQuery({
+export const getListAccount = () => {
+  const listAccountQuery = useQuery<AxiosResponse<ListResponse<Account>, any>>({
     queryKey: ['account'],
     queryFn: async () => {
       return axiosInstance.get('/akun/akun')
     },
   })
 
-  const listAccount: ListAccount[] = data?.data.data.content
+  const { data } = listAccountQuery
+  const listAccount = data?.data.data.content
 
-  return { loading: isLoading, listAccount: listAccount, error }
+  return { ...listAccountQuery, data: listAccount }
 }

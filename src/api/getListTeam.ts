@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { axiosInstance } from '.'
-import { Options } from '@/utils'
+import { ListResponse } from '@/utils'
 import { useMemo } from 'react'
+import { AxiosResponse } from 'axios'
 
 interface Team {
   id: number
@@ -17,25 +18,27 @@ interface Team {
   deleted_by?: null
 }
 
-type TeamOption = Team & Options
-
-export const useListTeam = () => {
-  const { isLoading, data, error } = useQuery({
+export const getListTeam = () => {
+  const listTeamQuery = useQuery<AxiosResponse<ListResponse<Team>, any>>({
     queryKey: ['team'],
     queryFn: async () => {
       return axiosInstance.get('/team/team')
     },
   })
+  const { data } = listTeamQuery
 
-  const listTeam: Team[] = data?.data.data.content
+  const listTeam = data?.data.data.content
 
-  const listOptionTeam: TeamOption[] = useMemo(() => {
-    return listTeam?.map((team: any) => ({
-      ...team,
+  const listOptionTeam = useMemo(() => {
+    return listTeam?.map((team) => ({
       label: team.nama,
       value: team.id,
     }))
   }, [listTeam])
 
-  return { loading: isLoading, listTeam, listOptionTeam, error }
+  return {
+    ...listTeamQuery,
+    data: listTeam,
+    listOption: listOptionTeam,
+  }
 }

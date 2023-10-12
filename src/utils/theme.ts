@@ -1,7 +1,5 @@
 import { themeConfig, Theme } from 'alurkerja-ui'
 
-const theme: Theme = {
+export const theme: Theme = {
   ...themeConfig,
 }
-
-export default theme

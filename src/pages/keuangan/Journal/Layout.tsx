@@ -47,7 +47,7 @@ export const JournalContext = createContext<DetailJournal | undefined>(
 export const LayoutJournal = () => {
   const { id } = useParams()
   const { data } = useQuery({
-    queryKey: ['detail-journal'],
+    queryKey: ['journal', id],
     queryFn: () => {
       return axiosInstance.get(`/journal/journal/${id}`)
     },

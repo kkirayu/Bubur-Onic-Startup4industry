@@ -2,7 +2,7 @@ import { Input, Select, Switch } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 
 import { Button, Dialog } from '@/components'
-import { axiosInstance, useListTeam } from '@/api'
+import { axiosInstance, getListTeam } from '@/api'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
@@ -34,7 +34,7 @@ interface CreatePayload {
 
 export const CreateKaryawan = () => {
   const { setValue, handleSubmit } = useForm()
-  const { listOptionTeam } = useListTeam()
+  const { listOption: listOptionTeam } = getListTeam()
   const navigate = useNavigate()
 
   const { mutate, isLoading } = useMutation({

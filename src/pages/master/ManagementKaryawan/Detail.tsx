@@ -1,17 +1,17 @@
 import { Input, Select, Switch } from 'alurkerja-ui'
 
 import { Button } from '@/components'
-import { axiosInstance, useListTeam } from '@/api'
+import { axiosInstance, getListTeam } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export const DetailKaryawan = () => {
-  const { listOptionTeam } = useListTeam()
+  const { listOption: listOptionTeam } = getListTeam()
   const navigate = useNavigate()
   const { id } = useParams()
 
   const { data } = useQuery({
-    queryKey: [`${id}`],
+    queryKey: ['profil-pegawai', id],
     queryFn: async () => {
       return axiosInstance
         .get(`/pegawai/profil-pegawai/${id}`)

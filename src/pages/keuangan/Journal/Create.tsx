@@ -7,7 +7,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import moment from 'moment'
 
 import { Button, Dialog } from '@/components'
-import { axiosInstance, useListAccount } from '@/api'
+import { axiosInstance, getListAccount } from '@/api'
 
 interface PayloadCreateJournal {
   deskripsi: string
@@ -25,9 +25,8 @@ export const CreateJurnal = () => {
     formState: { errors },
     unregister,
   } = useForm()
-  const { listAccount } = useListAccount()
+  const { data: listAccount } = getListAccount()
   const navigate = useNavigate()
-
   const { mutate, isLoading } = useMutation({
     mutationFn: (payload: PayloadCreateJournal) => {
       return axiosInstance.post('/journal/journal/create-journal', payload)
@@ -74,7 +73,7 @@ export const CreateJurnal = () => {
   }, [formValues])
 
   const listOptionAccount = useMemo(() => {
-    return listAccount?.map((acc: any) => ({
+    return listAccount?.map((acc) => ({
       ...acc,
       label: acc.nama,
       value: acc.id,

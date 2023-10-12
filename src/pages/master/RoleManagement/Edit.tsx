@@ -18,7 +18,7 @@ export const EditRole = () => {
   const [selectedRow, setSelectedRow] = useState<number[]>([])
 
   const { data } = useQuery({
-    queryKey: [`${id}`],
+    queryKey: ['role', id],
     queryFn: async () => {
       return axiosInstance.get(`/crud/role/${id}`).then((res) => res.data.data)
     },

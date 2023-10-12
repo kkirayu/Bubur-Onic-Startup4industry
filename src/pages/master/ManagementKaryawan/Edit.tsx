@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { FieldValues, useForm } from 'react-hook-form'
 
 import { Button, Dialog } from '@/components'
-import { axiosInstance, useListTeam } from '@/api'
+import { axiosInstance, getListTeam } from '@/api'
 import { useEffect } from 'react'
 
 interface EditPayload {
@@ -34,13 +34,14 @@ interface EditPayload {
 }
 
 export const EditKaryawan = () => {
-  const { listOptionTeam, loading } = useListTeam()
+  const { listOption: listOptionTeam, isLoading: loadingListTeam } =
+    getListTeam()
   const navigate = useNavigate()
   const { id } = useParams()
   const { handleSubmit, setValue } = useForm()
 
   const { data } = useQuery({
-    queryKey: [`${id}`],
+    queryKey: ['profil-pegawai', id],
     queryFn: async () => {
       return axiosInstance
         .get(`/pegawai/profil-pegawai/${id}`)
@@ -270,7 +271,7 @@ export const EditKaryawan = () => {
             </label>
             {data && (
               <Select
-                isLoading={loading}
+                isLoading={loadingListTeam}
                 options={listOptionTeam}
                 defaultValue={listOptionTeam?.filter(
                   (option) => option.value === data?.team_id

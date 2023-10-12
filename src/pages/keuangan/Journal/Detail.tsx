@@ -4,11 +4,11 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
 import { Dialog, Button } from '@/components'
-import { axiosInstance, useListAccount } from '@/api'
+import { axiosInstance, getListAccount } from '@/api'
 import { JournalContext } from './Layout'
 
 export const DetailJurnal = () => {
-  const { listAccount } = useListAccount()
+  const { data: listAccount } = getListAccount()
   const navigate = useNavigate()
   const detailJournal = useContext(JournalContext)
 

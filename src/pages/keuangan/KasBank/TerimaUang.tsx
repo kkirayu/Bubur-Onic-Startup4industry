@@ -7,7 +7,7 @@ import { ErrorMessage } from '@hookform/error-message'
 import moment from 'moment'
 
 import { Button, Dialog } from '@/components'
-import { axiosInstance, useListAccount } from '@/api'
+import { axiosInstance, getListAccount } from '@/api'
 
 interface PayloadTerimaUang {
   deskripsi: string
@@ -24,7 +24,7 @@ export const TerimaUang = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { listAccount } = useListAccount()
+  const { data: listAccount } = getListAccount()
   const navigate = useNavigate()
   const { account_id } = useParams()
 
@@ -64,7 +64,7 @@ export const TerimaUang = () => {
   }, [formValues])
 
   const listOptionAccount = useMemo(() => {
-    return listAccount?.map((acc: any) => ({
+    return listAccount?.map((acc) => ({
       ...acc,
       label: acc.nama,
       value: acc.id,
@@ -75,12 +75,12 @@ export const TerimaUang = () => {
     if (account_id) {
       setValue('account_0', +account_id)
       return listAccount
-        ?.map((acc: any) => ({
+        ?.map((acc) => ({
           ...acc,
           label: acc.nama,
           value: acc.id,
         }))
-        .filter((acc: any) => acc.id === +account_id)
+        .filter((acc) => acc.id === +account_id)
     }
   }, [listAccount, account_id])
 
