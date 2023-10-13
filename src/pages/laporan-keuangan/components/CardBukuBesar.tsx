@@ -105,7 +105,7 @@ export const CardBukuBesar = () => {
                     htmlFor=""
                     className="after:content-['*'] after:text-red-400 after:text-sm"
                   >
-                    Jenis Laporan Buku Besar
+                    Group COA
                   </label>
                   <Select
                     invalid={errors.group ? true : false}
