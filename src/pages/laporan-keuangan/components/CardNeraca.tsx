@@ -1,15 +1,14 @@
-import { Modal, Select } from 'alurkerja-ui'
+import { InputDate, Modal, Select } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import DatePicker from 'react-datepicker'
 import { useState } from 'react'
+import moment from 'moment'
 
 import { IconLaporan } from '@/assets'
 import { Button } from '@/components'
-import { getListAccount, getListCompany } from '@/api'
-import moment from 'moment'
+import { getListCompany } from '@/api'
 
-export const CardBukuBesar = () => {
+export const CardNeraca = () => {
   const {
     setValue,
     handleSubmit,
@@ -19,36 +18,24 @@ export const CardBukuBesar = () => {
   } = useForm({
     defaultValues: {
       company: '',
-      group: '',
+      date: new Date(),
     },
   })
 
   const navigate = useNavigate()
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
-  const { listOption: listOptionAcount } = getListAccount()
-
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    new Date(),
-    new Date(),
-  ])
 
   const onClickJournal = (data: FieldValues) => {
-    if (data.company === '') {
-      setError('company', { type: 'required', message: 'company required' })
-    }
-    if (data.group === '') {
-      setError('group', { type: 'required', message: 'group COA required' })
-    }
-    if (data.company !== '' && data.group !== '') {
+    if (data.company !== '') {
       navigate({
-        pathname: 'buku-besar',
-        search: `?company=${data.company}&group=${data.group}&start=${moment(
-          dateRange[0]
-        ).format('DD/MM/YYYY')}&end=${moment(dateRange[1]).format(
+        pathname: 'neraca',
+        search: `?company=${data.company}&date=${moment(data.date).format(
           'DD/MM/YYYY'
         )}`,
       })
+    } else {
+      setError('company', { type: 'required', message: 'company required' })
     }
   }
 
@@ -58,16 +45,16 @@ export const CardBukuBesar = () => {
         <IconLaporan />
         <div>
           <div className="text-gray-700">Laporan</div>
-          <div className="text-gray-700 font-semibold">Buku besar</div>
+          <div className="text-gray-700 font-semibold">Neraca</div>
         </div>
       </div>
       <div className="p-6">
         <p className="mb-6">
-          Menampilkan coa keuangan dengan history transaksi pada periode
+          Menampilkan perbandingan antara coa aktiva dan pasiva pada periode
           tertentu.
         </p>
         <Modal
-          title="Konfigurasi Laporan Buku Besar"
+          title="Konfigurasi Laporan Neraca"
           triggerButton={<Button>Buka Laporan</Button>}
           maxWidth="2xl"
         >
@@ -100,48 +87,15 @@ export const CardBukuBesar = () => {
                     )}
                   </div>
                 </div>
+
                 <div>
                   <label
                     htmlFor=""
                     className="after:content-['*'] after:text-red-400 after:text-sm"
                   >
-                    Jenis Laporan Buku Besar
+                    Neraca Per Tanggal
                   </label>
-                  <Select
-                    invalid={errors.group ? true : false}
-                    options={listOptionAcount}
-                    onChange={(selected: any) => {
-                      setValue('group', selected.value)
-                      clearErrors('group')
-                    }}
-                  />
-                  <div className="text-xs text-gray-alurkerja-2">
-                    {errors?.group ? (
-                      <span className="text-red-alurkerja">
-                        {errors?.group.message}
-                      </span>
-                    ) : (
-                      'Group Coa Yang ingin ditampilkan'
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor=""
-                    className="after:content-['*'] after:text-red-400 after:text-sm"
-                  >
-                    Periode Transaksi
-                  </label>
-                  <DatePicker
-                    className="w-full border p-2 rounded"
-                    selectsRange={true}
-                    startDate={dateRange[0]}
-                    endDate={dateRange[1]}
-                    onChange={(update) => {
-                      setDateRange(update)
-                    }}
-                    isClearable={true}
-                  />
+                  <InputDate defaultValue={new Date()} />
                   <div className="text-xs text-gray-alurkerja-2">
                     Periode Transaksi
                   </div>
