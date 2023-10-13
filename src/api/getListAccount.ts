@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import { axiosInstance } from '.'
 import { ListResponse } from '@/utils'
+import { useMemo } from 'react'
 
 interface Account {
   id: number
@@ -47,5 +48,16 @@ export const getListAccount = () => {
   const { data } = listAccountQuery
   const listAccount = data?.data.data.content
 
-  return { ...listAccountQuery, data: listAccount }
+  const listOptionAccount = useMemo(() => {
+    return listAccount?.map((company) => ({
+      label: company.nama,
+      value: company.id,
+    }))
+  }, [listAccount])
+
+  return {
+    ...listAccountQuery,
+    data: listAccount,
+    listOption: listOptionAccount,
+  }
 }
