@@ -2,11 +2,13 @@ import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
 import { axiosInstance } from '@/api'
 import { useQuery } from '@tanstack/react-query'
+import { Fragment, useMemo } from 'react'
 
 export function ViewLaporanJournal() {
   const [searchParams] = useSearchParams()
 
   const companyID = searchParams.get('company')
+  const type = searchParams.get('type')
   const startDate = searchParams.get('start')
   const endDate = searchParams.get('end')
 
@@ -19,8 +21,41 @@ export function ViewLaporanJournal() {
     },
   })
 
+  const { data: report } = useQuery({
+    queryKey: ['laporan-journal'],
+    queryFn: async () => {
+      return axiosInstance
+        .get(
+          `/laporan/laporan-journal?company=${companyID}&type=${type}&start=${startDate}&end=${endDate}`
+        )
+        .then((res) => res.data?.data)
+    },
+  })
+
+  const totalDebit = useMemo(() => {
+    let total = 0
+    if (report) {
+      report.forEach((item: any) => {
+        total += +item.total_debit
+      })
+    }
+
+    return total
+  }, [report])
+
+  const totalKredit = useMemo(() => {
+    let total = 0
+    if (report) {
+      report.forEach((item: any) => {
+        total += +item.total_kredit
+      })
+    }
+
+    return total
+  }, [report])
+
   return (
-    <div className="px-4 pb-6 bg-white">
+    <div className="px-4 pb-12 bg-white">
       <div className="p-4 border-b flex items-center justify-between">
         <h3 className="text-base font-bold uppercase leading-normal">
           lAPORAN
@@ -60,29 +95,40 @@ export function ViewLaporanJournal() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="p-2.5">12/10/2013</td>
-              <td className="font-semibold p-2.5">TRAN1293102839012039128</td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td className="pl-14 pr-2.5 py-1">6400201 - Biaya Sewa Kantor</td>
-              <td className="text-center">12,321,321.00</td>
-              <td className="text-center">-</td>
-            </tr>
-            <tr className="bg-gray-alurkerja-3 border-y border-y-black-alurkerja-1">
-              <td></td>
-              <td></td>
-              <td className="text-center p-4">1</td>
-              <td className="text-center p-4">1</td>
-            </tr>
+            {report?.map((item: any, i: number) => (
+              <Fragment key={i}>
+                <tr>
+                  <td className="p-2.5">{item.tanggal_transaksi}</td>
+                  <td className="font-semibold p-2.5">{item.kode_jurnal}</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                {item.journal_akuns?.map((akun: any, i: number) => (
+                  <tr key={i}>
+                    <td></td>
+                    <td className="pl-14 pr-2.5 py-1">{akun.deskripsi}</td>
+                    <td className="text-center">
+                      {akun.posisi_akun === 'DEBIT' ? akun.jumlah : '-'}
+                    </td>
+                    <td className="text-center">
+                      {akun.posisi_akun === 'CREDIT' ? akun.jumlah : '-'}
+                    </td>
+                  </tr>
+                ))}
+
+                <tr className="bg-gray-alurkerja-3 border-y border-y-black-alurkerja-1">
+                  <td></td>
+                  <td></td>
+                  <td className="text-center p-4">{item.total_debit}</td>
+                  <td className="text-center p-4">{item.total_kredit}</td>
+                </tr>
+              </Fragment>
+            ))}
             <tr>
               <td>Total Transaksi</td>
               <td>Total Transaksi</td>
-              <td className="text-center">12,321,321.00</td>
-              <td className="text-center">12,321,321.00</td>
+              <td className="text-center">{totalDebit}</td>
+              <td className="text-center">{totalKredit}</td>
             </tr>
           </tbody>
         </table>
