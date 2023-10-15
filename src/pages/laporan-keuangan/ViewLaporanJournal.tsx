@@ -3,6 +3,7 @@ import { RefreshCcw, Printer, Upload } from 'lucide-react'
 import { axiosInstance } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 import { Fragment, useMemo } from 'react'
+import { formatToMoney } from '@/utils'
 
 export function ViewLaporanJournal() {
   const [searchParams] = useSearchParams()
@@ -103,32 +104,45 @@ export function ViewLaporanJournal() {
                   <td></td>
                   <td></td>
                 </tr>
-                {item.journal_akuns?.map((akun: any, i: number) => (
-                  <tr key={i}>
-                    <td></td>
-                    <td className="pl-14 pr-2.5 py-1">{akun.deskripsi}</td>
-                    <td className="text-center">
-                      {akun.posisi_akun === 'DEBIT' ? akun.jumlah : '-'}
-                    </td>
-                    <td className="text-center">
-                      {akun.posisi_akun === 'CREDIT' ? akun.jumlah : '-'}
-                    </td>
-                  </tr>
-                ))}
+                {item.journal_akuns?.map((akuns: any, i: number) => {
+                  const accountName = akuns.akun
+                    ? akuns.akun?.kode_akun + ' - ' + akuns.akun?.nama
+                    : '-'
+                  return (
+                    <tr key={i}>
+                      <td></td>
+                      <td className="pl-14 pr-2.5 py-1">{accountName}</td>
+                      <td className="text-center">
+                        {akuns.posisi_akun === 'DEBIT'
+                          ? formatToMoney(akuns.jumlah)
+                          : '-'}
+                      </td>
+                      <td className="text-center">
+                        {akuns.posisi_akun === 'CREDIT'
+                          ? formatToMoney(akuns.jumlah)
+                          : '-'}
+                      </td>
+                    </tr>
+                  )
+                })}
 
                 <tr className="bg-gray-alurkerja-3 border-y border-y-black-alurkerja-1">
                   <td></td>
                   <td></td>
-                  <td className="text-center p-4">{item.total_debit}</td>
-                  <td className="text-center p-4">{item.total_kredit}</td>
+                  <td className="text-center p-4">
+                    {formatToMoney(item.total_debit)}
+                  </td>
+                  <td className="text-center p-4">
+                    {formatToMoney(item.total_debit)}
+                  </td>
                 </tr>
               </Fragment>
             ))}
             <tr>
               <td>Total Transaksi</td>
               <td>Total Transaksi</td>
-              <td className="text-center">{totalDebit}</td>
-              <td className="text-center">{totalKredit}</td>
+              <td className="text-center">{formatToMoney(totalDebit)}</td>
+              <td className="text-center">{formatToMoney(totalKredit)}</td>
             </tr>
           </tbody>
         </table>
