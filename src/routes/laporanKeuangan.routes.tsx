@@ -5,6 +5,7 @@ import {
   ListJournal,
   Neraca,
   PenambahanModal,
+  ViewLaporaNeraca,
   ViewLaporanBukuBesar,
   ViewLaporanJournal,
 } from '@/pages/laporan-keuangan'
@@ -17,6 +18,7 @@ export const laporanKeuanganRoutes: RouteObject = {
     { path: 'dashboard', element: <Dashboard /> },
     { path: 'dashboard/journal', element: <ViewLaporanJournal /> },
     { path: 'dashboard/buku-besar', element: <ViewLaporanBukuBesar /> },
+    { path: 'dashboard/neraca', element: <ViewLaporaNeraca /> },
     { path: 'daftar-jurnal', element: <ListJournal /> },
     { path: 'buku-besar', element: <BukuBesar /> },
     { path: 'neraca', element: <Neraca /> },
