@@ -118,20 +118,27 @@ export default function AdminLayout() {
               </div>
               {path.map((name, i) => (
                 <Fragment key={i}>
-                  {i < path.length - 1 ? (
+                  {i !== 0 ? (
                     <>
                       <Link
-                        to={module + '/' + name}
-                        className="text-gray-400 text-sm font-semibold capitalize"
+                        to={module + '/' + path[i - 1] + '/' + name}
+                        className="text-gray-400 text-sm font-semibold capitalize hover:text-main-blue-alurkerja"
                       >
                         {name.replaceAll('-', ' ')}
                       </Link>
-                      <div className="w-1 h-1 bg-gray-400 rounded-full" />
+                      {i < path.length - 1 && (
+                        <div className="w-1 h-1 bg-gray-400 rounded-full" />
+                      )}
                     </>
                   ) : (
-                    <div className="text-gray-400 text-sm font-semibold capitalize">
-                      {name.replaceAll('-', ' ')}
-                    </div>
+                    <>
+                      <div className="text-gray-400 text-sm font-semibold capitalize">
+                        {name.replaceAll('-', ' ')}
+                      </div>
+                      {i < path.length - 1 && (
+                        <div className="w-1 h-1 bg-gray-400 rounded-full" />
+                      )}
+                    </>
                   )}
                 </Fragment>
               ))}
