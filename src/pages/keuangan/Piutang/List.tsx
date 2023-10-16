@@ -2,8 +2,11 @@ import { FormLowcodeLite, TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 import { Download, Search, RefreshCcw } from 'lucide-react'
 import { Button } from '@/components'
+import { useNavigate } from 'react-router-dom'
 
 export const ListPiutang = () => {
+  const navigate = useNavigate()
+
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -38,7 +41,7 @@ export const ListPiutang = () => {
         <TableLowcode
           title="Data Pembayaran Piutang"
           baseUrl={import.meta.env.VITE_API_BASEURL}
-          specPath="/api/crud/piutang"
+          specPath="/api/journal/journal"
           renderState={renderState}
           setRenderState={setRenderState}
           pageConfig={pageConfig}
@@ -88,6 +91,7 @@ export const ListPiutang = () => {
               <Download size={18} /> Download
             </Button>
           )}
+          onClickCreate={() => navigate('create')}
         />
       </section>
     </div>

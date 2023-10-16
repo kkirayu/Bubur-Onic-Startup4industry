@@ -1,5 +1,4 @@
 import {
-  AkunManagement,
   Aset,
   Hutang,
   Journal,
@@ -11,6 +10,7 @@ import {
   DetailJurnal,
   LayoutJournal,
   TerimaUang,
+  CreatePiutang,
 } from '@/pages/keuangan'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -22,6 +22,7 @@ export const keuanganRoutes: RouteObject = {
     { path: 'aset', element: <Aset /> },
     { path: 'hutang', element: <Hutang /> },
     { path: 'piutang', element: <ListPiutang /> },
+    { path: 'piutang/create', element: <CreatePiutang /> },
     {
       path: 'journal',
       element: <Outlet />,
