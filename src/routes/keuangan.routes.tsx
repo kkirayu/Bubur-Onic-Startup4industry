@@ -1,6 +1,5 @@
 import {
   Aset,
-  Hutang,
   Journal,
   KasBank,
   Pembayaran,
@@ -12,6 +11,7 @@ import {
   TerimaUang,
   CreatePiutang,
 } from '@/pages/keuangan'
+import { ListPembayaranHutang } from '@/pages/keuangan/Hutang/ListPembayaranHutang'
 
 import { Outlet, RouteObject } from 'react-router-dom'
 
@@ -20,7 +20,7 @@ export const keuanganRoutes: RouteObject = {
   element: <Outlet />,
   children: [
     { path: 'aset', element: <Aset /> },
-    { path: 'hutang', element: <Hutang /> },
+    { path: 'hutang/pembayaran-hutang', element: <ListPembayaranHutang /> },
     { path: 'piutang/penerimaan-pembayaran-piutang', element: <ListPiutang /> },
     {
       path: 'piutang/penerimaan-pembayaran-piutang/create',

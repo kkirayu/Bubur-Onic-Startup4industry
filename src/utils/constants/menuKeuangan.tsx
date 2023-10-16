@@ -48,6 +48,12 @@ export const menuKeuangan = [
       {
         href: '/keuangan/hutang',
         label: 'Hutang',
+        child: [
+          {
+            href: '/keuangan/hutang/pembayaran-hutang',
+            label: 'Pembayaran Hutang',
+          },
+        ],
       },
       {
         href: '/keuangan/aset',
