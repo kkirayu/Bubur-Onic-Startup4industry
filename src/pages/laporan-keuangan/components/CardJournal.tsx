@@ -53,9 +53,7 @@ export const CardJournal = () => {
         <IconLaporan />
         <div>
           <div className="text-gray-700">Laporan</div>
-          <div className="text-gray-700 font-semibold">
-            Journal (General Ledger)
-          </div>
+          <div className="text-gray-700 font-semibold">Journal</div>
         </div>
       </div>
       <div className="p-6">

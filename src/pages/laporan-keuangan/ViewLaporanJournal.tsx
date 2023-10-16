@@ -78,7 +78,7 @@ export function ViewLaporanJournal() {
       <div className="mt-8 mb-4 flex items-center gap-2.5">
         <img className="w-auto min-w-[120px] h-28" src="/icon.png" alt="Res" />
         <div>
-          <div className="font-semibold">Laporan journal (General Ledger)</div>
+          <div className="font-semibold">Laporan journal </div>
           <div>
             Periode {startDate} - {endDate}
           </div>
