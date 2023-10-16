@@ -93,12 +93,11 @@ export const CreatePiutang = () => {
             search={search}
             setSearch={setSearch}
             column={[
-              { key: 'name', label: 'No. Pembayaran' },
-              { key: 'name', label: 'Tanggal Bayar' },
-              { key: 'name', label: 'Jenis Pembayaran' },
-              { key: 'name', label: 'Akun Kas' },
-              { key: 'name', label: 'Total' },
-              { key: 'name', label: 'Status' },
+              { key: 'name', label: 'No. Transaksi' },
+              { key: 'name', label: 'Tanggal Dibuat' },
+              { key: 'name', label: 'Tanggal Jatuh Tempo' },
+              { key: 'name', label: 'Sisa Hutang' },
+              { key: 'name', label: 'Bayar' },
             ]}
             readonly
           />
