@@ -10,6 +10,7 @@ import {
   LayoutJournal,
   TerimaUang,
   CreatePiutang,
+  CreatePembayaranHutang,
 } from '@/pages/keuangan'
 import { ListPembayaranHutang } from '@/pages/keuangan/Hutang/ListPembayaranHutang'
 
@@ -21,6 +22,10 @@ export const keuanganRoutes: RouteObject = {
   children: [
     { path: 'aset', element: <Aset /> },
     { path: 'hutang/pembayaran-hutang', element: <ListPembayaranHutang /> },
+    {
+      path: 'hutang/pembayaran-hutang/create',
+      element: <CreatePembayaranHutang />,
+    },
     { path: 'piutang/penerimaan-pembayaran-piutang', element: <ListPiutang /> },
     {
       path: 'piutang/penerimaan-pembayaran-piutang/create',
