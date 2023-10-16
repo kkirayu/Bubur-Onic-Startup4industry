@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom'
 import { Header, Sidebar } from 'alurkerja-ui'
 import clsx from 'clsx'
@@ -16,8 +16,10 @@ export default function AdminLayout() {
   const { logout, currentUser, setCurrentUser } = useAuthStore()
   const token = localStorage.getItem('token')
 
-  const [isAppReady, setIsAppReady] = useState(false)
+  const module = pathname.split('/')[1]
+  const path = pathname.split('/').slice(2)
 
+  const [isAppReady, setIsAppReady] = useState(false)
   const [toggled, setToggled] = useState(false)
 
   useEffect(() => {
@@ -108,6 +110,33 @@ export default function AdminLayout() {
             </div>
           }
         />
+        <div className="w-full h-11 px-3.5 py-2.5 bg-white flex-col justify-start items-start gap-2.5 inline-flex border">
+          <div className="justify-start items-center gap-3.5 inline-flex">
+            <div className="text-gray-700 text-base font-semibold border-r pr-4 capitalize">
+              {module}
+            </div>
+            {path.map((name, i) => (
+              <Fragment key={i}>
+                {i < path.length - 1 ? (
+                  <>
+                    <Link
+                      to={module + '/' + name}
+                      className="text-gray-400 text-sm font-semibold capitalize"
+                    >
+                      {name}
+                    </Link>
+                    <div className="w-1 h-1 bg-gray-400 rounded-full" />
+                  </>
+                ) : (
+                  <div className="text-gray-400 text-sm font-semibold capitalize">
+                    {name}
+                  </div>
+                )}
+              </Fragment>
+            ))}
+          </div>
+        </div>
+
         <main className="px-4 py-8">
           <Outlet />
         </main>

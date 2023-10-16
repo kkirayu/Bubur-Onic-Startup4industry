@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft, CreditCard, Save } from 'lucide-react'
-import { Checkbox, Input, Select, TableLowcode } from 'alurkerja-ui'
+import { Checkbox, Input, Modal, Select, TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 
 import { Button } from '@/components'
 
 export const CreatePiutang = () => {
+  const [dataTable, setDataTable] = useState([
+    { name: 'tes' },
+    { name: 'tes2' },
+  ])
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -84,6 +88,7 @@ export const CreatePiutang = () => {
             title="List Nomor Transaksi"
             baseUrl={import.meta.env.VITE_API_BASEURL}
             specPath="/api/journal/journal"
+            data={dataTable}
             renderState={renderState}
             setRenderState={setRenderState}
             pageConfig={pageConfig}
@@ -99,7 +104,27 @@ export const CreatePiutang = () => {
               { key: 'name', label: 'Sisa Hutang' },
               { key: 'name', label: 'Bayar' },
             ]}
-            readonly
+            customButtonCreate={() => (
+              <Modal
+                title="Tambah Nomor Transaksi"
+                triggerButton={<Button>Tambah Nomor Transaksi</Button>}
+              >
+                <div className="px-6">
+                  <div className="py-12">
+                    <label
+                      htmlFor="no_transaksi"
+                      className="after:content-['*'] after:text-red-400 after:text-sm"
+                    >
+                      Pilih Nomor Transaksi
+                    </label>
+                    <Select options={[]} />
+                  </div>
+                  <div className="p-5 w-full border-t flex justify-end">
+                    <Button>Tambah</Button>
+                  </div>
+                </div>
+              </Modal>
+            )}
           />
         </div>
 

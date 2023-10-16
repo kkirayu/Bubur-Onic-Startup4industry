@@ -950,10 +950,10 @@ ajv@^6.10.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alurkerja-ui@^0.0.384:
-  version "0.0.384"
-  resolved "https://registry.yarnpkg.com/alurkerja-ui/-/alurkerja-ui-0.0.384.tgz#26debfd838e9d7ea8500894de5fd081630fae249"
-  integrity sha512-1sctxexlqRGiekdF2b2HNbMYX+6hzdwxzHLAKmnKIVQN69greFmsCTR2ut2hnNT0EwOVM74lUS5O51zYeJjuVg==
+alurkerja-ui@^0.0.386:
+  version "0.0.386"
+  resolved "https://registry.yarnpkg.com/alurkerja-ui/-/alurkerja-ui-0.0.386.tgz#b829b22329edd831c547e35b70faeeeb12e88d7e"
+  integrity sha512-9EzkhFRGSl6/sj0Kbczj8f6s8RhuqoYZmnCW2X2fffpSFMh10EMbycuuRLAJwR3xsbe4syJB1j/4baBb0pZzkQ==
   dependencies:
     "@headlessui/react" "^1.7.14"
     "@types/dompurify" "^3.0.2"
