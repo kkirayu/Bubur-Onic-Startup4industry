@@ -29,7 +29,7 @@ export const CreatePembayaranHutang = () => {
     <div>
       <Link
         className="flex items-center text-main-blue-alurkerja gap-1 mb-4"
-        to="/keuangan/piutang"
+        to="/keuangan/hutang/pembayaran-hutang"
       >
         <ArrowLeft />
         Kembali
