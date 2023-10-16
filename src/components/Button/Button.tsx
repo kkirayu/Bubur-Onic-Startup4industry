@@ -8,11 +8,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium'
   block?: boolean
   loading?: boolean
-  color?: 'blue' | 'red'
+  color?: 'blue' | 'red' | 'orange'
 }
 
 const Button: FC<ButtonProps> = (props) => {
   const {
+    className,
     children,
     size = 'small',
     variant = 'filled',
@@ -20,18 +21,21 @@ const Button: FC<ButtonProps> = (props) => {
     loading = false,
     disabled = false,
     color = 'blue',
+    ...restProps
   } = props
 
+  const colorMapping = {
+    blue: 'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2',
+    red: 'bg-red-alurkerja text-white disabled:bg-gray-alurkerja-2',
+    orange: 'bg-[#FFA800] text-white disabled:bg-gray-alurkerja-2',
+  }
+
   const buttonSize = () =>
-    size === 'small' ? 'px-[15px] py-2' : 'px-[15px] py-2.5'
+    size === 'small' ? 'px-[15px] py-2 text-sm' : 'px-[15px] py-2.5 text-base'
 
   const buttonVariant = () => {
     if (variant === 'filled') {
-      if (color === 'blue') {
-        return 'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2 disabled:cursor-not-allowed'
-      } else if (color === 'red') {
-        return 'bg-red-alurkerja text-white disabled:bg-gray-alurkerja-2 disabled:cursor-not-allowed'
-      }
+      return colorMapping[color]
     } else if (variant === 'outlined') {
       return 'text-main-blue-alurkerja border border-main-blue-alurkerja'
     } else {
@@ -43,14 +47,15 @@ const Button: FC<ButtonProps> = (props) => {
   return (
     <button
       className={clsx(
-        'rounded-md',
+        'rounded-md disabled:cursor-not-allowed',
         buttonBlock(),
         buttonSize(),
         buttonVariant(),
-        loading && 'flex items-center justify-center gap-1 '
+        loading && 'flex items-center justify-center gap-1',
+        className
       )}
       disabled={loading || disabled}
-      {...props}
+      {...restProps}
     >
       {loading && <Spinner />}
       {children}

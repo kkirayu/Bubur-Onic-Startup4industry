@@ -5,7 +5,7 @@ import {
   Journal,
   KasBank,
   Pembayaran,
-  Piutang,
+  ListPiutang,
   TransferUang,
   CreateJurnal,
   DetailJurnal,
@@ -21,7 +21,7 @@ export const keuanganRoutes: RouteObject = {
   children: [
     { path: 'aset', element: <Aset /> },
     { path: 'hutang', element: <Hutang /> },
-    { path: 'piutang', element: <Piutang /> },
+    { path: 'piutang', element: <ListPiutang /> },
     {
       path: 'journal',
       element: <Outlet />,
