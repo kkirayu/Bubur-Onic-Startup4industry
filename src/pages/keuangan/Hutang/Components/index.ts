@@ -1,2 +1,2 @@
 export * from './ModalDetailPembayaranHutang'
-export * from './SubHeaderPembayaranHutang'
+export * from './SubHeader1'

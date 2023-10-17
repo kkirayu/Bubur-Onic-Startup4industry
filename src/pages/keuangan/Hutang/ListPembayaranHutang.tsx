@@ -1,13 +1,11 @@
-import { DateRange, Select, TableLowcode } from 'alurkerja-ui'
+import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
-import { Download, Search, RefreshCcw } from 'lucide-react'
+import { Download } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components'
-import {
-  ModalDetailPembayaranHutang,
-  SubHeaderPembayaranHutang,
-} from './Components'
+import { ModalDetailPembayaranHutang, SubHeader1 } from './Components'
+
 export const ListPembayaranHutang = () => {
   const navigate = useNavigate()
 
@@ -38,7 +36,7 @@ export const ListPembayaranHutang = () => {
           onClickFilter={() => {
             setShowFilter((prev) => !prev)
           }}
-          subHeader={showFilter ? <SubHeaderPembayaranHutang /> : <></>}
+          subHeader={showFilter ? <SubHeader1 /> : <></>}
           customButtonDetail={() => <ModalDetailPembayaranHutang />}
           column={[
             { key: 'name', label: 'No. Pembayaran' },
