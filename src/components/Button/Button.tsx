@@ -8,7 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium'
   block?: boolean
   loading?: boolean
-  color?: 'blue' | 'red' | 'orange'
+  color?: 'blue' | 'red' | 'orange' | 'green'
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -24,10 +24,11 @@ const Button: FC<ButtonProps> = (props) => {
     ...restProps
   } = props
 
-  const colorMapping = {
+  const filledColor = {
     blue: 'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2',
     red: 'bg-red-alurkerja text-white disabled:bg-gray-alurkerja-2',
-    orange: 'bg-[#FFA800] text-white disabled:bg-gray-alurkerja-2',
+    orange: 'bg-orange-alurkerja text-white disabled:bg-gray-alurkerja-2',
+    green: 'bg-green-alurkerja text-white disabled:bg-gray-alurkerja-2',
   }
 
   const buttonSize = () =>
@@ -35,7 +36,7 @@ const Button: FC<ButtonProps> = (props) => {
 
   const buttonVariant = () => {
     if (variant === 'filled') {
-      return colorMapping[color]
+      return filledColor[color]
     } else if (variant === 'outlined') {
       return 'text-main-blue-alurkerja border border-main-blue-alurkerja'
     } else {
