@@ -11,6 +11,8 @@ import {
   TerimaUang,
   CreatePiutang,
   CreatePembayaranHutang,
+  ListInvoucePembelian,
+  ListDataHutang,
 } from '@/pages/keuangan'
 import { ListPembayaranHutang } from '@/pages/keuangan/Hutang/ListPembayaranHutang'
 
@@ -21,11 +23,15 @@ export const keuanganRoutes: RouteObject = {
   element: <Outlet />,
   children: [
     { path: 'aset', element: <Aset /> },
+    // HUTANG
     { path: 'hutang/pembayaran-hutang', element: <ListPembayaranHutang /> },
     {
       path: 'hutang/pembayaran-hutang/create',
       element: <CreatePembayaranHutang />,
     },
+    { path: 'hutang/invoice-pembelian', element: <ListInvoucePembelian /> },
+    { path: 'hutang/data-hutang', element: <ListDataHutang /> },
+    // PIUTANG
     { path: 'piutang/penerimaan-pembayaran-piutang', element: <ListPiutang /> },
     {
       path: 'piutang/penerimaan-pembayaran-piutang/create',

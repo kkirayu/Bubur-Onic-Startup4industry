@@ -57,6 +57,10 @@ export const menuKeuangan = [
             href: '/keuangan/hutang/invoice-pembelian',
             label: 'Invoice Pembelian',
           },
+          {
+            href: '/keuangan/hutang/data-hutang',
+            label: 'Data Hutang',
+          },
         ],
       },
       {
