@@ -2,9 +2,9 @@ import { Modal, TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 import { Download, Eye } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 import { Button } from '@/components'
-
 export const ListPembayaranHutang = () => {
   const navigate = useNavigate()
 
@@ -12,6 +12,27 @@ export const ListPembayaranHutang = () => {
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
+
+  const convertToJournal = () => {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Konfirmasi',
+      text: 'Apakah anda yakin untuk konversi ke penjurnalan ?',
+      reverseButtons: true,
+      showCancelButton: true,
+      showConfirmButton: true,
+      cancelButtonText: 'Batalkan',
+      confirmButtonText: 'Lanjutkan',
+      buttonsStyling: false,
+      customClass: {
+        cancelButton:
+          'text-main-blue-alurkerja border border-main-blue-alurkerja px-[15px] py-2.5 text-base rounded mr-4',
+        confirmButton:
+          'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2 px-[15px] py-2.5 text-base rounded',
+      },
+    })
+  }
+
   return (
     <div>
       <div className="text-gray-700 text-xl font-semibold mb-4">
@@ -169,7 +190,9 @@ export const ListPembayaranHutang = () => {
                 </div>
                 <div className="p-5 border-t">
                   <div className="w-fit ml-auto">
-                    <Button color="orange">Konversi ke Penjurnalan</Button>
+                    <Button color="orange" onClick={() => convertToJournal()}>
+                      Konversi ke Penjurnalan
+                    </Button>
                   </div>
                 </div>
               </>
