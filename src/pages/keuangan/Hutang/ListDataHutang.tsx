@@ -4,7 +4,7 @@ import { Printer } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components'
-import { ModalDetailPembayaranHutang, SubHeader1 } from './Components'
+import { ModalDetailPembayaranHutang, SubHeader } from './Components'
 
 export const ListDataHutang = () => {
   const navigate = useNavigate()
@@ -36,7 +36,7 @@ export const ListDataHutang = () => {
           onClickFilter={() => {
             setShowFilter((prev) => !prev)
           }}
-          subHeader={showFilter ? <SubHeader1 /> : <></>}
+          subHeader={showFilter ? <SubHeader /> : <></>}
           customButtonDetail={() => <ModalDetailPembayaranHutang />}
           column={[
             { key: 'name', label: 'No. Invoice' },
