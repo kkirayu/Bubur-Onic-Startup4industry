@@ -55,7 +55,7 @@ export const ListDataHutang = () => {
               <Printer size={18} /> Print
             </Button>
           )}
-          extraCell={() => (
+          extraRow={() => (
             <div className="w-full h-14 items-center inline-flex justify-between px-3.5 py-5 text-zinc-800 text-xs font-bold">
               <div>Total Hutang</div>
               <div>Rp 6,040,000.00</div>
