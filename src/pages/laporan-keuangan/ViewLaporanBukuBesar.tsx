@@ -156,10 +156,10 @@ export function ViewLaporanBukuBesar() {
                 <tr>
                   <td className="border-b"></td>
                   <td className="p-4 border-b font-bold">Total</td>
-                  <td className="p-4 border-b text-right">
+                  <td className="p-4 border-b text-right font-bold">
                     {formatToMoney(item.debit)}
                   </td>
-                  <td className="p-4 text-right border-b">
+                  <td className="p-4 text-right border-b font-bold">
                     {formatToMoney(item.credit)}
                   </td>
                   <td className="border-b"></td>
