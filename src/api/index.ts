@@ -5,6 +5,7 @@ export const axiosInstance = axios.create({
 })
 
 export * from './getListAccount'
+export * from './getListCategoryAccount'
 export * from './getListPermission'
 export * from './getListTeam'
 export * from './getListJournal'

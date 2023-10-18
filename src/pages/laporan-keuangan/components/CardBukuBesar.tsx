@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import { IconLaporan } from '@/assets'
 import { Button } from '@/components'
-import { getListAccount, getListCompany } from '@/api'
+import { getListCompany, getListCategoryAccount } from '@/api'
 import moment from 'moment'
 
 export const CardBukuBesar = () => {
@@ -26,7 +26,7 @@ export const CardBukuBesar = () => {
   const navigate = useNavigate()
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
-  const { listOption: listOptionAcount } = getListAccount()
+  const { listOption: listOptionCategoryAccount } = getListCategoryAccount()
 
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     new Date(),
@@ -109,7 +109,7 @@ export const CardBukuBesar = () => {
                   </label>
                   <Select
                     invalid={errors.group ? true : false}
-                    options={listOptionAcount}
+                    options={listOptionCategoryAccount}
                     onChange={(selected: any) => {
                       setValue('group', selected.value)
                       clearErrors('group')

@@ -54,6 +54,7 @@ export const ListInvoicePembelian = () => {
               <Download size={18} /> Download
             </Button>
           )}
+          onClickCreate={() => navigate('create')}
         />
       </section>
     </div>

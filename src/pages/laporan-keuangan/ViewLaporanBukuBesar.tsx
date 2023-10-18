@@ -1,13 +1,16 @@
 import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
-import { axiosInstance } from '@/api'
 import { useQuery } from '@tanstack/react-query'
+import { Fragment, useMemo } from 'react'
+import clsx from 'clsx'
+import { axiosInstance } from '@/api'
+import { formatToMoney } from '@/utils'
 
 export function ViewLaporanBukuBesar() {
   const [searchParams] = useSearchParams()
 
   const companyID = searchParams.get('company')
-  const accountID = searchParams.get('group')
+  const categoryAccountID = searchParams.get('group')
   const startDate = searchParams.get('start')
   const endDate = searchParams.get('end')
 
@@ -20,14 +23,61 @@ export function ViewLaporanBukuBesar() {
     },
   })
 
-  const { data: currentAccount } = useQuery({
-    queryKey: ['account', accountID],
+  const { data: currentCategoryAccount } = useQuery({
+    queryKey: ['category-account', categoryAccountID],
     queryFn: async () => {
       return axiosInstance
-        .get(`/akun/akun/${accountID}`)
+        .get(`/akun/kategori-akun/${categoryAccountID}`)
         .then((res) => res.data?.data)
     },
   })
+
+  const { data: report } = useQuery({
+    queryKey: ['laporan-buku-besar'],
+    queryFn: async () => {
+      return axiosInstance
+        .get(
+          `/laporan/laporan-buku-besar?company=1&group=asset&start=01/10/2023&end=18/10/2023`
+        )
+        .then((res) => res.data?.data)
+    },
+  })
+
+  const totalDebit = useMemo(() => {
+    let total = 0
+    const mergedData = report?.reduce((result: any, currentObject: any) => {
+      return result.concat(currentObject.items)
+    }, [])
+
+    mergedData?.forEach((transaction: any) => {
+      total += +transaction.debit
+    })
+
+    return total
+  }, [report])
+
+  const totalCredit = useMemo(() => {
+    let total = 0
+    const mergedData = report?.reduce((result: any, currentObject: any) => {
+      return result.concat(currentObject.items)
+    }, [])
+
+    mergedData?.forEach((transaction: any) => {
+      total += +transaction.credit
+    })
+
+    return total
+  }, [report])
+
+  const totalSaldo = useMemo(() => {
+    let total = 0
+
+    report?.forEach((account: any) => {
+      total += +account.balance
+    })
+
+    return total
+  }, [report])
 
   return (
     <div className="px-4 pb-6 bg-white">
@@ -61,7 +111,7 @@ export function ViewLaporanBukuBesar() {
       </div>
       <div>
         <div className="bg-gray-alurkerja-3 text-gray-alurkerja-1 font-bold p-4">
-          {currentAccount?.kode_akun} - {currentAccount?.nama}
+          {currentCategoryAccount?.nama}
         </div>
         <table className="w-full table-auto">
           <thead className="border-y border-black-alurkerja-1">
@@ -76,32 +126,64 @@ export function ViewLaporanBukuBesar() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="p-4">-</td>
-              <td className="p-4">Saldo Awal 01/11/2023</td>
-              <td className="p-4">-</td>
-              <td className="p-4">-</td>
-              <td className="p-4">17.500.000</td>
-            </tr>
-            <tr>
-              <td className="p-4 text-main-blue-alurkerja">12/12/2023</td>
-              <td className="p-4 text-main-blue-alurkerja font-bold">
-                TR-3.1023.0002 - Amortisasi sewa dibayar dimuka
-                <div className="text-gray-alurkerja-1 font-normal">
-                  (Amortasi Sewa Dibayar Dimuka)
-                </div>
-              </td>
-              <td className="p-4">-</td>
-              <td className="p-4">12.321.321</td>
-              <td className="p-4">5.178.679</td>
-            </tr>
+            {report?.map((item: any, i: number) => (
+              <Fragment key={i}>
+                <tr>
+                  <td className="px-4 text-main-blue-alurkerja">{item.date}</td>
+                  <td className="px-4 text-main-blue-alurkerja font-bold">
+                    {item?.account_id[1]}
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td className="p-4 text-main-blue-alurkerja">
+                    {formatToMoney(item.balance)}
+                  </td>
+                </tr>
+                {item?.items?.map((transaction: any, i: number) => {
+                  const isLastItem = i === item?.items?.length - 1
+                  return (
+                    <tr key={i}>
+                      <td
+                        className={clsx(
+                          'px-4 text-main-blue-alurkerja',
+                          isLastItem && 'pb-4'
+                        )}
+                      ></td>
+                      <td
+                        className={clsx(
+                          'px-4 text-gray-alurkerja-1 font-normal',
+                          isLastItem && 'pb-4'
+                        )}
+                      >
+                        {transaction?.move_name}
+                      </td>
+                      <td className={clsx('px-4 ', isLastItem && 'pb-4')}>
+                        {formatToMoney(transaction.debit)}
+                      </td>
+                      <td className={clsx('px-4 ', isLastItem && 'pb-4')}>
+                        {formatToMoney(transaction.credit)}
+                      </td>
+                      <td
+                        className={clsx(
+                          'px-4 ',
+                          i === item?.items?.length - 1 && 'pb-2'
+                        )}
+                      >
+                        {formatToMoney(transaction.balance)}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </Fragment>
+            ))}
+
             <tr className="bg-gray-alurkerja-3">
               <td></td>
-              <td className="p-4 text-center font-bold text-black-alurkerja-1">
+              <td className="p-4 text-left font-bold text-black-alurkerja-1">
                 Total Debit/Kredit
               </td>
-              <td className="p-4">0.00</td>
-              <td className="p-4">12.321.321</td>
+              <td className="p-4">{formatToMoney(totalDebit)}</td>
+              <td className="p-4">{formatToMoney(totalCredit)}</td>
               <td className="p-4"></td>
             </tr>
           </tbody>
@@ -110,9 +192,9 @@ export function ViewLaporanBukuBesar() {
           <div>
             <div>Saldo Awal : 17.500.000.00</div>
           </div>
-          <div className="flex items-center gap-4">
-            <div>Nilai Mutasi : (12.321.321.00)</div>
-            <div>Saldo Akhir : 5.178.679.00</div>
+          <div className="flex items-center gap-6">
+            <div>Nilai Mutasi : {formatToMoney(totalCredit - totalDebit)}</div>
+            <div>Saldo Akhir : {formatToMoney(totalSaldo)}</div>
           </div>
         </div>
       </div>
