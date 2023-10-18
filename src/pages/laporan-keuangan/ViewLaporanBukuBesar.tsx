@@ -120,60 +120,50 @@ export function ViewLaporanBukuBesar() {
               <th className="text-left p-4">
                 No. Transaksi - Keterangan Transaksi
               </th>
-              <th className="p-4">Nilai Debit</th>
-              <th className="p-4">Nilai Kredit</th>
-              <th className="p-4">Saldo COA</th>
+              <th className="p-4 text-right">Nilai Debit</th>
+              <th className="p-4 text-right">Nilai Kredit</th>
+              <th className="p-4 text-right">Saldo COA</th>
             </tr>
           </thead>
           <tbody>
             {report?.map((item: any, i: number) => (
               <Fragment key={i}>
                 <tr>
-                  <td className="px-4 text-main-blue-alurkerja">{item.date}</td>
-                  <td className="px-4 text-main-blue-alurkerja font-bold">
-                    {item?.account_id[1]}
+                  <td className="px-4 pt-4 text-main-blue-alurkerja">
+                    {item.date}
                   </td>
-                  <td></td>
-                  <td></td>
-                  <td className="p-4 text-main-blue-alurkerja">
-                    {formatToMoney(item.balance)}
+                  <td className="px-4 pt-4 text-main-blue-alurkerja font-bold">
+                    {item?.account_id[1]}
                   </td>
                 </tr>
                 {item?.items?.map((transaction: any, i: number) => {
-                  const isLastItem = i === item?.items?.length - 1
                   return (
                     <tr key={i}>
-                      <td
-                        className={clsx(
-                          'px-4 text-main-blue-alurkerja',
-                          isLastItem && 'pb-4'
-                        )}
-                      ></td>
-                      <td
-                        className={clsx(
-                          'px-4 text-gray-alurkerja-1 font-normal',
-                          isLastItem && 'pb-4'
-                        )}
-                      >
-                        {transaction?.move_name}
-                      </td>
-                      <td className={clsx('px-4 ', isLastItem && 'pb-4')}>
+                      <td className="px-4 text-right text-main-blue-alurkerja"></td>
+                      <td className="px-4">{transaction?.move_name}</td>
+                      <td className="px-4 text-right">
                         {formatToMoney(transaction.debit)}
                       </td>
-                      <td className={clsx('px-4 ', isLastItem && 'pb-4')}>
+                      <td className="px-4 text-right">
                         {formatToMoney(transaction.credit)}
                       </td>
-                      <td
-                        className={clsx(
-                          'px-4 ',
-                          i === item?.items?.length - 1 && 'pb-2'
-                        )}
-                      >
+                      <td className="px-4 text-right">
                         {formatToMoney(transaction.balance)}
                       </td>
                     </tr>
                   )
                 })}
+                <tr>
+                  <td className="border-b"></td>
+                  <td className="p-4 border-b font-bold">Total</td>
+                  <td className="p-4 border-b text-right">
+                    {formatToMoney(item.debit)}
+                  </td>
+                  <td className="p-4 text-right border-b">
+                    {formatToMoney(item.credit)}
+                  </td>
+                  <td className="border-b"></td>
+                </tr>
               </Fragment>
             ))}
 
@@ -182,18 +172,16 @@ export function ViewLaporanBukuBesar() {
               <td className="p-4 text-left font-bold text-black-alurkerja-1">
                 Total Debit/Kredit
               </td>
-              <td className="p-4">{formatToMoney(totalDebit)}</td>
-              <td className="p-4">{formatToMoney(totalCredit)}</td>
+              <td className="p-4 text-right">{formatToMoney(totalDebit)}</td>
+              <td className="p-4 text-right">{formatToMoney(totalCredit)}</td>
               <td className="p-4"></td>
             </tr>
           </tbody>
         </table>
         <div className="flex items-center justify-between p-4">
-          <div>
-            <div>Saldo Awal : 17.500.000.00</div>
-          </div>
+          <div></div>
           <div className="flex items-center gap-6">
-            <div>Nilai Mutasi : {formatToMoney(totalCredit - totalDebit)}</div>
+            <div>Nilai Mutasi : {formatToMoney(totalDebit - totalCredit)}</div>
             <div>Saldo Akhir : {formatToMoney(totalSaldo)}</div>
           </div>
         </div>
