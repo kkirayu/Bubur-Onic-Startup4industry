@@ -1,7 +1,39 @@
 import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
-import { axiosInstance } from '@/api'
 import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
+import { formatToMoney } from '@/utils'
+import { axiosInstance } from '@/api'
+
+interface ReportNeraca {
+  key: string
+  value: string
+  group: Group[]
+}
+export interface Items {
+  account_id_count: number
+  date: string
+  debit: number
+  credit: number
+  discount_amount_currency: number
+  balance: number
+  amount_residual: number
+  amount_residual_currency: number
+  account_id?: (number | string)[] | null
+}
+
+export interface Group {
+  account_root_id_count: number
+  date: string
+  debit: number
+  credit: number
+  discount_amount_currency: number
+  balance: number
+  amount_residual: number
+  amount_residual_currency: number
+  account_root_id?: (number | string)[] | null
+  items: Items[]
+}
 
 export function ViewLaporaNeraca() {
   const [searchParams] = useSearchParams()
@@ -17,6 +49,36 @@ export function ViewLaporaNeraca() {
         .then((res) => res.data?.data)
     },
   })
+
+  const { data: report } = useQuery<ReportNeraca[]>({
+    queryKey: ['laporan-neraca'],
+    queryFn: async () => {
+      return axiosInstance
+        .get(`/laporan/laporan-neraca?company=1&date=18/10/2023`)
+        .then((res) => res.data?.data)
+    },
+  })
+
+  const listAccount = useMemo(() => {
+    return report?.reduce((mergedItems: Items[], { group }) => {
+      group.forEach((item) => {
+        item.items.forEach((account) => {
+          mergedItems.push(account)
+        })
+      })
+      return mergedItems
+    }, [])
+  }, [report])
+
+  const totalBalance = useMemo(() => {
+    let total = 0
+
+    listAccount?.forEach((acc) => {
+      total += +acc.balance
+    })
+
+    return total
+  }, [listAccount])
 
   return (
     <div className="px-4 pb-6 bg-white">
@@ -51,36 +113,30 @@ export function ViewLaporaNeraca() {
           <div className="text-left text-gray-alurkerja-1">Aktiva</div>
           <div className="text-right">%</div>
         </div>
-        <div className="flex justify-between pl-4 py-4">
-          <div className="text-left text-gray-alurkerja-1">Aktifa Lancar</div>
-          <div className="text-red-alurkerja text-right">%</div>
-        </div>
-        <div className="flex justify-between pl-8 py-4">
-          <div className="text-left  text-red-alurkerja">
-            Kas dan Setara Kas
-          </div>
-          <div className="text-red-alurkerja text-right">%</div>
+        <div className="flex justify-between pl-4 py-4 text-main-blue-alurkerja">
+          <div className="text-left ">Aktiva Lancar</div>
+          <div className="text-right">%</div>
         </div>
 
-        {Array.from(Array(3), (i) => (
-          <div className="flex justify-between pl-12 py-4" key={i}>
-            <div className="text-left text-gray-alurkerja-1">
-              1001001 - kas Kecil
+        {listAccount?.map((acc, i) => (
+          <div className="grid grid-cols-12 pl-8 py-4" key={i}>
+            <div className="col-span-8 text-left text-gray-alurkerja-1">
+              {acc.account_id?.[1]}
             </div>
 
-            <div className="text-gray-alurkerja-1 grid grid-cols-2">
-              <div>150.000.000</div>
+            <div className="col-span-4 text-gray-alurkerja-1 grid grid-cols-2">
+              <div className="text-right">{formatToMoney(acc.balance)}</div>
               <div className="text-right">0.54</div>
             </div>
           </div>
         ))}
 
-        <div className="flex justify-between pl-8 py-4">
-          <div className="text-left text-gray-alurkerja-1">
-            Total Kas dan Setara Kas
+        <div className="grid grid-cols-12 pl-4 py-4">
+          <div className="col-span-8 text-left text-main-blue-alurkerja">
+            Total Aktiva Lancar
           </div>
-          <div className="text-gray-alurkerja-1 grid grid-cols-2">
-            <div>150.000.000</div>
+          <div className="col-span-4 text-main-blue-alurkerja grid grid-cols-2">
+            <div className="text-right">{formatToMoney(totalBalance)}</div>
             <div></div>
           </div>
         </div>
