@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { Fragment, useCallback } from 'react'
 import { formatToMoney } from '@/utils'
 import { axiosInstance } from '@/api'
 
@@ -59,26 +59,9 @@ export function ViewLaporaNeraca() {
     },
   })
 
-  const listAccount = useMemo(() => {
-    return report?.reduce((mergedItems: Items[], { group }) => {
-      group.forEach((item) => {
-        item.items.forEach((account) => {
-          mergedItems.push(account)
-        })
-      })
-      return mergedItems
-    }, [])
-  }, [report])
-
-  const totalBalance = useMemo(() => {
-    let total = 0
-
-    listAccount?.forEach((acc) => {
-      total += +acc.balance
-    })
-
-    return total
-  }, [listAccount])
+  const getTotalBalance = useCallback((neraca: ReportNeraca) => {
+    return neraca.group.reduce((prev, current) => prev + current.balance, 0)
+  }, [])
 
   return (
     <div className="px-4 pb-6 bg-white">
@@ -109,37 +92,52 @@ export function ViewLaporaNeraca() {
         </div>
       </div>
       <div className="font-bold px-4">
-        <div className="flex justify-between py-4">
-          <div className="text-left text-gray-alurkerja-1">Aktiva</div>
-          <div className="text-right">%</div>
-        </div>
-        <div className="flex justify-between pl-4 py-4 text-main-blue-alurkerja">
-          <div className="text-left ">Aktiva Lancar</div>
-          <div className="text-right">%</div>
-        </div>
-
-        {listAccount?.map((acc, i) => (
-          <div className="grid grid-cols-12 pl-8 py-4" key={i}>
-            <div className="col-span-8 text-left text-gray-alurkerja-1">
-              {acc.account_id?.[1]}
+        {report?.map((neraca, i) => (
+          <Fragment key={i}>
+            <div className="flex justify-between py-4">
+              <div className="text-left text-gray-alurkerja-1">
+                {neraca.value}
+              </div>
+              <div className="text-right">%</div>
             </div>
+            {neraca.group.map((group, i) => (
+              <>
+                <div
+                  className="flex justify-between pl-4 py-4 text-main-blue-alurkerja"
+                  key={i}
+                >
+                  <div className="text-left ">{group.account_root_id?.[1]}</div>
+                  <div className="text-right">%</div>
+                </div>
+                {group.items.map((acc, i) => (
+                  <div className="grid grid-cols-12 pl-8 py-4" key={i}>
+                    <div className="col-span-8 text-left text-gray-alurkerja-1">
+                      {acc.account_id?.[1]}
+                    </div>
 
-            <div className="col-span-4 text-gray-alurkerja-1 grid grid-cols-2">
-              <div className="text-right">{formatToMoney(acc.balance)}</div>
-              <div className="text-right">0.54</div>
+                    <div className="col-span-4 text-gray-alurkerja-1 grid grid-cols-2">
+                      <div className="text-right">
+                        {formatToMoney(acc.balance)}
+                      </div>
+                      <div className="text-right">0.54</div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            ))}
+            <div className="grid grid-cols-12 pl-4 py-4">
+              <div className="col-span-8 text-left text-main-blue-alurkerja">
+                Total {neraca.value}
+              </div>
+              <div className="col-span-4 text-main-blue-alurkerja grid grid-cols-2">
+                <div className="text-right">
+                  {formatToMoney(getTotalBalance(neraca))}
+                </div>
+                <div></div>
+              </div>
             </div>
-          </div>
+          </Fragment>
         ))}
-
-        <div className="grid grid-cols-12 pl-4 py-4">
-          <div className="col-span-8 text-left text-main-blue-alurkerja">
-            Total Aktiva Lancar
-          </div>
-          <div className="col-span-4 text-main-blue-alurkerja grid grid-cols-2">
-            <div className="text-right">{formatToMoney(totalBalance)}</div>
-            <div></div>
-          </div>
-        </div>
       </div>
     </div>
   )
