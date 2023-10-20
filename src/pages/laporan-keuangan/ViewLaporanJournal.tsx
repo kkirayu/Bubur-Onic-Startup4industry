@@ -1,9 +1,10 @@
 import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
 import { axiosInstance } from '@/api'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Fragment, useMemo } from 'react'
 import { formatToMoney } from '@/utils'
+import { Spinner } from 'alurkerja-ui'
 
 export function ViewLaporanJournal() {
   const [searchParams] = useSearchParams()
@@ -30,6 +31,33 @@ export function ViewLaporanJournal() {
           `/laporan/laporan-journal?company=${companyID}&type=${type}&start=${startDate}&end=${endDate}`
         )
         .then((res) => res.data?.data)
+    },
+  })
+
+  const { mutate: exportLaporan, isLoading } = useMutation({
+    mutationFn: () => {
+      return axiosInstance.get(
+        `/laporan/laporan-journal/export?company=${companyID}&type=${type}&start=${startDate}&end=${endDate}`,
+        { responseType: 'blob' }
+      )
+    },
+    onSuccess: (res) => {
+      const fileName = `Laporan-Journal.pdf`
+      const blob = new Blob([res.data], { type: 'application/pdf' })
+
+      // Buat URL objek untuk file PDF
+      const url = window.URL.createObjectURL(blob)
+
+      // Buat elemen <a> untuk mengunduh file
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+
+      // Klik elemen <a> untuk memulai unduhan
+      a.click()
+
+      // Hapus URL objek setelah pengunduhan selesai
+      window.URL.revokeObjectURL(url)
     },
   })
 
@@ -69,8 +97,12 @@ export function ViewLaporanJournal() {
             <Printer />
             Cetak Laporan
           </button>
-          <button className="px-5 flex items-center gap-1">
-            <Upload />
+          <button
+            className="px-5 flex items-center gap-1"
+            onClick={() => exportLaporan()}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner /> : <Upload />}
             Eksport Data
           </button>
         </div>

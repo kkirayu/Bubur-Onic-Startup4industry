@@ -1,9 +1,10 @@
 import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
-import { Fragment, useCallback } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { Fragment } from 'react'
 import { formatToMoney } from '@/utils'
 import { axiosInstance } from '@/api'
+import { Spinner } from 'alurkerja-ui'
 
 export function ViewLaporaLabaRugi() {
   const [searchParams] = useSearchParams()
@@ -29,6 +30,33 @@ export function ViewLaporaLabaRugi() {
     },
   })
 
+  const { mutate: exportLaporan, isLoading } = useMutation({
+    mutationFn: () => {
+      return axiosInstance.get(
+        `/laporan/laporan-laba-rugi/export?company=1&date=18/10/2023`,
+        { responseType: 'blob' }
+      )
+    },
+    onSuccess: (res) => {
+      const fileName = `Laporan-Buku-Besar.pdf`
+      const blob = new Blob([res.data], { type: 'application/pdf' })
+
+      // Buat URL objek untuk file PDF
+      const url = window.URL.createObjectURL(blob)
+
+      // Buat elemen <a> untuk mengunduh file
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+
+      // Klik elemen <a> untuk memulai unduhan
+      a.click()
+
+      // Hapus URL objek setelah pengunduhan selesai
+      window.URL.revokeObjectURL(url)
+    },
+  })
+
   return (
     <div className="px-4 pb-6 bg-white">
       <div className="p-4 border-b flex items-center justify-between">
@@ -43,8 +71,12 @@ export function ViewLaporaLabaRugi() {
             <Printer />
             Cetak Laporan
           </button>
-          <button className="px-5 flex items-center gap-1">
-            <Upload />
+          <button
+            className="px-5 flex items-center gap-1"
+            onClick={() => exportLaporan()}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner /> : <Upload />}
             Eksport Data
           </button>
         </div>

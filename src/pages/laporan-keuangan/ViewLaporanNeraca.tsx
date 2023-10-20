@@ -1,9 +1,10 @@
 import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Fragment, useCallback } from 'react'
 import { formatToMoney } from '@/utils'
 import { axiosInstance } from '@/api'
+import { Spinner } from 'alurkerja-ui'
 
 interface ReportNeraca {
   key: string
@@ -75,9 +76,32 @@ export function ViewLaporaNeraca() {
     },
   })
 
-  const getTotalBalance = useCallback((neraca: ReportNeraca) => {
-    return neraca.group.reduce((prev, current) => prev + current.balance, 0)
-  }, [])
+  const { mutate: exportLaporan, isLoading } = useMutation({
+    mutationFn: () => {
+      return axiosInstance.get(
+        `/laporan/laporan-neraca/export?company=1&date=18/10/2023`,
+        { responseType: 'blob' }
+      )
+    },
+    onSuccess: (res) => {
+      const fileName = `Laporan-Neraca.pdf`
+      const blob = new Blob([res.data], { type: 'application/pdf' })
+
+      // Buat URL objek untuk file PDF
+      const url = window.URL.createObjectURL(blob)
+
+      // Buat elemen <a> untuk mengunduh file
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName
+
+      // Klik elemen <a> untuk memulai unduhan
+      a.click()
+
+      // Hapus URL objek setelah pengunduhan selesai
+      window.URL.revokeObjectURL(url)
+    },
+  })
 
   return (
     <div className="px-4 pb-6 bg-white">
@@ -93,8 +117,12 @@ export function ViewLaporaNeraca() {
             <Printer />
             Cetak Laporan
           </button>
-          <button className="px-5 flex items-center gap-1">
-            <Upload />
+          <button
+            className="px-5 flex items-center gap-1"
+            onClick={() => exportLaporan()}
+            disabled={isLoading}
+          >
+            {isLoading ? <Spinner /> : <Upload />}
             Eksport Data
           </button>
         </div>
