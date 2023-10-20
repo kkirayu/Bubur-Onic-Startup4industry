@@ -20,7 +20,21 @@ export interface Items {
   amount_residual: number
   amount_residual_currency: number
   account_id?: (number | string)[] | null
+  saldo: Saldo
 }
+
+
+export interface Saldo {
+  dataAwal: SaldoItem;
+  dataAkhir: SaldoItem;
+  selisih: number;
+}
+
+export interface SaldoItem {
+  tanggal: string;
+  saldo: number;
+}
+
 
 export interface Group {
   account_root_id_count: number
@@ -29,6 +43,10 @@ export interface Group {
   credit: number
   discount_amount_currency: number
   balance: number
+  total_awal: number
+  total_akhir: number
+  tanggal_awal: number
+  tanggal_akhir: number
   amount_residual: number
   amount_residual_currency: number
   account_root_id?: (number | string)[] | null
@@ -93,49 +111,149 @@ export function ViewLaporaNeraca() {
       </div>
       <div className="font-bold px-4">
         {report?.map((neraca, i) => (
-          <Fragment key={i}>
+          // <Fragment key={i}>
+          //   <div className="flex justify-between py-4">
+          //     <div className="text-left text-gray-alurkerja-1">
+          //       {neraca.value}
+          //     </div>
+          //   </div>
+          //   {neraca.group.map((group, i) => (
+          //     <>
+          //       <div
+          //         className="flex justify-between pl-4 py-4 text-main-blue-alurkerja"
+          //         key={i}
+          //       >
+          //         <div className="text-left ">{group.account_root_id?.[1]}</div>
+          //       </div>
+          //       {group.items.map((acc, i) => (
+          //         <div className="grid grid-cols-12 pl-8 py-4" key={i}>
+          //           <div className="col-span-8 text-left text-gray-alurkerja-1">
+          //             {acc.account_id?.[1]}
+          //           </div>
+
+          //           <div className="col-span-4 text-gray-alurkerja-1 grid grid-cols-2">
+          //             <div className="text-right">
+          //               {formatToMoney(acc.balance)}
+          //             </div>
+          //             <div className="text-right">0.54</div>
+          //           </div>
+          //         </div>
+          //       ))}
+          //     </>
+          //   ))}
+          //   <div className="grid grid-cols-12 pl-4 py-4">
+          //     <div className="col-span-8 text-left text-main-blue-alurkerja">
+          //       Total {neraca.value}
+          //     </div>
+          //     <div className="col-span-4 text-main-blue-alurkerja grid grid-cols-2">
+          //       <div className="text-right">
+          //         {formatToMoney(getTotalBalance(neraca))}
+          //       </div>
+          //       <div></div>
+          //     </div>
+          //   </div>
+          // </Fragment>
+          <Fragment>
+
             <div className="flex justify-between py-4">
               <div className="text-left text-gray-alurkerja-1">
                 {neraca.value}
               </div>
-              <div className="text-right">%</div>
             </div>
-            {neraca.group.map((group, i) => (
-              <>
-                <div
-                  className="flex justify-between pl-4 py-4 text-main-blue-alurkerja"
-                  key={i}
-                >
-                  <div className="text-left ">{group.account_root_id?.[1]}</div>
-                  <div className="text-right">%</div>
-                </div>
-                {group.items.map((acc, i) => (
-                  <div className="grid grid-cols-12 pl-8 py-4" key={i}>
-                    <div className="col-span-8 text-left text-gray-alurkerja-1">
-                      {acc.account_id?.[1]}
-                    </div>
+            <table className='w-full'>
+              <thead>
+                <tr>
+                  <th className="text-left w-[400px] ">
+                    Keterangan /  uaraian
 
-                    <div className="col-span-4 text-gray-alurkerja-1 grid grid-cols-2">
-                      <div className="text-right">
-                        {formatToMoney(acc.balance)}
-                      </div>
-                      <div className="text-right">0.54</div>
-                    </div>
-                  </div>
+                  </th>
+                  <th className="text-left w-[400px] ">
+                    Tanggal Awal
+
+                  </th>
+                  <th className="text-left ">
+                    Tanggal Akhir
+
+                  </th>
+                  <th className="text-left ">
+                    Kenaikan
+
+                  </th>
+                  <th className="text-left ">
+                    Kenaikan (%)
+
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {neraca.group.map((group, i) => (
+                  <Fragment>
+
+                    <tr>
+                      <td className='w-[400px]'>
+
+                        <div className="text-left ">{group.account_root_id?.[1]}</div>
+                      </td>
+                      <td className="text-left ">
+                          <div className="text-left font-normal ">{group.tanggal_awal}</div>
+
+                      </td>
+                      <td className="text-left ">
+
+                      <div className="text-left font-normal ">{group.tanggal_akhir}</div>
+
+                      </td>
+
+
+                    </tr>
+
+                    {group.items.map((acc, i) => {
+
+
+                      return <tr>
+                        <td className='w-[400px]'>
+                          <div className="text-left font-normal ">|---{acc.account_id?.[1]}</div>
+                        </td>
+                        <td>
+                          <div className="text-left font-normal ">Rp.{acc.saldo.dataAwal.saldo}</div>
+                        </td>
+                        <td>
+                          <div className="text-left font-normal ">Rp.{acc.saldo.dataAkhir.saldo}</div>
+                        </td>
+                        <td>
+                          <div className="text-left font-normal ">Rp.{acc.saldo.selisih}</div>
+                        </td>
+                      </tr>
+
+
+                    })}
+                    <tr >
+                      <td className='w-[400px] pb-[30px]'>
+                        Total {group.account_root_id?.[1]}
+                      </td>
+                      <td className=' pb-[30px]'>
+
+                        Rp.{group.total_awal || 0}
+                      </td>
+                      <td className=' pb-[30px]'>
+
+                      Rp.{group.total_akhir || 0}
+                      </td>
+                      <td className="text-left font-normal pb-[30px]">
+                        Rp.{group.balance}
+                      </td>
+                      <td className="text-left font-normal pb-[30px]">
+                        {(group.total_awal ? (group.total_akhir -  group.total_awal) / group.total_awal  * 100  :  100 )} %
+                      </td>
+                    </tr>
+
+
+
+                  </Fragment>
                 ))}
-              </>
-            ))}
-            <div className="grid grid-cols-12 pl-4 py-4">
-              <div className="col-span-8 text-left text-main-blue-alurkerja">
-                Total {neraca.value}
-              </div>
-              <div className="col-span-4 text-main-blue-alurkerja grid grid-cols-2">
-                <div className="text-right">
-                  {formatToMoney(getTotalBalance(neraca))}
-                </div>
-                <div></div>
-              </div>
-            </div>
+              </tbody>
+            </table>
           </Fragment>
         ))}
       </div>
