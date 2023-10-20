@@ -1,4 +1,9 @@
-import { CardBukuBesar, CardJournal, CardNeraca } from './components'
+import {
+  CardBukuBesar,
+  CardJournal,
+  CardLabaRugi,
+  CardNeraca,
+} from './components'
 
 export function Dashboard() {
   return (
@@ -12,6 +17,7 @@ export function Dashboard() {
         <CardJournal />
         <CardBukuBesar />
         <CardNeraca />
+        <CardLabaRugi />
       </div>
     </div>
   )
