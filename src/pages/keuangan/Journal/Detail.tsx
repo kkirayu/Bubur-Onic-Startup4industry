@@ -72,7 +72,7 @@ export const DetailJurnal = () => {
 
   const onSubmit = () => {
     if (detailJournal) {
-      detailJournal.posted_by
+      detailJournal.posted_at
         ? mutate({ id: detailJournal.id, type: 'un-post' })
         : mutate({ id: detailJournal.id, type: 'post' })
     }
@@ -142,10 +142,10 @@ export const DetailJurnal = () => {
               <>
                 <Input
                   readOnly
-                  value={detailJournal.posted_by ? 'Posted' : 'Draft'}
+                  value={detailJournal.posted_at ? 'Posted' : 'Draft'}
                 />
                 <Button loading={isLoading} onClick={() => onSubmit()}>
-                  {detailJournal.posted_by ? 'Unpost' : 'Post'}
+                  {detailJournal.posted_at ? 'Unpost' : 'Post'}
                 </Button>
               </>
             )}

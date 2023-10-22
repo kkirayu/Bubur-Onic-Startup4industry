@@ -12,6 +12,7 @@ export const AkunManagement = () => {
   <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
+        
         tableName="akun"
         module="akun"
         renderState={renderState}
