@@ -137,93 +137,74 @@ export function ViewLaporaNeraca() {
       </div>
       <div className="font-bold px-4">
         {report?.map((neraca, i) => (
-          <Fragment>
-            <div className="flex justify-between py-4">
-              <div className="text-left text-gray-alurkerja-1">
-                {neraca.value}
-              </div>
+          <Fragment key={i}>
+            <div className="text-gray-700 text-base font-bold ">
+              {neraca.value}
             </div>
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="text-left w-[400px] ">Keterangan / uaraian</th>
-                  <th className="text-left w-[400px] ">Tanggal Awal</th>
-                  <th className="text-left ">Tanggal Akhir</th>
-                  <th className="text-left ">Kenaikan</th>
-                  <th className="text-left ">Kenaikan (%)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {neraca.group.map((group, i) => (
-                  <Fragment>
-                    <tr>
-                      <td className="w-[400px]">
-                        <div className="text-left ">
-                          {group.account_root_id?.[1]}
-                        </div>
-                      </td>
-                      <td className="text-left ">
-                        <div className="text-left font-normal ">
-                          {group.tanggal_awal}
-                        </div>
-                      </td>
-                      <td className="text-left ">
-                        <div className="text-left font-normal ">
-                          {group.tanggal_akhir}
-                        </div>
-                      </td>
-                    </tr>
 
+            {neraca.group.map((group, i) => (
+              <div className="mb-6" key={i}>
+                <div className="text-gray-700 text-sm font-normal">
+                  ({group.account_root_id?.[1]})
+                </div>
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-left w-[400px]">
+                        Keterangan / Uraian
+                      </th>
+                      <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                        Saldo Awal
+                      </th>
+                      <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                        Saldo Akhir
+                      </th>
+                      <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                        Kenaikan
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {group.items.map((acc, i) => {
                       return (
                         <tr>
-                          <td className="w-[400px]">
-                            <div className="text-left font-normal ">
-                              |---{acc.account_id?.[1]}
-                            </div>
+                          <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y">
+                            |---{acc.account_id?.[1]}
                           </td>
-                          <td>
-                            <div className="text-left font-normal ">
-                              Rp.{acc.saldo.dataAwal.saldo}
-                            </div>
+                          <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                            {formatToMoney(acc.saldo.dataAwal.saldo)}
                           </td>
-                          <td>
-                            <div className="text-left font-normal ">
-                              Rp.{acc.saldo.dataAkhir.saldo}
-                            </div>
+                          <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                            {formatToMoney(acc.saldo.dataAkhir.saldo)}
                           </td>
-                          <td>
-                            <div className="text-left font-normal ">
-                              Rp.{acc.saldo.selisih}
-                            </div>
+                          <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                            {formatToMoney(acc.saldo.selisih)}
                           </td>
                         </tr>
                       )
                     })}
                     <tr>
-                      <td className="w-[400px] pb-[30px]">
+                      <td className="text-zinc-800 text-xs px-3.5 py-2.5 border-y font-bold bg-slate-100">
                         Total {group.account_root_id?.[1]}
                       </td>
-                      <td className=" pb-[30px]">Rp.{group.total_awal || 0}</td>
-                      <td className=" pb-[30px]">
-                        Rp.{group.total_akhir || 0}
+                      <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                        {formatToMoney(group.total_awal)}
                       </td>
-                      <td className="text-left font-normal pb-[30px]">
-                        Rp.{group.balance}
+                      <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                        {formatToMoney(group.total_akhir)}
                       </td>
-                      <td className="text-left font-normal pb-[30px]">
-                        {group.total_awal
-                          ? ((group.total_akhir - group.total_awal) /
-                              group.total_awal) *
-                            100
-                          : 100}{' '}
-                        %
+                      <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                        {formatToMoney(group.balance)}
                       </td>
                     </tr>
-                  </Fragment>
-                ))}
-              </tbody>
-            </table>
+                  </tbody>
+                </table>
+              </div>
+            ))}
+
+            {i !== report.length - 1 && (
+              <div className="w-full h-px border border-slate-200 my-6" />
+            )}
           </Fragment>
         ))}
       </div>
