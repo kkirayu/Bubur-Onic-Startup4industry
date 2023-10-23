@@ -68,11 +68,11 @@ const Login = () => {
       className="container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:px-0 bg-black-alurkerja-1 pb-12"
       style={{ backgroundImage: 'url("/bg.webp")' }}
     >
-      <div className="h-fit  items-center justify-center md:justify-start relative bg-white flex flex-col">
-        <div className="w-full bg-slate-200 py-6 flex items-center justify-center">
+      <div className="h-fit items-center justify-center md:justify-start relative bg-white flex flex-col rounded">
+        <div className="w-full bg-slate-200 py-6 flex items-center justify-center rounded">
           <img className="w-36 h-10" src="/logo.webp" />
         </div>
-        <div className="px-6 lg:px-8 pt-2 pb-8">
+        <div className="px-20 pb-20 pt-12">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="mx-auto flex w-full flex-col justify-center space-y-4 sm:w-[350px]"
