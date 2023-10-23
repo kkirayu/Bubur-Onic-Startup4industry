@@ -15,6 +15,22 @@ export const ListInvoicePembelian = () => {
   const [search, setSearch] = useState<string>()
   const [showFilter, setShowFilter] = useState(false)
 
+  const ExtraRow = () => (
+    <tr>
+      <td colSpan={7}>
+        <div className="flex items-center justify-between py-5 px-4">
+          <div className="text-zinc-800 text-xs font-bold font-['Poppins']">
+            Grand Total
+          </div>
+
+          <div className="text-zinc-800 text-xs font-bold font-['Poppins']">
+            Rp 150,000,000.00
+          </div>
+        </div>
+      </td>
+    </tr>
+  )
+
   return (
     <div>
       <div className="text-gray-700 text-xl font-semibold mb-4">
@@ -41,9 +57,9 @@ export const ListInvoicePembelian = () => {
             { key: 'name', label: 'Nama Supplier' },
             { key: 'name', label: 'No. Invoice' },
             { key: 'name', label: 'Tanggal' },
-            { key: 'name', label: 'Total' },
+            { key: 'name', label: 'Total Hutang' },
             { key: 'name', label: 'Sisa Tagihan' },
-            { key: 'name', label: 'Status Pembayran' },
+            { key: 'name', label: 'Status Pembayaran' },
           ]}
           extraButton={() => (
             <Button
@@ -55,6 +71,7 @@ export const ListInvoicePembelian = () => {
             </Button>
           )}
           onClickCreate={() => navigate('create')}
+          extraRow={() => <ExtraRow />}
         />
       </section>
     </div>
