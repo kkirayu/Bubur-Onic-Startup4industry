@@ -1,8 +1,9 @@
-import { InputDate, Modal, Select } from 'alurkerja-ui'
+import { Modal, Select } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import moment from 'moment'
+import DatePicker from 'react-datepicker'
 
 import { IconLaporan } from '@/assets'
 import { Button } from '@/components'
@@ -18,7 +19,7 @@ export const CardNeraca = () => {
   } = useForm({
     defaultValues: {
       company: '',
-      date: new Date(),
+      periode: '',
     },
   })
 
@@ -26,16 +27,26 @@ export const CardNeraca = () => {
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
 
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    new Date(),
+    new Date(),
+  ])
+
   const onClickJournal = (data: FieldValues) => {
-    if (data.company !== '') {
+    if (dateRange[0] === null || dateRange[1] === null) {
+      setError('periode', { type: 'required', message: 'periode required' })
+    }
+    if (data.company === '') {
+      setError('company', { type: 'required', message: 'company required' })
+    }
+
+    if (data.company !== '' && dateRange[0] && dateRange[1]) {
       navigate({
         pathname: 'neraca',
-        search: `?company=${data.company}&date=${moment(data.date).format(
+        search: `?company=${data.company}&start=${moment(dateRange[0]).format(
           'DD/MM/YYYY'
-        )}`,
+        )}&end=${moment(dateRange[1]).format('DD/MM/YYYY')}`,
       })
-    } else {
-      setError('company', { type: 'required', message: 'company required' })
     }
   }
 
@@ -93,11 +104,27 @@ export const CardNeraca = () => {
                     htmlFor=""
                     className="after:content-['*'] after:text-red-400 after:text-sm"
                   >
-                    Neraca Per Tanggal
+                    Neraca per Tanggal
                   </label>
-                  <InputDate defaultValue={new Date()} />
+                  <DatePicker
+                    className="w-full border p-2 rounded"
+                    selectsRange={true}
+                    startDate={dateRange[0]}
+                    endDate={dateRange[1]}
+                    onChange={(update) => {
+                      setDateRange(update)
+                      clearErrors('periode')
+                    }}
+                    isClearable={true}
+                  />
                   <div className="text-xs text-gray-alurkerja-2">
-                    Periode Transaksi
+                    {errors?.periode ? (
+                      <span className="text-red-alurkerja">
+                        {errors?.periode.message}
+                      </span>
+                    ) : (
+                      'Periode Transaksi'
+                    )}
                   </div>
                 </div>
               </div>
