@@ -138,7 +138,7 @@ export function ViewLaporanJournal() {
                 </tr>
                 {item.journal_akuns?.map((akuns: any, i: number) => {
                   const accountName = akuns.akun
-                    ? akuns.akun?.kode_akun + ' - ' + akuns.akun?.nama
+                    ? akuns.akun_label
                     : '-'
                   return (
                     <tr key={i}>
