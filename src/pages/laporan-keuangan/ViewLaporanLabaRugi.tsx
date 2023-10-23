@@ -25,7 +25,7 @@ export function ViewLaporaLabaRugi() {
     queryKey: ['laporan-laba-rugi'],
     queryFn: async () => {
       return axiosInstance
-        .get(`/laporan/laporan-laba-rugi?company=1&date=18/10/2023`)
+        .get(`/laporan/laporan-laba-rugi?company=${companyID}&date=${date}`)
         .then((res) => res.data?.data)
     },
   })
@@ -67,10 +67,10 @@ export function ViewLaporaLabaRugi() {
           <button className="px-5 flex items-center gap-1">
             <RefreshCcw size={16} /> Refresh Data
           </button>
-          <button className="px-5 flex items-center gap-1">
+          {/* <button className="px-5 flex items-center gap-1">
             <Printer />
             Cetak Laporan
-          </button>
+          </button> */}
           <button
             className="px-5 flex items-center gap-1"
             onClick={() => exportLaporan()}

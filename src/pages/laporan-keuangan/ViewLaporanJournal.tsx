@@ -93,10 +93,10 @@ export function ViewLaporanJournal() {
           <button className="px-5 flex items-center gap-1">
             <RefreshCcw size={16} /> Refresh Data
           </button>
-          <button className="px-5 flex items-center gap-1">
+          {/* <button className="px-5 flex items-center gap-1">
             <Printer />
             Cetak Laporan
-          </button>
+          </button> */}
           <button
             className="px-5 flex items-center gap-1"
             onClick={() => exportLaporan()}
@@ -137,9 +137,7 @@ export function ViewLaporanJournal() {
                   <td></td>
                 </tr>
                 {item.journal_akuns?.map((akuns: any, i: number) => {
-                  const accountName = akuns.akun
-                    ? akuns.akun_label
-                    : '-'
+                  const accountName = akuns.akun ? akuns.akun_label : '-'
                   return (
                     <tr key={i}>
                       <td></td>

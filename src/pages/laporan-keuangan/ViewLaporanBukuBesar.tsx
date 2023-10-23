@@ -11,7 +11,7 @@ export function ViewLaporanBukuBesar() {
   const [searchParams] = useSearchParams()
 
   const companyID = searchParams.get('company')
-  const categoryAccountID = searchParams.get('group')
+  const group = searchParams.get('group')
   const startDate = searchParams.get('start')
   const endDate = searchParams.get('end')
 
@@ -24,21 +24,12 @@ export function ViewLaporanBukuBesar() {
     },
   })
 
-  const { data: currentCategoryAccount } = useQuery({
-    queryKey: ['category-account', categoryAccountID],
-    queryFn: async () => {
-      return axiosInstance
-        .get(`/akun/kategori-akun/${categoryAccountID}`)
-        .then((res) => res.data?.data)
-    },
-  })
-
   const { data: report } = useQuery({
     queryKey: ['laporan-buku-besar'],
     queryFn: async () => {
       return axiosInstance
         .get(
-          `/laporan/laporan-buku-besar?company=1&group=asset&start=01/10/2023&end=18/10/2023`
+          `/laporan/laporan-buku-besar?company=1&group=${group}&start=${startDate}&end=${endDate}`
         )
         .then((res) => res.data?.data)
     },
@@ -117,10 +108,10 @@ export function ViewLaporanBukuBesar() {
           <button className="px-5 flex items-center gap-1">
             <RefreshCcw size={16} /> Refresh Data
           </button>
-          <button className="px-5 flex items-center gap-1">
+          {/* <button className="px-5 flex items-center gap-1">
             <Printer />
             Cetak Laporan
-          </button>
+          </button> */}
           <button
             className="px-5 flex items-center gap-1"
             onClick={() => exportLaporan()}
@@ -142,8 +133,8 @@ export function ViewLaporanBukuBesar() {
         </div>
       </div>
       <div>
-        <div className="bg-gray-alurkerja-3 text-gray-alurkerja-1 font-bold p-4">
-          {currentCategoryAccount?.nama}
+        <div className="bg-gray-alurkerja-3 text-gray-alurkerja-1 font-bold p-4 uppercase">
+          {group}
         </div>
         <table className="w-full table-auto">
           <thead className="border-y border-black-alurkerja-1">

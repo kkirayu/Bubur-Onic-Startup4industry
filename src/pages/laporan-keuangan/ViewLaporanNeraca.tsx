@@ -71,7 +71,7 @@ export function ViewLaporaNeraca() {
     queryKey: ['laporan-neraca'],
     queryFn: async () => {
       return axiosInstance
-        .get(`/laporan/laporan-neraca?company=1&date=18/10/2023`)
+        .get(`/laporan/laporan-neraca?company=${companyID}&date=${date}`)
         .then((res) => res.data?.data)
     },
   })
@@ -113,10 +113,10 @@ export function ViewLaporaNeraca() {
           <button className="px-5 flex items-center gap-1">
             <RefreshCcw size={16} /> Refresh Data
           </button>
-          <button className="px-5 flex items-center gap-1">
+          {/* <button className="px-5 flex items-center gap-1">
             <Printer />
             Cetak Laporan
-          </button>
+          </button> */}
           <button
             className="px-5 flex items-center gap-1"
             onClick={() => exportLaporan()}
