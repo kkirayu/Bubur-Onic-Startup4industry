@@ -13,6 +13,7 @@ import {
   DetailKaryawan,
   EditKaryawan,
 } from '@/pages/master'
+import { CreateAkun } from '@/pages/master/AkunManagement'
 
 import { Outlet, RouteObject } from 'react-router-dom'
 
@@ -26,6 +27,7 @@ export const masterRoutes: RouteObject = {
     { path: 'management-karyawan/:id', element: <DetailKaryawan /> },
     { path: 'management-karyawan/:id/edit', element: <EditKaryawan /> },
     { path: 'akun', element: <ListAccount /> },
+    { path: 'akun/create', element: <CreateAkun /> },
     { path: 'user', element: <UserManagement /> },
     { path: 'role', element: <RoleManagement /> },
     { path: 'role/:id/edit', element: <EditRole /> },

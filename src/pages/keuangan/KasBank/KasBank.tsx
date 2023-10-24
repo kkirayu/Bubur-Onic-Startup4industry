@@ -26,6 +26,9 @@ export const KasBank = () => {
         filterBy={filterBy}
         setFilterBy={setFilterBy}
         search={search}
+        customButtonCreate={() => {
+          return  <></>
+        }}
         setSearch={setSearch}
         column={[
           { label: 'Nama', key: 'nama' },

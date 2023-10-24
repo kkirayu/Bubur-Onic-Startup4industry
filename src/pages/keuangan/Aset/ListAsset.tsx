@@ -13,11 +13,11 @@ export const ListAsset = () => {
   return (
     <div>
       <div className="text-gray-700 text-xl font-semibold mb-4">
-        Penerimaan Pembayaran Piutang
+        Manage Asset
       </div>
       <section className="bg-white">
         <TableLowcode
-          title="Data Pembayaran Piutang"
+          title="Manage Asset"
           baseUrl={import.meta.env.VITE_API_BASEURL}
           specPath="/api/journal/journal"
           renderState={renderState}

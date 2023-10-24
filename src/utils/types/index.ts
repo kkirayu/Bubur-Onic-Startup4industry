@@ -31,3 +31,8 @@ export interface ListResponse<T = any> {
   status: number
   message: string
 }
+export interface ListNotPaginatedResponse<T = any> {
+  data:  Array<T>
+  status: number
+  message: string
+}

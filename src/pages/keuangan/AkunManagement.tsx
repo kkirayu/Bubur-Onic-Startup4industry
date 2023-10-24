@@ -1,5 +1,6 @@
 import { TableLowcode } from 'alurkerja-ui'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const AkunManagement = () => {
 
@@ -12,7 +13,6 @@ export const AkunManagement = () => {
   <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        
         tableName="akun"
         module="akun"
         renderState={renderState}
