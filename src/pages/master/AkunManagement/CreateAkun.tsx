@@ -24,7 +24,7 @@ export const CreateAkun = () => {
   const watchKategoriAkun = watch('kategori_akun')
 
   useEffect(() => {
-    var data = _.find(listKategoriAkunData, { id: watchKategoriAkun });
+    var data = _.find(listKategoriAkunData || [], { id: watchKategoriAkun });
     if (data) {
       setAccountPrefix(data.prefix_akun)
       setAccountType(data.code)
