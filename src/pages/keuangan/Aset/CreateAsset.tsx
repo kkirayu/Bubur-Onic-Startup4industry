@@ -1,39 +1,113 @@
 import { useMemo, useState } from 'react'
 import { Input, Select } from 'alurkerja-ui'
-import { FieldValues, useForm } from 'react-hook-form'
+import { Controller, FieldValues, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { ErrorMessage } from '@hookform/error-message'
-import moment from 'moment'
 
 import { Button, Dialog } from '@/components'
-import { axiosInstance, getListAccount } from '@/api'
-
-interface PayloadCreateJournal {
-  deskripsi: string
-  tanggal_transaksi: string
-  judul: string
-  akuns?: { id: number; debit: number; credit: number; description: string }[]
-}
+import { axiosInstance, getListCategoryAsset, getListSupplier } from '@/api'
 
 export const CreateAsset = () => {
+  const navigate = useNavigate()
   const {
     register,
-    watch,
     setValue,
     handleSubmit,
     formState: { errors },
-    unregister,
+    watch,
+    control,
   } = useForm()
+  const { listOption: optionCategoryAsset } = getListCategoryAsset()
+  const { listOption: optionSupplier } = getListSupplier()
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (payload: FieldValues) => {
+      return axiosInstance.post('/odoo/odoo-api', {
+        args: [
+          {
+            analytic_precision: 2,
+            state: 'draft',
+            name: payload.name,
+            category_id: payload.category_id,
+            code: false,
+            date: payload.date,
+            date_first_depreciation: 'manual',
+            first_depreciation_manual_date:
+              payload.first_depreciation_manual_date,
+            account_analytic_id: false,
+            currency_id: 12,
+            value: payload.value,
+            salvage_value: payload.salvage_value,
+            partner_id: payload.partner_id,
+            invoice_id: false,
+            analytic_distribution: false,
+            depreciation_line_ids: [],
+            method: 'linear',
+            method_progress_factor: 0.3,
+            method_time: 'number',
+            prorata: false,
+            method_number: 5,
+            method_period: 12,
+            method_end: false,
+          },
+        ],
+        model: 'account.asset.asset',
+        method: 'create',
+        kwargs: {
+          context: {
+            lang: 'en_US',
+            tz: 'Asia/Jakarta',
+            uid: 2,
+            allowed_company_ids: [1],
+            params: {
+              action: 300,
+              model: 'account.asset.asset',
+              view_type: 'list',
+              cids: 1,
+              menu_id: 115,
+            },
+          },
+        },
+      })
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil membuat Asset',
+        callback: () => {
+          navigate('/keuangan/aset')
+        },
+      })
+    },
+    onError: (err: any) => {
+      if (err.response.status === 422) {
+        Dialog.error({ description: err.response.data.message })
+      } else {
+        Dialog.error()
+      }
+    },
+  })
 
   return (
     <section className="bg-white rounded py-6">
       <h3 className="font-bold text-xl mb-10 px-6">Tambah Jurnal</h3>
       <div className="grid grid-cols-3 gap-4 px-10 mb-8">
         <div>
-          <label htmlFor="">Nama Asset</label>
-          <Input />
-          <span className="text-gray-alurkerja-2 text-xs">Nama Asset</span>
+          <label
+            htmlFor=""
+            className="after:content-['*'] after:text-red-400 after:text-sm"
+          >
+            Nama Asset
+          </label>
+          <Input {...register('name', { required: true })} />
+
+          <ErrorMessage
+            errors={errors}
+            name="name"
+            render={() => (
+              <p className="text-red-400 text-xs">Nama Asset Required</p>
+            )}
+          />
         </div>
         <div>
           <label
@@ -42,23 +116,41 @@ export const CreateAsset = () => {
           >
             Kategori Asset
           </label>
-          <Input />
-          <span className="text-gray-alurkerja-2 text-xs">Kategori Asset</span>
+          <Controller
+            control={control}
+            name="category_id"
+            rules={{ required: true }}
+            render={({ field: { onChange } }) => (
+              <Select
+                options={optionCategoryAsset}
+                onChange={(selected: any) => onChange(selected.value)}
+              />
+            )}
+          />
           <ErrorMessage
             errors={errors}
-            name=""
+            name="category_id"
             render={() => (
-              <p className="text-red-400 text-xs">Tanggal Required </p>
+              <p className="text-red-400 text-xs">Kategori Asset Required</p>
             )}
           />
         </div>
 
         <div>
-          <label htmlFor="">Tanggal Pembelian</label>
-          <Input type="date" />
-          <span className="text-gray-alurkerja-2 text-xs">
+          <label
+            htmlFor=""
+            className="after:content-['*'] after:text-red-400 after:text-sm"
+          >
             Tanggal Pembelian
-          </span>
+          </label>
+          <Input {...register('date', { required: true })} type="date" />
+          <ErrorMessage
+            errors={errors}
+            name="date"
+            render={() => (
+              <p className="text-red-400 text-xs">Tanggal Pembelian Required</p>
+            )}
+          />
         </div>
 
         <div>
@@ -68,81 +160,58 @@ export const CreateAsset = () => {
           >
             Tanggal Mulai Depresiasi
           </label>
-          <Input />
-          <span className="text-gray-alurkerja-2 text-xs">
-            Tanggal Mulai Depresiasi
-          </span>
+          <Input
+            {...register('first_depreciation_manual_date', { required: true })}
+            type="date"
+          />
           <ErrorMessage
             errors={errors}
-            name=""
+            name="first_depreciation_manual_date"
             render={() => (
-              <p className="text-red-400 text-xs"> Judul Jurnal Required </p>
+              <p className="text-red-400 text-xs">
+                Tanggal Mulai Depresiasi Required
+              </p>
             )}
           />
         </div>
         <div className="col-span-2"></div>
         <div>
-          <label
-            htmlFor=""
-            className="after:content-['*'] after:text-red-400 after:text-sm"
-          >
-            Gross Value
-          </label>
-          <Input />
+          <label htmlFor="">Gross Value</label>
+          <Input {...register('value')} />
           <span className="text-gray-alurkerja-2 text-xs">Gross Value</span>
         </div>
         <div>
-          <label
-            htmlFor=""
-            className="after:content-['*'] after:text-red-400 after:text-sm"
-          >
-            Salvage Value
-          </label>
-          <Input />
+          <label htmlFor="">Salvage Value</label>
+          <Input {...register('salvage_value')} />
           <span className="text-gray-alurkerja-2 text-xs">Salvage Value</span>
         </div>
         <div>
-          <label
-            htmlFor=""
-            className="after:content-['*'] after:text-red-400 after:text-sm"
-          >
-            Resedual Value
-          </label>
-          <Input />
+          <label htmlFor="">Resedual Value</label>
+          <Input value={watch('value') - watch('salvage_value')} />
           <span className="text-gray-alurkerja-2 text-xs">Resedual Value</span>
         </div>
 
         <div className="col-span-3">
-          <label
-            htmlFor="deskripsi"
-            className="after:content-['*'] after:text-red-400 after:text-sm"
-          >
-            Deskripsi
-          </label>
-          <Input {...register('deskripsi', { required: true })} textArea />
-          <span className="text-gray-alurkerja-2 text-xs">Deskripsi Akun</span>
-          <ErrorMessage
-            errors={errors}
-            name="deskripsi"
-            render={() => (
-              <p className="text-red-400 text-xs">Deskripsi Required </p>
-            )}
-          />
+          <label htmlFor="deskripsi">Deskripsi</label>
+          <Input {...register('deskripsi')} textArea />
         </div>
         <div>
-          <label
-            htmlFor=""
-            className="after:content-['*'] after:text-red-400 after:text-sm"
-          >
-            Supplier
-          </label>
-          <Select options={[]} />
-          <span className="text-gray-alurkerja-2 text-xs">Resedual Value</span>
+          <label htmlFor="">Supplier</label>
+          <Select
+            options={optionSupplier}
+            onChange={(selected: any) => setValue('partner_id', selected.value)}
+          />
+          <span className="text-gray-alurkerja-2 text-xs">Supplier</span>
         </div>
       </div>
 
       <div className="w-fit flex gap-x-4 ml-auto px-6">
-        <Button>Simpan</Button>
+        <Button
+          onClick={() => handleSubmit((payload) => mutate(payload))()}
+          loading={isLoading}
+        >
+          Simpan
+        </Button>
         <Button variant="outlined">Reset</Button>
       </div>
     </section>
