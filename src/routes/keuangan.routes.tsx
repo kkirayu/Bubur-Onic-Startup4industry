@@ -14,6 +14,7 @@ import {
   CreateInvoicePembelian,
   ListAsset,
   CreateAsset,
+  EditAsset,
 } from '@/pages/keuangan'
 import { ListPembayaranHutang } from '@/pages/keuangan/Hutang/ListPembayaranHutang'
 
@@ -26,6 +27,7 @@ export const keuanganRoutes: RouteObject = {
     // Assets
     { path: 'aset', element: <ListAsset /> },
     { path: 'aset/create', element: <CreateAsset /> },
+    { path: 'aset/:id/edit', element: <EditAsset /> },
     // HUTANG
     { path: 'hutang/pembayaran-hutang', element: <ListPembayaranHutang /> },
     {
