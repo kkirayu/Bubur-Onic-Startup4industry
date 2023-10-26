@@ -38,6 +38,7 @@ export const ListAsset = () => {
             { key: 'name', label: 'Tanggal Pembelian' },
           ]}
           onClickCreate={() => navigate('create')}
+          onClickEdit={(_, id) => navigate(id + '/edit')}
         />
       </section>
     </div>

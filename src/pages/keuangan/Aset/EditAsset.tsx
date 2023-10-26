@@ -4,6 +4,8 @@ import { Controller, FieldValues, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ErrorMessage } from '@hookform/error-message'
+import CurrencyInput from 'react-currency-input-field'
+import _ from 'underscore'
 
 import { Button, Dialog } from '@/components'
 import { axiosInstance, getListCategoryAsset, getListSupplier } from '@/api'
@@ -228,18 +230,51 @@ export const EditAsset = () => {
         <div className="col-span-2"></div>
         <div>
           <label htmlFor="">Gross Value</label>
-          <Input {...register('value')} />
-          <span className="text-gray-alurkerja-2 text-xs">Gross Value</span>
+          <CurrencyInput
+            prefix="Rp"
+            className="input border border-[#c4c4c480] h-11 focus:ring-indigo-600 focus-within:ring-indigo-600 focus-within:border-indigo-600 focus:border-indigo-600"
+            groupSeparator="."
+            decimalSeparator=","
+            decimalsLimit={2}
+            value={watch('value')}
+            onValueChange={(value) => setValue('value', value)}
+          />
+
+          <span className="text-gray-alurkerja-2 text-xs">Harga Beli</span>
         </div>
         <div>
           <label htmlFor="">Salvage Value</label>
-          <Input {...register('salvage_value')} />
-          <span className="text-gray-alurkerja-2 text-xs">Salvage Value</span>
+          <CurrencyInput
+            prefix="Rp"
+            className="input border border-[#c4c4c480] h-11 focus:ring-indigo-600 focus-within:ring-indigo-600 focus-within:border-indigo-600 focus:border-indigo-600"
+            groupSeparator="."
+            decimalSeparator=","
+            decimalsLimit={2}
+            value={watch('salvage_value')}
+            onValueChange={(value) => setValue('salvage_value', value)}
+          />
+
+          <span className="text-gray-alurkerja-2 text-xs">
+            Harga Jual Maksimum
+          </span>
         </div>
         <div>
-          <label htmlFor="">Residual Value</label>
-          <Input value={watch('value') - watch('salvage_value')} />
-          <span className="text-gray-alurkerja-2 text-xs">Resedual Value</span>
+          <label htmlFor="">Resedual Value</label>
+          <CurrencyInput
+            prefix="Rp"
+            className="input border border-[#c4c4c480] h-11 focus:ring-indigo-600 focus-within:ring-indigo-600 focus-within:border-indigo-600 focus:border-indigo-600"
+            groupSeparator="."
+            decimalSeparator=","
+            decimalsLimit={2}
+            value={
+              !_.isNaN(watch('value') - watch('salvage_value'))
+                ? watch('value') - watch('salvage_value')
+                : 0
+            }
+          />
+          <span className="text-gray-alurkerja-2 text-xs">
+            Harga Beli - Harga Jual Maksimum
+          </span>
         </div>
 
         <div className="col-span-3">
