@@ -11,10 +11,11 @@ import {
 import { useState } from 'react'
 
 import { Button } from '@/components'
-import { getListAccount } from '@/api'
+import { getListAccount, getListSupplier } from '@/api'
 
 export const CreatePembayaranHutang = () => {
   const { listOption: accountOptions } = getListAccount()
+  const { listOption: supplierOptions } = getListSupplier()
 
   const [dataTable, setDataTable] = useState([
     { name: 'tes' },
@@ -55,7 +56,7 @@ export const CreatePembayaranHutang = () => {
                   >
                     Supplier
                   </label>
-                  <Select options={[]} />
+                  <Select options={supplierOptions} />
                 </div>
               </div>
               <div>
