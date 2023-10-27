@@ -77,7 +77,7 @@ export const CreatePembayaranHutang = () => {
 
               <div>
                 <label htmlFor="no_transaksi">Upload Invoice</label>
-                <PendingUpload />
+                <PendingUpload multiple />
               </div>
 
               <div>
