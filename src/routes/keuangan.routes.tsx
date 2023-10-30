@@ -15,8 +15,9 @@ import {
   ListAsset,
   CreateAsset,
   EditAsset,
+  EditInvoicePembelian,
+  ListPembayaranHutang,
 } from '@/pages/keuangan'
-import { ListPembayaranHutang } from '@/pages/keuangan/Hutang/ListPembayaranHutang'
 
 import { Outlet, RouteObject } from 'react-router-dom'
 
@@ -35,6 +36,10 @@ export const keuanganRoutes: RouteObject = {
       element: <CreatePembayaranHutang />,
     },
     { path: 'hutang/invoice-pembelian', element: <ListInvoicePembelian /> },
+    {
+      path: 'hutang/invoice-pembelian/:id/edit',
+      element: <EditInvoicePembelian />,
+    },
     {
       path: 'hutang/invoice-pembelian/create',
       element: <CreateInvoicePembelian />,

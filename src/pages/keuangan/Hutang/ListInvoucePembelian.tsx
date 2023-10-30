@@ -71,6 +71,7 @@ export const ListInvoicePembelian = () => {
             </Button>
           )}
           onClickCreate={() => navigate('create')}
+          onClickEdit={(_, id) => navigate(id + '/edit')}
           extraRow={() => <ExtraRow />}
         />
       </section>
