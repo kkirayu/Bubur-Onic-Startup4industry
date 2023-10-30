@@ -41,7 +41,7 @@ export const EditInvoicePembelian = () => {
       <div className="bg-white">
         <div className="w-full h-14 px-6 py-3.5  rounded-tl rounded-tr border border-slate-200 justify-start items-center inline-flex">
           <div className="text-gray-700 text-base font-semibold">
-            Tambah Invoice Pembelian
+            Edit Invoice Pembelian
           </div>
         </div>
         <div className="p-6 grid grid-cols-2 gap-6">
