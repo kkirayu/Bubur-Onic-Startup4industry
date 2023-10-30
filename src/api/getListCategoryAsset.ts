@@ -1,13 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { AxiosResponse } from 'axios'
 import { axiosInstance } from '.'
-import { OdooResponse } from '@/utils'
 import { useMemo } from 'react'
 
 export const getListCategoryAsset = () => {
-  const listCategoryAssetQuery = useQuery<
-    AxiosResponse<OdooResponse<[number, string]>, any>
-  >({
+  const listCategoryAssetQuery = useQuery({
     queryKey: ['category-asset'],
     queryFn: async () => {
       return axiosInstance.post('/odoo/odoo-api', {
@@ -33,13 +29,16 @@ export const getListCategoryAsset = () => {
 
   const { data } = listCategoryAssetQuery
 
-  const listCategoryAsset = data?.data.data
+  const listCategoryAsset = data?.data.data.content
 
   const listOptionCategoryAsset = useMemo(() => {
-    return listCategoryAsset?.map((asset) => ({
-      label: asset[1],
-      value: asset[0],
-    }))
+    if (listCategoryAsset) {
+      return listCategoryAsset?.map((asset: [number, string]) => ({
+        label: asset[1],
+        value: asset[0],
+      }))
+    }
+    return undefined
   }, [listCategoryAsset])
 
   return {

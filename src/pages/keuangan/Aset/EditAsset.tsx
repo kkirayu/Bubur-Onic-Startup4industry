@@ -175,7 +175,7 @@ export const EditAsset = () => {
                 onChange={(selected: any) => onChange(selected.value)}
                 isLoading={onFetchingDetail}
                 value={optionCategoryAsset?.filter(
-                  (asset) => asset.value === watch('category_id')
+                  (asset: any) => asset.value === watch('category_id')
                 )}
               />
             )}

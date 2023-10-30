@@ -1,10 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Input, Select, InputDate } from 'alurkerja-ui'
 import { useState } from 'react'
-import { getListAccount, getListProduct, getListSupplier } from '@/api'
-import { useForm } from 'react-hook-form'
-import { Button } from '@/components'
+import {
+  axiosInstance,
+  getListAccount,
+  getListProduct,
+  getListSupplier,
+} from '@/api'
+import { FieldValues, useForm } from 'react-hook-form'
+import { Button, Dialog } from '@/components'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 export const CreateInvoicePembelian = () => {
   const {
@@ -15,6 +21,7 @@ export const CreateInvoicePembelian = () => {
     formState: { errors },
     unregister,
   } = useForm()
+  const navigate = useNavigate()
 
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
@@ -22,7 +29,8 @@ export const CreateInvoicePembelian = () => {
   const [row, setRow] = useState([0])
 
   const { listOption: supplierOption } = getListSupplier()
-  const { listOption: accountOption } = getListAccount()
+  const { listOption: accountOption, isLoading: isFetchingAccount } =
+    getListAccount()
   const { listOption: productOption } = getListProduct()
 
   const removeAccoutRow = (idx: number) => {
@@ -33,6 +41,129 @@ export const CreateInvoicePembelian = () => {
     // selalu increment index meskipun row ada yang dihapus
     setRow((prev) => [...prev, prev[prev.length - 1] + 1])
   }
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (payload: FieldValues) => {
+      return axiosInstance.post('/odoo/odoo-api', {
+        args: [
+          {
+            date: '2023-10-30',
+            auto_post: 'no',
+            auto_post_until: false,
+            company_id: 1,
+            journal_id: 2,
+            show_name_warning: false,
+            posted_before: false,
+            payment_state: 'not_paid',
+            currency_id: 12,
+            statement_line_id: false,
+            payment_id: false,
+            tax_cash_basis_created_move_ids: [],
+            name: '/',
+            partner_id: 9,
+            l10n_id_kode_transaksi: false,
+            l10n_id_replace_invoice_id: false,
+            quick_edit_total_amount: 0,
+            ref: false,
+            invoice_vendor_bill_id: false,
+            invoice_date: '2023-10-17',
+            payment_reference: false,
+            partner_bank_id: false,
+            invoice_date_due: '2023-10-30',
+            invoice_payment_term_id: false,
+            invoice_line_ids: [
+              [
+                0,
+                'virtual_9',
+                {
+                  analytic_precision: 2,
+                  sequence: 100,
+                  product_id: 5,
+                  name: 'Kabel Data',
+                  asset_category_id: false,
+                  account_id: 68,
+                  analytic_distribution: false,
+                  quantity: 1,
+                  price_unit: 1000,
+                  discount: 0,
+                  tax_ids: [[6, false, [2]]],
+                  partner_id: 9,
+                  currency_id: 12,
+                  display_type: 'product',
+                  product_uom_id: 1,
+                },
+              ],
+            ],
+            narration: false,
+            tax_totals: {
+              amount_untaxed: 1000,
+              amount_total: 1110,
+              formatted_amount_total: 'Rp 1,110.00',
+              formatted_amount_untaxed: 'Rp 1,000.00',
+              groups_by_subtotal: {
+                'Untaxed Amount': [
+                  {
+                    group_key: 1,
+                    tax_group_id: 1,
+                    tax_group_name: 'Taxes',
+                    tax_group_amount: 110,
+                    tax_group_base_amount: 1000,
+                    formatted_tax_group_amount: 'Rp 110.00',
+                    formatted_tax_group_base_amount: 'Rp 1,000.00',
+                  },
+                ],
+              },
+              subtotals: [
+                {
+                  name: 'Untaxed Amount',
+                  amount: 1000,
+                  formatted_amount: 'Rp 1,000.00',
+                },
+              ],
+              subtotals_order: ['Untaxed Amount'],
+              display_tax_base: false,
+            },
+            line_ids: [],
+            user_id: 2,
+            invoice_user_id: 2,
+            invoice_origin: false,
+            qr_code_method: false,
+            invoice_incoterm_id: false,
+            fiscal_position_id: false,
+            invoice_source_email: false,
+            to_check: false,
+            l10n_id_tax_number: false,
+          },
+        ],
+        model: 'account.move',
+        method: 'create',
+        kwargs: {
+          context: {
+            lang: 'en_US',
+            tz: 'Asia/Jakarta',
+            uid: 2,
+            allowed_company_ids: [1],
+            default_move_type: 'in_invoice',
+          },
+        },
+      })
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil membuat Invoice Pembelian',
+        callback: () => {
+          navigate('/keuangan/invoice-pembelian')
+        },
+      })
+    },
+    onError: (err: any) => {
+      if (err.response.status === 422) {
+        Dialog.error({ description: err.response.data.message })
+      } else {
+        Dialog.error()
+      }
+    },
+  })
 
   return (
     <div>
@@ -52,69 +183,90 @@ export const CreateInvoicePembelian = () => {
         <div className="p-6 grid grid-cols-2 gap-6">
           <div>
             <label htmlFor="">Nama Supplier</label>
-            <Select options={supplierOption} />
+            <Select
+              options={supplierOption}
+              onChange={(selected: any) =>
+                setValue('partner_id', selected.value)
+              }
+            />
           </div>
           <div>
             <label htmlFor="">Tanggal</label>
-            <InputDate />
+            <InputDate
+              onChange={(date) => {
+                setValue('invoice_date', date)
+              }}
+            />
           </div>
           <div>
             <label htmlFor="">Jatuh Tempo</label>
-            <InputDate />
+            <InputDate
+              onChange={(date) => {
+                setValue('date', date)
+              }}
+            />
           </div>
           <div className="col-span-2">
             <label htmlFor="">Catatan</label>
-            <Input textArea />
+            <Input
+              textArea
+              onChange={(date) => {
+                setValue('description', date)
+              }}
+            />
           </div>
         </div>
         <div className="p-6">
           <div className="flex justify-end items-center mb-2.5">
             <Button onClick={() => addAccountRow()}>Tambah Product</Button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full table-auto">
-              <thead className="bg-[#F8F9FD]">
-                <tr className="uppercase text-left">
-                  <th className="px-3 py-4">Product</th>
-                  <th className="px-3 py-4">Account</th>
-                  <th className="px-3 py-4">Jumlah</th>
-                  <th className="px-3 py-4">Harga</th>
-                  <th className="px-3 py-4">Tax</th>
-                  <th className="px-3 py-4">SubTotal</th>
-                  <th className="px-3 py-4">Aksi</th>
+
+          <table className="w-full table-auto">
+            <thead className="bg-[#F8F9FD]">
+              <tr className="uppercase text-left">
+                <th className="px-3 py-4">Product</th>
+                <th className="px-3 py-4">Account</th>
+                <th className="px-3 py-4">Jumlah</th>
+                <th className="px-3 py-4">Harga</th>
+                <th className="px-3 py-4">Tax</th>
+                <th className="px-3 py-4">SubTotal</th>
+                <th className="px-3 py-4">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {row.map((idx) => (
+                <tr key={`account-row-${idx + 1}`}>
+                  <td className="px-3 py-2.5">
+                    <Select options={productOption} />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Select
+                      isLoading={isFetchingAccount}
+                      options={accountOption}
+                      defaultValue={accountOption?.[0]}
+                    />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Input />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Input />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Select options={[]} />
+                  </td>
+                  <td className="text-center">
+                    <Input />
+                  </td>
+                  <td className="text-center">
+                    <Button color="red" onClick={() => removeAccoutRow(idx)}>
+                      Hapus
+                    </Button>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {row.map((idx) => (
-                  <tr key={`account-row-${idx + 1}`}>
-                    <td className="px-3 py-2.5">
-                      <Select options={productOption} />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <Select options={accountOption} />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <Input />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <Input />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <Select options={[]} />
-                    </td>
-                    <td className="text-center">
-                      <Input />
-                    </td>
-                    <td className="text-center">
-                      <Button color="red" onClick={() => removeAccoutRow(idx)}>
-                        Hapus
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Modal, Select } from 'alurkerja-ui'
+import { Input, Modal, Select } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -19,7 +19,7 @@ export const CardNeraca = () => {
   } = useForm({
     defaultValues: {
       company: '',
-      periode: '',
+      date: '',
     },
   })
 
@@ -27,25 +27,20 @@ export const CardNeraca = () => {
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
 
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    new Date(),
-    new Date(),
-  ])
-
   const onClickJournal = (data: FieldValues) => {
-    if (dateRange[0] === null || dateRange[1] === null) {
-      setError('periode', { type: 'required', message: 'periode required' })
+    if (data.date === '') {
+      setError('date', { type: 'required', message: 'date required' })
     }
     if (data.company === '') {
       setError('company', { type: 'required', message: 'company required' })
     }
 
-    if (data.company !== '' && dateRange[0] && dateRange[1]) {
+    if (data.company !== '' && data.date !== '') {
       navigate({
         pathname: 'neraca',
-        search: `?company=${data.company}&start=${moment(dateRange[0]).format(
+        search: `?company=${data.company}&date=${moment(data.date).format(
           'DD/MM/YYYY'
-        )}&end=${moment(dateRange[1]).format('DD/MM/YYYY')}`,
+        )}`,
       })
     }
   }
@@ -106,21 +101,18 @@ export const CardNeraca = () => {
                   >
                     Neraca per Tanggal
                   </label>
-                  <DatePicker
-                    className="w-full border p-2 rounded"
-                    selectsRange={true}
-                    startDate={dateRange[0]}
-                    endDate={dateRange[1]}
-                    onChange={(update) => {
-                      setDateRange(update)
-                      clearErrors('periode')
+                  <Input
+                    type="date"
+                    invalid={errors.date ? true : false}
+                    onChange={(selected: any) => {
+                      setValue('date', selected.value)
+                      clearErrors('date')
                     }}
-                    isClearable={true}
                   />
                   <div className="text-xs text-gray-alurkerja-2">
-                    {errors?.periode ? (
+                    {errors?.date ? (
                       <span className="text-red-alurkerja">
-                        {errors?.periode.message}
+                        {errors?.date.message}
                       </span>
                     ) : (
                       'Periode Transaksi'
