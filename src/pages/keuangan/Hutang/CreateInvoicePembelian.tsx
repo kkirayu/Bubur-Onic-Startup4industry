@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Input, Select, InputDate } from 'alurkerja-ui'
 import { useState } from 'react'
-import { getListAccount, getListSupplier } from '@/api'
+import { getListAccount, getListProduct, getListSupplier } from '@/api'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components'
 
@@ -23,6 +23,7 @@ export const CreateInvoicePembelian = () => {
 
   const { listOption: supplierOption } = getListSupplier()
   const { listOption: accountOption } = getListAccount()
+  const { listOption: productOption } = getListProduct()
 
   const removeAccoutRow = (idx: number) => {
     setRow((prev) => prev.filter((prevIdx) => prevIdx !== idx))
@@ -70,48 +71,50 @@ export const CreateInvoicePembelian = () => {
           <div className="flex justify-end items-center mb-2.5">
             <Button onClick={() => addAccountRow()}>Tambah Product</Button>
           </div>
-          <table className="w-full table-auto">
-            <thead className="bg-[#F8F9FD]">
-              <tr className="uppercase text-left">
-                <th className="px-3 py-4">Product</th>
-                <th className="px-3 py-4">Account</th>
-                <th className="px-3 py-4">Jumlah</th>
-                <th className="px-3 py-4">Harga</th>
-                <th className="px-3 py-4">Tax</th>
-                <th className="px-3 py-4">SubTotal</th>
-                <th className="px-3 py-4">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {row.map((idx) => (
-                <tr key={`account-row-${idx + 1}`}>
-                  <td className="px-3 py-2.5">
-                    <Select options={[]} />
-                  </td>
-                  <td className="px-3 py-2.5">
-                    <Select options={accountOption} />
-                  </td>
-                  <td className="px-3 py-2.5">
-                    <Input />
-                  </td>
-                  <td className="px-3 py-2.5">
-                    <Input />
-                  </td>
-                  <td className="px-3 py-2.5">
-                    <Select options={[]} />
-                  </td>
-                  <td className="text-center">
-                    <Input />
-                  </td>
-                  <td className="text-center">
-                    <Button color="red" onClick={() => removeAccoutRow(idx)}>
-                      Hapus
-                    </Button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto">
+              <thead className="bg-[#F8F9FD]">
+                <tr className="uppercase text-left">
+                  <th className="px-3 py-4">Product</th>
+                  <th className="px-3 py-4">Account</th>
+                  <th className="px-3 py-4">Jumlah</th>
+                  <th className="px-3 py-4">Harga</th>
+                  <th className="px-3 py-4">Tax</th>
+                  <th className="px-3 py-4">SubTotal</th>
+                  <th className="px-3 py-4">Aksi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {row.map((idx) => (
+                  <tr key={`account-row-${idx + 1}`}>
+                    <td className="px-3 py-2.5">
+                      <Select options={productOption} />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <Select options={accountOption} />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <Input />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <Input />
+                    </td>
+                    <td className="px-3 py-2.5">
+                      <Select options={[]} />
+                    </td>
+                    <td className="text-center">
+                      <Input />
+                    </td>
+                    <td className="text-center">
+                      <Button color="red" onClick={() => removeAccoutRow(idx)}>
+                        Hapus
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

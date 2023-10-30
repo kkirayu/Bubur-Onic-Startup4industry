@@ -38,6 +38,15 @@ export interface OdooResponse<T = any> {
   message: string
 }
 
+export interface OdooResponse2<T = any> {
+  data: {
+    length: number
+    records: Array<T>
+  }
+  status: number
+  message: string
+}
+
 export interface ListNotPaginatedResponse<T = any> {
   data: Array<T>
   status: number
