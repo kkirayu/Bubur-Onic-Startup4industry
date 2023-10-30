@@ -12,6 +12,7 @@ import {
   EditRole,
   DetailKaryawan,
   EditKaryawan,
+  ListProduct,
 } from '@/pages/master'
 import { CreateAkun } from '@/pages/master/AkunManagement'
 
@@ -35,5 +36,6 @@ export const masterRoutes: RouteObject = {
     { path: 'unactive-user', element: <UnactiveUserManagement /> },
     { path: 'bonus', element: <ListBonus /> },
     { path: 'denda', element: <ListDenda /> },
+    { path: 'product', element: <ListProduct /> },
   ],
 }

@@ -1,3 +1,1 @@
-import UnactiveUserManagement from './UnactiveUserManagement'
-
-export default UnactiveUserManagement
+export * from './UnactiveUserManagement'

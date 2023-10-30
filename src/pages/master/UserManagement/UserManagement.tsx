@@ -12,7 +12,7 @@ import moment from 'moment'
 import { axiosInstance } from '@/api'
 import { Dialog, Button } from '@/components'
 
-function UserManagement() {
+export function UserManagement() {
   const { control, watch, setValue, handleSubmit } = useForm()
 
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
@@ -114,4 +114,3 @@ function UserManagement() {
   )
 }
 
-export default UserManagement
