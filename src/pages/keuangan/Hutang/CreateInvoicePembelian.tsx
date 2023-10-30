@@ -1,19 +1,37 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, Select, TableLowcode, InputDate } from 'alurkerja-ui'
+import { Input, Select, InputDate } from 'alurkerja-ui'
 import { useState } from 'react'
-import { getListSupplier } from '@/api'
+import { getListAccount, getListSupplier } from '@/api'
+import { useForm } from 'react-hook-form'
+import { Button } from '@/components'
 
 export const CreateInvoicePembelian = () => {
-  const [dataTable, setDataTable] = useState([
-    { name: 'tes' },
-    { name: 'tes2' },
-  ])
+  const {
+    register,
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+    unregister,
+  } = useForm()
+
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
+  const [row, setRow] = useState([0])
 
   const { listOption: supplierOption } = getListSupplier()
+  const { listOption: accountOption } = getListAccount()
+
+  const removeAccoutRow = (idx: number) => {
+    setRow((prev) => prev.filter((prevIdx) => prevIdx !== idx))
+  }
+
+  const addAccountRow = () => {
+    // selalu increment index meskipun row ada yang dihapus
+    setRow((prev) => [...prev, prev[prev.length - 1] + 1])
+  }
 
   return (
     <div>
@@ -47,55 +65,53 @@ export const CreateInvoicePembelian = () => {
             <label htmlFor="">Catatan</label>
             <Input textArea />
           </div>
-          <div className="w-full col-span-2">
-            <TableLowcode
-              title="Product"
-              baseUrl={import.meta.env.VITE_API_BASEURL}
-              specPath="/api/journal/journal"
-              data={dataTable}
-              renderState={renderState}
-              setRenderState={setRenderState}
-              filterBy={filterBy}
-              setFilterBy={setFilterBy}
-              search={search}
-              setSearch={setSearch}
-              column={[
-                { key: 'name', label: 'Nama Product' },
-                { key: 'name', label: 'Harga' },
-                { key: 'name', label: 'Dikirim' },
-                { key: 'name', label: 'Diterima' },
-                { key: 'name', label: 'Total' },
-              ]}
-              extraRow={() => (
-                <>
-                  <tr>
-                    <td colSpan={8}>
-                      <div className="flex items-center justify-between border-b">
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Total
-                        </div>
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Rp 6,000,000.00
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={8}>
-                      <div className="flex items-center justify-between border-b">
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Biaya Ongkir
-                        </div>
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Rp 50,000.00
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </>
-              )}
-            />
+        </div>
+        <div className="p-6">
+          <div className="flex justify-end items-center mb-2.5">
+            <Button onClick={() => addAccountRow()}>Tambah Product</Button>
           </div>
+          <table className="w-full table-auto">
+            <thead className="bg-[#F8F9FD]">
+              <tr className="uppercase text-left">
+                <th className="px-3 py-4">Product</th>
+                <th className="px-3 py-4">Account</th>
+                <th className="px-3 py-4">Jumlah</th>
+                <th className="px-3 py-4">Harga</th>
+                <th className="px-3 py-4">Tax</th>
+                <th className="px-3 py-4">SubTotal</th>
+                <th className="px-3 py-4">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {row.map((idx) => (
+                <tr key={`account-row-${idx + 1}`}>
+                  <td className="px-3 py-2.5">
+                    <Select options={[]} />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Select options={accountOption} />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Input />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Input />
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <Select options={[]} />
+                  </td>
+                  <td className="text-center">
+                    <Input />
+                  </td>
+                  <td className="text-center">
+                    <Button color="red" onClick={() => removeAccoutRow(idx)}>
+                      Hapus
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
