@@ -264,6 +264,42 @@ export const DetailBills = () => {
     },
   })
 
+  const { mutate: onConfirm, isLoading: isLoadingConfirm } = useMutation({
+    mutationFn: () => {
+      return axiosInstance.post('/odoo/odoo-api', {
+        args: [[+id!!]],
+        kwargs: {
+          context: {
+            params: {
+              id: id,
+              cids: 1,
+              menu_id: 115,
+              action: 233,
+              model: 'account.move',
+              view_type: 'form',
+            },
+            default_move_type: 'in_invoice',
+            lang: 'en_US',
+            tz: 'Asia/Jakarta',
+            uid: 2,
+            allowed_company_ids: [1],
+            validate_analytic: true,
+          },
+        },
+        method: 'action_post',
+        model: 'account.move',
+      })
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil membuat journal hutang',
+        callback: () => {
+          navigate('/keuangan/hutang/tagihan')
+        },
+      })
+    },
+  })
+
   if (!detailBills) {
     return (
       <div className="h-[80vh] w-full flex items-center justify-center">
@@ -282,7 +318,9 @@ export const DetailBills = () => {
           <ArrowLeft />
           Kembali
         </Link>
-        <Button>Confirm</Button>
+        <Button loading={isLoadingConfirm} onClick={() => onConfirm()}>
+          {detailBills.state === 'posted' ? 'Register Payment' : 'Confirm'}
+        </Button>
       </div>
       <div className="bg-white">
         <div className="w-full h-14 px-6 py-3.5  rounded-tl rounded-tr border border-slate-200 justify-start items-center inline-flex">
