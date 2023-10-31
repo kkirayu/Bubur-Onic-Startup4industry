@@ -2,7 +2,7 @@ import { Input, Select, Switch } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 
 import { Button, Dialog } from '@/components'
-import { axiosInstance, getListKategoriAkun, getListTeam } from '@/api'
+import { axiosInstance, getListKategoriAkun, getListParentAkun, getListTeam } from '@/api'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -17,11 +17,14 @@ interface CreatePayload {
 export const CreateAkun = () => {
   const { setValue, handleSubmit, watch } = useForm()
   const { listOption: listKategoriAkun, data: listKategoriAkunData } = getListKategoriAkun()
+  const { listOption: listParentAkun, data: listParentAkunData } = getListParentAkun()
   const navigate = useNavigate()
   const [accountPrefix, setAccountPrefix] = useState("");
   const [accountType, setAccountType] = useState("");
+  const [kategoriAkunOptions, setKategoriAkunOptions] = useState<any[]>([]);
 
   const watchKategoriAkun = watch('kategori_akun')
+  const watchParentAkun = watch('parent_akun')
 
   useEffect(() => {
     var data = _.find(listKategoriAkunData || [], { id: watchKategoriAkun });
@@ -31,6 +34,23 @@ export const CreateAkun = () => {
     }
   }, [watchKategoriAkun]);
 
+
+  useEffect(() => {
+    console.log(listKategoriAkunData)
+    if (watchParentAkun) {
+
+      const found = _.where(listKategoriAkunData || [],  {"parent_kategori_akun" : watchParentAkun})
+      setValue("kategori_akun" ,  null);
+      setKategoriAkunOptions(_.map(found, (item: any) => {
+        return {
+          label: `(${item.prefix_akun}) ` + item.nama,
+          value: item.id,
+        }
+      })
+      )
+    }
+
+  }, [watchParentAkun]);
   const { mutate, isLoading } = useMutation({
     mutationFn: (payload: CreatePayload) => {
       return axiosInstance.post(
@@ -73,19 +93,33 @@ export const CreateAkun = () => {
       <h3 className="font-bold text-xl mb-10 px-6">Tambah Akun</h3>
 
       <div className='px-10 pb-10 flex flex-col gap-y-2'>
-
         <div>
           <label
             htmlFor=""
             className="after:content-['*'] after:text-red-400 after:text-sm"
           >
-            Kategori Akun
+            Parent Akun
           </label>
           <Select
-            options={listKategoriAkun}
-            onChange={(v: any) => setValue('kategori_akun', +v.value)}
+            options={listParentAkun}
+            onChange={(v: any) => setValue('parent_akun', +v.value)}
           />
         </div>
+        {!watchParentAkun ? <></> : <>
+          <div>
+            <label
+              htmlFor=""
+              className="after:content-['*'] after:text-red-400 after:text-sm"
+            >
+              Kategori Akun
+            </label>
+            <Select
+              options={kategoriAkunOptions}
+              onChange={(v: any) => setValue('kategori_akun', +v.value)}
+            />
+          </div>
+        </>
+        }
 
 
         {!watchKategoriAkun ? <></> : <>
@@ -116,7 +150,7 @@ export const CreateAkun = () => {
               htmlFor=""
               className="after:content-['*'] after:text-red-400 after:text-sm"
             >
-              Akun Bank
+              Akun Kas
             </label>
             <Switch
               onChange={(v: any) => setValue('is_akun_bank', v)}
