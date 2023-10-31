@@ -9,6 +9,7 @@ export const getListCategoryAsset = () => {
       return axiosInstance.post('/odoo/odoo-api', {
         model: 'account.asset.category',
         method: 'name_search',
+        res_type: 'PAGINATEDLIST',
         args: [],
         kwargs: {
           name: '',
