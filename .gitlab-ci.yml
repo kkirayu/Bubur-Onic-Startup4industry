@@ -29,5 +29,4 @@ deploy_stag:
   script:
     - echo "Deploy ke server merapi"
     - ssh root@192.168.88.210 "cd /opt/alurkerja/onic/onic-fe-stag && sh k8s_update.sh onic-fe-stag"
-  only:
-    - manual
+  when: manual
