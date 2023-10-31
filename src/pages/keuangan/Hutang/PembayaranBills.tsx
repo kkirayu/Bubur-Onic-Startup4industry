@@ -1,7 +1,7 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, InputDate, Select } from 'alurkerja-ui'
-import { Button } from '@/components'
+import { Input, InputDate, Radio, Select } from 'alurkerja-ui'
+import { Button, Dialog } from '@/components'
 import { axiosInstance } from '@/api'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { FieldValues, useForm } from 'react-hook-form'
@@ -9,9 +9,10 @@ import _ from 'underscore'
 
 export const PembayaranBills = () => {
   const { id } = useParams()
-  const { register, setValue, handleSubmit } = useForm()
+  const navigate = useNavigate()
+  const { register, setValue, handleSubmit, watch } = useForm()
 
-  const {} = useQuery({
+  const { data } = useQuery({
     queryKey: ['bills', id],
     queryFn: async () => {
       return axiosInstance
@@ -184,6 +185,45 @@ export const PembayaranBills = () => {
     },
   })
 
+  const { mutate: createPayment, isLoading: isLoadingCreatePayment } =
+    useMutation({
+      mutationFn: (paymentID: number) => {
+        return axiosInstance.post('/odoo/odoo-api', {
+          args: [[paymentID]],
+          kwargs: {
+            context: {
+              params: {
+                id: 41,
+                cids: 1,
+                menu_id: 115,
+                action: 233,
+                model: 'account.move',
+                view_type: 'form',
+              },
+              lang: 'en_US',
+              tz: 'Asia/Jakarta',
+              uid: 2,
+              allowed_company_ids: [1],
+              dont_redirect_to_payments: true,
+              active_model: 'account.move',
+              active_id: +id!!,
+              active_ids: [+id!!],
+            },
+          },
+          method: 'action_create_payments',
+          model: 'account.payment.register',
+        })
+      },
+      onSuccess: () => {
+        Dialog.success({
+          description: 'Berhasil melakukan pembayaran',
+          callback: () => {
+            navigate('/keuangan/hutang/tagihan')
+          },
+        })
+      },
+    })
+
   const { mutate, isLoading } = useMutation({
     mutationFn: (payload: FieldValues) => {
       return axiosInstance.post('/odoo/odoo-api', {
@@ -194,8 +234,8 @@ export const PembayaranBills = () => {
             early_payment_discount_mode: false,
             payment_type: 'outbound',
             partner_type: 'supplier',
-            source_amount: 5100000,
-            source_amount_currency: 5100000,
+            source_amount: data.amount_residual,
+            source_amount_currency: data.amount_residual,
             source_currency_id: 12,
             company_id: 1,
             partner_id: 19,
@@ -232,11 +272,15 @@ export const PembayaranBills = () => {
             },
             dont_redirect_to_payments: true,
             active_model: 'account.move',
-            active_id: 37,
-            active_ids: [37],
+            active_id: +id!!,
+            active_ids: [+id!!],
           },
         },
       })
+    },
+    onSuccess: (data) => {
+      const paymentID = data.data.data[0]
+      createPayment(paymentID)
     },
   })
 
@@ -283,6 +327,21 @@ export const PembayaranBills = () => {
               <label htmlFor="">Jumlah</label>
               <Input {...register('amount')} />
             </div>
+            {data?.amount_residual - watch('amount') !== 0 && (
+              <div>
+                <label htmlFor="">Payment Difference</label>
+                <Input value={data?.amount_residual - watch('amount')} />
+                <Radio
+                  name="payment_difference"
+                  listOption={[
+                    { label: 'Keep Open', key: 1 },
+                    { label: 'Mark As Fully Paid', key: 2 },
+                  ]}
+                  defaultValue={1}
+                />
+              </div>
+            )}
+
             <div>
               <label htmlFor="">Tanggal Pembayaran</label>
               <InputDate
@@ -301,7 +360,7 @@ export const PembayaranBills = () => {
         </div>
         <div className="w-fit ml-auto p-6 flex items-center gap-4">
           <Button
-            loading={isLoading}
+            loading={isLoading || isLoadingCreatePayment}
             onClick={() => handleSubmit((payload) => mutate(payload))()}
           >
             Buat Pembayaran
