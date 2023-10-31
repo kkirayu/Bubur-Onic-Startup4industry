@@ -171,7 +171,7 @@ export function ViewLaporanBukuBesar() {
                         {formatToMoney(transaction.credit)}
                       </td>
                       <td className="px-4 text-right">
-                        {formatToMoney(transaction.balance)}
+                        {/* {formatToMoney(transaction.balance ,  true)} */}
                       </td>
                     </tr>
                   )
@@ -185,7 +185,7 @@ export function ViewLaporanBukuBesar() {
                   <td className="p-4 text-right border-b font-bold">
                     {formatToMoney(item.credit)}
                   </td>
-                  <td className="border-b"></td>
+                  <td className="px-4 text-right">{formatToMoney((item.credit - item.debit ) * -1) }</td>
                 </tr>
               </Fragment>
             ))}

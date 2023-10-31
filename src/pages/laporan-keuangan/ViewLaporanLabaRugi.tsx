@@ -5,6 +5,7 @@ import { Fragment } from 'react'
 import { formatToMoney } from '@/utils'
 import { axiosInstance } from '@/api'
 import { Spinner } from 'alurkerja-ui'
+import _ from 'underscore'
 
 export function ViewLaporaLabaRugi() {
   const [searchParams] = useSearchParams()
@@ -86,7 +87,7 @@ export function ViewLaporaLabaRugi() {
         <img className="w-auto min-w-[120px] h-28" src="/icon.png" alt="Res" />
         <div>
           <div className="font-semibold">Laporan Laba Rugi</div>
-          <div>Periode {startDate } ~ {endDate}</div>
+          <div>Periode {startDate} ~ {endDate}</div>
           <div>{data?.nama}</div>
         </div>
       </div>
@@ -124,12 +125,12 @@ export function ViewLaporaLabaRugi() {
                           |--{transaction.account_id[1]}
                         </td>
                         <td>
-                          {formatToMoney(transaction.saldo.dataAwal.saldo)}
+                          {formatToMoney(transaction.saldo.dataAwal.saldo,  true)}
                         </td>
                         <td>
-                          {formatToMoney(transaction.saldo.dataAkhir.saldo)}
+                          {formatToMoney(transaction.saldo.dataAkhir.saldo ,  true)}
                         </td>
-                        <td>{formatToMoney(transaction.saldo.selisih)}</td>
+                        <td>{formatToMoney(transaction.saldo.selisih,  true)}</td>
                       </tr>
                     ))}
                   </Fragment>
@@ -137,6 +138,30 @@ export function ViewLaporaLabaRugi() {
               </Fragment>
             ))}
           </tbody>
+
+          {report?.map((item, i) => (
+            <Fragment key={i}>
+              <tr>
+                <td colSpan={3} className="font-semibold text-main-blue-alurkerja p-1">
+                  Total {item.value}
+                </td>
+                <td className="">
+                  {formatToMoney(item.total,  true)}
+                </td>
+              </tr>
+            </Fragment>
+          ))}
+
+          <Fragment >
+            <tr>
+              <td colSpan={3} className="font-semibold text-main-blue-alurkerja p-1">
+                Laba Bersih
+              </td>
+              <td className="">
+                {formatToMoney(_.reduce(report || [], (memo, item) => memo + item.total, 0),  true) }
+              </td>
+            </tr>
+          </Fragment>
         </table>
       </div>
     </div>

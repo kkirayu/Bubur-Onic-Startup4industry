@@ -132,7 +132,12 @@ export function ViewLaporanJournal() {
               <Fragment key={i}>
                 <tr>
                   <td className="p-2.5">{item.tanggal_transaksi}</td>
-                  <td className="font-semibold p-2.5">{item.kode_jurnal}</td>
+                  <td className='p-2.5'>
+                    <div className="font-semibold">{item.kode_jurnal}
+                    </div>
+
+                    {item.judul}
+                  </td>
                   <td></td>
                   <td></td>
                 </tr>
