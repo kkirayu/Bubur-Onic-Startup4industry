@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { axiosInstance, getListSupplier } from '@/api'
 import { useQuery } from '@tanstack/react-query'
 
-export const EditInvoicePembelian = () => {
+export const DetailBills = () => {
   const { id } = useParams()
 
   const [dataTable, setDataTable] = useState([
@@ -19,7 +19,7 @@ export const EditInvoicePembelian = () => {
   const { listOption: supplierOption } = getListSupplier()
 
   const { data, isLoading: onFetchingDetail } = useQuery({
-    queryKey: ['invoice-pembelian', id],
+    queryKey: ['bills', id],
     queryFn: async () => {
       return axiosInstance
         .post('/odoo/odoo-api', {})
@@ -33,7 +33,7 @@ export const EditInvoicePembelian = () => {
     <div>
       <Link
         className="flex items-center text-main-blue-alurkerja gap-1 mb-4"
-        to="/keuangan/hutang/invoice-pembelian"
+        to="/keuangan/hutang/tagihan"
       >
         <ArrowLeft />
         Kembali
