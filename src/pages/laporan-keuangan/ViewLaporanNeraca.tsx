@@ -56,7 +56,8 @@ export function ViewLaporaNeraca() {
   const [searchParams] = useSearchParams()
 
   const companyID = searchParams.get('company')
-  const date = searchParams.get('date')
+  const startDate = searchParams.get('start')
+  const endDate = searchParams.get('end')
 
   const { data } = useQuery({
     queryKey: ['company', companyID],
@@ -71,7 +72,7 @@ export function ViewLaporaNeraca() {
     queryKey: ['laporan-neraca'],
     queryFn: async () => {
       return axiosInstance
-        .get(`/laporan/laporan-neraca?company=${companyID}&date=${date}`)
+        .get(`/laporan/laporan-neraca?company=${companyID}&start=${startDate}&end=${endDate}`)
         .then((res) => res.data?.data)
     },
   })
@@ -131,7 +132,7 @@ export function ViewLaporaNeraca() {
         <img className="w-auto min-w-[120px] h-28" src="/icon.png" alt="Res" />
         <div>
           <div className="font-semibold">Laporan Neraca</div>
-          <div>Periode {date}</div>
+          <div>Periode {startDate } ~ {endDate}</div>
           <div>{data?.nama}</div>
         </div>
       </div>
