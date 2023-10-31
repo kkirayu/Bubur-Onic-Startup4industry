@@ -1,16 +1,33 @@
 stages:
-  - staging
+  - dev
+  - stag
 
-deploy_staging:
+deploy_dev:
   only:
     - develop
   tags:
     - merapi
-  stage: staging
+  stage: dev
   image: javanlabs/ssh-client:latest
   environment:
-    name: rtgs-fe
-    url: https://rtgs-fe.merapi.javan.id
+    name: onic-fe
+    url: https://onic-fe.merapi.javan.id
   script:
     - echo "Deploy ke server merapi"
     - ssh root@192.168.88.210 "cd /opt/alurkerja/onic/onic-fe && sh k8s_update.sh onic-fe"
+
+deploy_stag:
+  only:
+    - develop
+  tags:
+    - merapi
+  stage: stag
+  image: javanlabs/ssh-client:latest
+  environment:
+    name: onic-fe
+    url: https://onic-fe-stag.merapi.javan.id
+  script:
+    - echo "Deploy ke server merapi"
+    - ssh root@192.168.88.210 "cd /opt/alurkerja/onic/onic-fe-stag && sh k8s_update.sh onic-fe-stag"
+  only:
+    - manual
