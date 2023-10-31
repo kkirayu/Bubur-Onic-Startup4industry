@@ -12,7 +12,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { Button, Dialog } from '@/components'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-export const CreateInvoicePembelian = () => {
+export const CreateBills = () => {
   const {
     register,
     watch,
@@ -47,7 +47,7 @@ export const CreateInvoicePembelian = () => {
       return axiosInstance.post('/odoo/odoo-api', {
         args: [
           {
-            date: '2023-10-30',
+            date: '2023-10-31',
             auto_post: 'no',
             auto_post_until: false,
             company_id: 1,
@@ -64,12 +64,12 @@ export const CreateInvoicePembelian = () => {
             l10n_id_kode_transaksi: false,
             l10n_id_replace_invoice_id: false,
             quick_edit_total_amount: 0,
-            ref: false,
+            ref: 'Pembelian-' + new Date(),
             invoice_vendor_bill_id: false,
-            invoice_date: '2023-10-17',
+            invoice_date: '2023-10-30',
             payment_reference: false,
             partner_bank_id: false,
-            invoice_date_due: '2023-10-30',
+            invoice_date_due: '2023-10-31',
             invoice_payment_term_id: false,
             invoice_line_ids: [
               [
@@ -78,13 +78,13 @@ export const CreateInvoicePembelian = () => {
                 {
                   analytic_precision: 2,
                   sequence: 100,
-                  product_id: 5,
-                  name: 'Kabel Data',
+                  product_id: 6,
+                  name: 'BAJU',
                   asset_category_id: false,
-                  account_id: 68,
+                  account_id: 67,
                   analytic_distribution: false,
                   quantity: 1,
-                  price_unit: 1000,
+                  price_unit: 50000,
                   discount: 0,
                   tax_ids: [[6, false, [2]]],
                   partner_id: 9,
@@ -96,28 +96,28 @@ export const CreateInvoicePembelian = () => {
             ],
             narration: false,
             tax_totals: {
-              amount_untaxed: 1000,
-              amount_total: 1110,
-              formatted_amount_total: 'Rp 1,110.00',
-              formatted_amount_untaxed: 'Rp 1,000.00',
+              amount_untaxed: 50000,
+              amount_total: 55500,
+              formatted_amount_total: 'Rp 55,500.00',
+              formatted_amount_untaxed: 'Rp 50,000.00',
               groups_by_subtotal: {
                 'Untaxed Amount': [
                   {
                     group_key: 1,
                     tax_group_id: 1,
                     tax_group_name: 'Taxes',
-                    tax_group_amount: 110,
-                    tax_group_base_amount: 1000,
-                    formatted_tax_group_amount: 'Rp 110.00',
-                    formatted_tax_group_base_amount: 'Rp 1,000.00',
+                    tax_group_amount: 5500,
+                    tax_group_base_amount: 50000,
+                    formatted_tax_group_amount: 'Rp 5,500.00',
+                    formatted_tax_group_base_amount: 'Rp 50,000.00',
                   },
                 ],
               },
               subtotals: [
                 {
                   name: 'Untaxed Amount',
-                  amount: 1000,
-                  formatted_amount: 'Rp 1,000.00',
+                  amount: 50000,
+                  formatted_amount: 'Rp 50,000.00',
                 },
               ],
               subtotals_order: ['Untaxed Amount'],
@@ -143,6 +143,14 @@ export const CreateInvoicePembelian = () => {
             tz: 'Asia/Jakarta',
             uid: 2,
             allowed_company_ids: [1],
+            params: {
+              id: 25,
+              cids: 1,
+              menu_id: 115,
+              action: 233,
+              model: 'account.move',
+              view_type: 'form',
+            },
             default_move_type: 'in_invoice',
           },
         },
@@ -150,9 +158,9 @@ export const CreateInvoicePembelian = () => {
     },
     onSuccess: () => {
       Dialog.success({
-        description: 'Berhasil membuat Invoice Pembelian',
+        description: 'Berhasil membuat hutang',
         callback: () => {
-          navigate('/keuangan/invoice-pembelian')
+          navigate('/keuangan/hutang/tagihan')
         },
       })
     },
@@ -169,7 +177,7 @@ export const CreateInvoicePembelian = () => {
     <div>
       <Link
         className="flex items-center text-main-blue-alurkerja gap-1 mb-4"
-        to="/keuangan/hutang/invoice-pembelian"
+        to="/keuangan/hutang/tagihan"
       >
         <ArrowLeft />
         Kembali
@@ -181,6 +189,10 @@ export const CreateInvoicePembelian = () => {
           </div>
         </div>
         <div className="p-6 grid grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="">Judul</label>
+            <Input />
+          </div>
           <div>
             <label htmlFor="">Nama Supplier</label>
             <Select
@@ -267,6 +279,14 @@ export const CreateInvoicePembelian = () => {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="ml-auto p-6 w-fit">
+          <Button
+            loading={isLoading}
+            onClick={() => handleSubmit((payload) => mutate(payload))()}
+          >
+            Simpan
+          </Button>
         </div>
       </div>
     </div>

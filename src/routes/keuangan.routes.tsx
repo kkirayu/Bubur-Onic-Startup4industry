@@ -9,14 +9,12 @@ import {
   LayoutJournal,
   TerimaUang,
   CreatePiutang,
-  CreatePembayaranHutang,
-  ListInvoicePembelian,
-  CreateInvoicePembelian,
+  CreateBills,
   ListAsset,
   CreateAsset,
   EditAsset,
-  EditInvoicePembelian,
-  ListPembayaranHutang,
+  DetailBills,
+  ListBills,
 } from '@/pages/keuangan'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -30,25 +28,20 @@ export const keuanganRoutes: RouteObject = {
     { path: 'aset/create', element: <CreateAsset /> },
     { path: 'aset/:id/edit', element: <EditAsset /> },
     // HUTANG
-    { path: 'hutang/pembayaran-hutang', element: <ListPembayaranHutang /> },
+    { path: 'hutang/tagihan', element: <ListBills /> },
     {
-      path: 'hutang/pembayaran-hutang/create',
-      element: <CreatePembayaranHutang />,
-    },
-    { path: 'hutang/invoice-pembelian', element: <ListInvoicePembelian /> },
-    {
-      path: 'hutang/invoice-pembelian/:id/edit',
-      element: <EditInvoicePembelian />,
+      path: 'hutang/tagihan/:id',
+      element: <DetailBills />,
     },
     {
-      path: 'hutang/invoice-pembelian/create',
-      element: <CreateInvoicePembelian />,
+      path: 'hutang/tagihan/create',
+      element: <CreateBills />,
     },
 
     // PIUTANG
-    { path: 'piutang/penerimaan-pembayaran-piutang', element: <ListPiutang /> },
+    { path: 'piutang/invoice', element: <ListPiutang /> },
     {
-      path: 'piutang/penerimaan-pembayaran-piutang/create',
+      path: 'piutang/invoice/create',
       element: <CreatePiutang />,
     },
     {

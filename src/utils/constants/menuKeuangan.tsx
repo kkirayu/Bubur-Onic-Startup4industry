@@ -40,8 +40,8 @@ export const menuKeuangan = [
         label: 'Piutang',
         child: [
           {
-            href: '/keuangan/piutang/penerimaan-pembayaran-piutang',
-            label: 'Penerimaan Pembayaran Piutang',
+            href: '/keuangan/piutang/invoice',
+            label: 'Invoice',
           },
         ],
       },
@@ -50,12 +50,8 @@ export const menuKeuangan = [
         label: 'Hutang',
         child: [
           {
-            href: '/keuangan/hutang/pembayaran-hutang',
-            label: 'Pembayaran Hutang',
-          },
-          {
-            href: '/keuangan/hutang/invoice-pembelian',
-            label: 'Invoice Pembelian',
+            href: '/keuangan/hutang/Tagihan',
+            label: 'Tagihan',
           },
         ],
       },

@@ -10,14 +10,11 @@ namespace=onic
 
 . /root/env/merapi
 
-
 echo $namespace 
 
 echo "Deploying App  With name " $appname;
 
 git pull
-
-
 
 DOCKER_BUILDKIT=1  docker build . --pull -t harbor.merapi.javan.id/$namespace/$appname:$version
 
