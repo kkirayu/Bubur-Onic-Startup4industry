@@ -85,8 +85,6 @@ export const ListBills = () => {
     },
   })
 
-  console.log(data)
-
   const ExtraRow = () => (
     <tr>
       <td colSpan={7}>
@@ -131,6 +129,7 @@ export const ListBills = () => {
               { key: 'amount_total_signed', label: 'Total Hutang' },
               { key: 'amount_residual_signed', label: 'Sisa Tagihan' },
               { key: 'payment_state', label: 'Status Pembayaran' },
+              { key: 'state', label: 'Status' },
             ]}
             customCell={({ defaultCell, name, value }) => {
               if (
