@@ -6,6 +6,8 @@ import moment from 'moment'
 import { IconLaporan } from '@/assets'
 import { Button } from '@/components'
 import { getListCompany } from '@/api'
+import ReactDatePicker from 'react-datepicker'
+import { useState } from 'react'
 
 export const CardLabaRugi = () => {
   const {
@@ -21,6 +23,11 @@ export const CardLabaRugi = () => {
     },
   })
 
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    new Date(),
+    new Date(),
+  ])
+
   const navigate = useNavigate()
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
@@ -29,7 +36,9 @@ export const CardLabaRugi = () => {
     if (data.company !== '') {
       navigate({
         pathname: 'laba-rugi',
-        search: `?company=${data.company}&date=${moment(data.date).format(
+        search: `?company=${data.company}&start=${moment(
+          dateRange[0]
+        ).format('DD/MM/YYYY')}&end=${moment(dateRange[1]).format(
           'DD/MM/YYYY'
         )}`,
       })
@@ -94,7 +103,19 @@ export const CardLabaRugi = () => {
                   >
                     Laba Rugi Per Tanggal
                   </label>
-                  <InputDate defaultValue={new Date()} />
+                  <ReactDatePicker
+                    className="w-full border p-2 rounded"
+                    selectsRange={true}
+                    startDate={dateRange[0]}
+                    endDate={dateRange[1]}
+                    onChange={(update) => {
+                      setDateRange(update)
+                    }}
+                    isClearable={true}
+                  />
+                  <div className="text-xs text-gray-alurkerja-2">
+                    Periode Transaksi
+                  </div>
                   <div className="text-xs text-gray-alurkerja-2">
                     Periode Transaksi
                   </div>

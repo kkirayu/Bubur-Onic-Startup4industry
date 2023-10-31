@@ -3,7 +3,7 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import moment from 'moment'
-import DatePicker from 'react-datepicker'
+import ReactDatePicker from 'react-datepicker'
 
 import { IconLaporan } from '@/assets'
 import { Button } from '@/components'
@@ -21,24 +21,29 @@ export const CardNeraca = () => {
       company: '',
       date: '',
     },
+    
   })
+
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    new Date(),
+    new Date(),
+  ])
 
   const navigate = useNavigate()
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
 
   const onClickJournal = (data: FieldValues) => {
-    if (data.date === '') {
-      setError('date', { type: 'required', message: 'date required' })
-    }
     if (data.company === '') {
       setError('company', { type: 'required', message: 'company required' })
     }
 
-    if (data.company !== '' && data.date !== '') {
+    if (data.company !== '' ) {
       navigate({
         pathname: 'neraca',
-        search: `?company=${data.company}&date=${moment(data.date).format(
+        search: `?company=${data.company}&start=${moment(
+          dateRange[0]
+        ).format('DD/MM/YYYY')}&end=${moment(dateRange[1]).format(
           'DD/MM/YYYY'
         )}`,
       })
@@ -101,13 +106,15 @@ export const CardNeraca = () => {
                   >
                     Neraca per Tanggal
                   </label>
-                  <Input
-                    type="date"
-                    invalid={errors.date ? true : false}
-                    onChange={(selected: any) => {
-                      setValue('date', selected.value)
-                      clearErrors('date')
+                  <ReactDatePicker
+                    className="w-full border p-2 rounded"
+                    selectsRange={true}
+                    startDate={dateRange[0]}
+                    endDate={dateRange[1]}
+                    onChange={(update) => {
+                      setDateRange(update)
                     }}
+                    isClearable={true}
                   />
                   <div className="text-xs text-gray-alurkerja-2">
                     {errors?.date ? (
