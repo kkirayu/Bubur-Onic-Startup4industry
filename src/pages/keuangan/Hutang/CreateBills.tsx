@@ -2,30 +2,22 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Input, Select, InputDate } from 'alurkerja-ui'
 import { useState } from 'react'
+import moment from 'moment'
+import { FieldValues, useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+
 import {
   axiosInstance,
   getListAccount,
   getListProduct,
   getListSupplier,
 } from '@/api'
-import { FieldValues, useForm } from 'react-hook-form'
 import { Button, Dialog } from '@/components'
-import { useMutation, useQuery } from '@tanstack/react-query'
 
 export const CreateBills = () => {
-  const {
-    register,
-    watch,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-    unregister,
-  } = useForm()
+  const { register, watch, setValue, handleSubmit } = useForm()
   const navigate = useNavigate()
 
-  const [renderState, setRenderState] = useState(0)
-  const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
-  const [search, setSearch] = useState<string>()
   const [row, setRow] = useState([0])
 
   const { listOption: supplierOption } = getListSupplier()
@@ -44,10 +36,46 @@ export const CreateBills = () => {
 
   const { mutate, isLoading } = useMutation({
     mutationFn: (payload: FieldValues) => {
+      let totalPrice = 0
+      const listProduct = row.map((idx) => {
+        const productKey = `product-${idx}`
+        const quantityKey = `quantity-${idx}`
+        const priceKey = `price_unit-${idx}`
+
+        const product = payload[productKey]
+        const quantity = payload[quantityKey]
+        const price = payload[priceKey]
+
+        totalPrice += +price
+
+        return {
+          name: product.label,
+          product_id: product.value,
+          quantity: +quantity,
+          price_unit: price,
+          analytic_precision: 2,
+          sequence: 100,
+          asset_category_id: false,
+          account_id: 67,
+          analytic_distribution: false,
+          discount: 0,
+          tax_ids: [[6, false, []]],
+          partner_id: 9,
+          currency_id: 12,
+          display_type: 'product',
+          product_uom_id: 1,
+        }
+      })
+
+      const invoiceLine = listProduct.map((product, idx) => [
+        0,
+        `virtual_${idx}`,
+        product,
+      ])
       return axiosInstance.post('/odoo/odoo-api', {
         args: [
           {
-            date: '2023-10-31',
+            date: moment(new Date()).format('YYYY-MM-DD'),
             auto_post: 'no',
             auto_post_until: false,
             company_id: 1,
@@ -60,69 +88,21 @@ export const CreateBills = () => {
             payment_id: false,
             tax_cash_basis_created_move_ids: [],
             name: '/',
-            partner_id: 9,
+            partner_id: payload.partner_id,
             l10n_id_kode_transaksi: false,
             l10n_id_replace_invoice_id: false,
             quick_edit_total_amount: 0,
-            ref: 'Pembelian-' + new Date(),
+            ref: 'Pembelian-' + moment(new Date()).format('YYYY-MM-DD'),
             invoice_vendor_bill_id: false,
-            invoice_date: '2023-10-30',
+            invoice_date: moment(payload.invoice_date).format('YYYY-MM-DD'),
             payment_reference: false,
             partner_bank_id: false,
-            invoice_date_due: '2023-10-31',
+            invoice_date_due: moment(payload.invoice_date_due).format(
+              'YYYY-MM-DD'
+            ),
             invoice_payment_term_id: false,
-            invoice_line_ids: [
-              [
-                0,
-                'virtual_9',
-                {
-                  analytic_precision: 2,
-                  sequence: 100,
-                  product_id: 6,
-                  name: 'BAJU',
-                  asset_category_id: false,
-                  account_id: 67,
-                  analytic_distribution: false,
-                  quantity: 1,
-                  price_unit: 50000,
-                  discount: 0,
-                  tax_ids: [[6, false, [2]]],
-                  partner_id: 9,
-                  currency_id: 12,
-                  display_type: 'product',
-                  product_uom_id: 1,
-                },
-              ],
-            ],
+            invoice_line_ids: invoiceLine,
             narration: false,
-            tax_totals: {
-              amount_untaxed: 50000,
-              amount_total: 55500,
-              formatted_amount_total: 'Rp 55,500.00',
-              formatted_amount_untaxed: 'Rp 50,000.00',
-              groups_by_subtotal: {
-                'Untaxed Amount': [
-                  {
-                    group_key: 1,
-                    tax_group_id: 1,
-                    tax_group_name: 'Taxes',
-                    tax_group_amount: 5500,
-                    tax_group_base_amount: 50000,
-                    formatted_tax_group_amount: 'Rp 5,500.00',
-                    formatted_tax_group_base_amount: 'Rp 50,000.00',
-                  },
-                ],
-              },
-              subtotals: [
-                {
-                  name: 'Untaxed Amount',
-                  amount: 50000,
-                  formatted_amount: 'Rp 50,000.00',
-                },
-              ],
-              subtotals_order: ['Untaxed Amount'],
-              display_tax_base: false,
-            },
             line_ids: [],
             user_id: 2,
             invoice_user_id: 2,
@@ -185,14 +165,10 @@ export const CreateBills = () => {
       <div className="bg-white">
         <div className="w-full h-14 px-6 py-3.5  rounded-tl rounded-tr border border-slate-200 justify-start items-center inline-flex">
           <div className="text-gray-700 text-base font-semibold">
-            Tambah Invoice Pembelian
+            Tambah Tagihan
           </div>
         </div>
         <div className="p-6 grid grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="">Judul</label>
-            <Input />
-          </div>
           <div>
             <label htmlFor="">Nama Supplier</label>
             <Select
@@ -203,7 +179,7 @@ export const CreateBills = () => {
             />
           </div>
           <div>
-            <label htmlFor="">Tanggal</label>
+            <label htmlFor="">Tanggal Tagihan</label>
             <InputDate
               onChange={(date) => {
                 setValue('invoice_date', date)
@@ -214,18 +190,13 @@ export const CreateBills = () => {
             <label htmlFor="">Jatuh Tempo</label>
             <InputDate
               onChange={(date) => {
-                setValue('date', date)
+                setValue('invoice_date_due', date)
               }}
             />
           </div>
           <div className="col-span-2">
-            <label htmlFor="">Catatan</label>
-            <Input
-              textArea
-              onChange={(date) => {
-                setValue('description', date)
-              }}
-            />
+            <label htmlFor="description">Catatan</label>
+            <Input {...register('description')} textArea />
           </div>
         </div>
         <div className="p-6">
@@ -240,7 +211,7 @@ export const CreateBills = () => {
                 <th className="px-3 py-4">Account</th>
                 <th className="px-3 py-4">Jumlah</th>
                 <th className="px-3 py-4">Harga</th>
-                <th className="px-3 py-4">Tax</th>
+
                 <th className="px-3 py-4">SubTotal</th>
                 <th className="px-3 py-4">Aksi</th>
               </tr>
@@ -249,26 +220,33 @@ export const CreateBills = () => {
               {row.map((idx) => (
                 <tr key={`account-row-${idx + 1}`}>
                   <td className="px-3 py-2.5">
-                    <Select options={productOption} />
+                    <Select
+                      options={productOption}
+                      onChange={(selected: any) => {
+                        setValue(`product-${idx}`, selected)
+                      }}
+                    />
                   </td>
                   <td className="px-3 py-2.5">
                     <Select
                       isLoading={isFetchingAccount}
                       options={accountOption}
-                      defaultValue={accountOption?.[0]}
                     />
                   </td>
                   <td className="px-3 py-2.5">
-                    <Input />
+                    <Input {...register(`quantity-${idx}`)} />
                   </td>
                   <td className="px-3 py-2.5">
-                    <Input />
+                    <Input {...register(`price_unit-${idx}`)} />
                   </td>
-                  <td className="px-3 py-2.5">
-                    <Select options={[]} />
-                  </td>
+
                   <td className="text-center">
-                    <Input />
+                    <Input
+                      readOnly
+                      value={
+                        watch(`price_unit-${idx}`) * watch(`quantity-${idx}`)
+                      }
+                    />
                   </td>
                   <td className="text-center">
                     <Button color="red" onClick={() => removeAccoutRow(idx)}>
