@@ -1,116 +1,419 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, Select, TableLowcode, InputDate } from 'alurkerja-ui'
-import { useState } from 'react'
-import { axiosInstance, getListSupplier } from '@/api'
-import { useQuery } from '@tanstack/react-query'
+import { Input, Select, InputDate, Spinner } from 'alurkerja-ui'
+import { useMemo, useState } from 'react'
+import moment from 'moment'
+import { FieldValues, useForm } from 'react-hook-form'
+import { useMutation, useQuery } from '@tanstack/react-query'
+
+import {
+  axiosInstance,
+  getListAccount,
+  getListProduct,
+  getListSupplier,
+} from '@/api'
+import { Button, Dialog } from '@/components'
+import _ from 'underscore'
 
 export const DetailBills = () => {
+  const { register, watch, setValue, handleSubmit } = useForm()
+  const navigate = useNavigate()
   const { id } = useParams()
-
-  const [dataTable, setDataTable] = useState([
-    { name: 'tes' },
-    { name: 'tes2' },
-  ])
-  const [renderState, setRenderState] = useState(0)
-  const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
-  const [search, setSearch] = useState<string>()
 
   const { listOption: supplierOption } = getListSupplier()
 
-  const { data, isLoading: onFetchingDetail } = useQuery({
-    queryKey: ['bills', id],
+  const { listOption: productOption } = getListProduct()
+
+  const [row, setRow] = useState([0])
+  const [currentPartner, setCurrentPartner] = useState<{
+    label: string
+    value: number | string
+  }>()
+
+  const removeAccoutRow = (idx: number) => {
+    setRow((prev) => prev.filter((prevIdx) => prevIdx !== idx))
+  }
+
+  const addAccountRow = () => {
+    // selalu increment index meskipun row ada yang dihapus
+    setRow((prev) => [...prev, prev[prev.length - 1] + 1])
+  }
+
+  const { data: accountOptions } = useQuery({
+    queryKey: ['account-odoo-option'],
     queryFn: async () => {
       return axiosInstance
-        .post('/odoo/odoo-api', {})
+        .post('/odoo/odoo-api', {
+          model: 'account.account',
+          method: 'name_search',
+          args: [],
+          kwargs: {
+            name: '',
+            operator: 'ilike',
+            args: [
+              '&',
+              '&',
+              '&',
+              ['deprecated', '=', false],
+              [
+                'account_type',
+                'not in',
+                ['asset_receivable', 'liability_payable'],
+              ],
+              ['company_id', '=', 1],
+              ['is_off_balance', '=', false],
+            ],
+            limit: 8,
+            context: {
+              lang: 'en_US',
+              tz: 'Asia/Jakarta',
+              uid: 2,
+              allowed_company_ids: [1],
+              partner_id: 9,
+              move_type: 'in_invoice',
+            },
+          },
+        })
+        .then((res) => res.data.data)
         .then((res) =>
-          res.data?.data.records.filter((bill: any) => bill.id === +id!!)
+          res.map((item: [number, string]) => ({
+            label: item[1],
+            value: item[0],
+          }))
         )
     },
   })
 
+  const { data: detailBills } = useQuery({
+    queryKey: ['bills', id],
+    queryFn: async () => {
+      return axiosInstance
+        .post('/odoo/odoo-api', {
+          args: [
+            [+id!!],
+            [
+              'authorized_transaction_ids',
+              'edi_show_cancel_button',
+              'edi_show_abandon_cancel_button',
+              'state',
+              'edi_blocking_level',
+              'edi_error_count',
+              'edi_web_services_to_process',
+              'edi_error_message',
+              'tax_lock_date_message',
+              'date',
+              'auto_post',
+              'auto_post_until',
+              'partner_credit_warning',
+              'transaction_ids',
+              'id',
+              'company_id',
+              'journal_id',
+              'show_name_warning',
+              'posted_before',
+              'move_type',
+              'payment_state',
+              'invoice_filter_type_domain',
+              'suitable_journal_ids',
+              'currency_id',
+              'company_currency_id',
+              'commercial_partner_id',
+              'bank_partner_id',
+              'display_qr_code',
+              'show_reset_to_draft_button',
+              'invoice_has_outstanding',
+              'is_move_sent',
+              'has_reconciled_entries',
+              'restrict_mode_hash_table',
+              'country_code',
+              'display_inactive_currency_warning',
+              'statement_line_id',
+              'payment_id',
+              'tax_country_id',
+              'tax_cash_basis_created_move_ids',
+              'quick_edit_mode',
+              'hide_post_button',
+              'duplicated_ref_ids',
+              'quick_encoding_vals',
+              'highest_name',
+              'name',
+              'partner_id',
+              'l10n_id_need_kode_transaksi',
+              'l10n_id_attachment_id',
+              'l10n_id_kode_transaksi',
+              'l10n_id_replace_invoice_id',
+              'quick_edit_total_amount',
+              'ref',
+              'tax_cash_basis_origin_move_id',
+              'invoice_vendor_bill_id',
+              'invoice_date',
+              'payment_reference',
+              'partner_bank_id',
+              'invoice_date_due',
+              'invoice_payment_term_id',
+              'edi_state',
+              'invoice_line_ids',
+              'narration',
+              'tax_totals',
+              'invoice_payments_widget',
+              'amount_residual',
+              'invoice_outstanding_credits_debits_widget',
+              'line_ids',
+              'user_id',
+              'invoice_user_id',
+              'invoice_origin',
+              'qr_code_method',
+              'invoice_incoterm_id',
+              'fiscal_position_id',
+              'invoice_source_email',
+              'to_check',
+              'l10n_id_tax_number',
+              'l10n_id_csv_created',
+              'reversed_entry_id',
+              'display_name',
+            ],
+          ],
+          model: 'account.move',
+          method: 'read',
+          kwargs: {
+            context: {
+              lang: 'en_US',
+              tz: 'Asia/Jakarta',
+              uid: 2,
+              allowed_company_ids: [1],
+              bin_size: true,
+              default_move_type: 'in_invoice',
+            },
+          },
+        })
+        .then((res) => res.data.data[0])
+    },
+    onSuccess: (data) => {
+      setRow(data.invoice_line_ids)
+      setCurrentPartner({
+        label: data.partner_id[1],
+        value: data.partner_id[0],
+      })
+    },
+  })
+
+  const productID = detailBills?.invoice_line_ids
+
+  const { data: detailProduct } = useQuery({
+    queryKey: ['detail-product'],
+    queryFn: async () => {
+      return axiosInstance
+        .post('/odoo/odoo-api', {
+          args: [
+            productID,
+            [
+              'analytic_precision',
+              'sequence',
+              'product_id',
+              'name',
+              'asset_category_id',
+              'account_id',
+              'analytic_distribution',
+              'quantity',
+              'product_uom_category_id',
+              'price_unit',
+              'discount',
+              'tax_ids',
+              'price_subtotal',
+              'partner_id',
+              'currency_id',
+              'company_id',
+              'company_currency_id',
+              'display_type',
+              'product_uom_id',
+            ],
+          ],
+          model: 'account.move.line',
+          method: 'read',
+          kwargs: {
+            context: {
+              lang: 'en_US',
+              tz: 'Asia/Jakarta',
+              uid: 2,
+              allowed_company_ids: [1],
+              params: {
+                id: 35,
+                cids: 1,
+                menu_id: 115,
+                action: 233,
+                model: 'account.move',
+                view_type: 'form',
+              },
+              default_move_type: 'in_invoice',
+              journal_id: 2,
+              default_partner_id: 9,
+              default_currency_id: 12,
+              default_display_type: 'product',
+              quick_encoding_vals: false,
+            },
+          },
+        })
+        .then((res) => res.data.data)
+    },
+    enabled: !!productID,
+    onSuccess: (data) => {
+      data.forEach((product: any) => {
+        setValue(`quantity-${product.id}`, product.quantity)
+        setValue(`price_unit-${product.id}`, product.price_unit)
+      })
+    },
+  })
+
+  if (!detailBills) {
+    return (
+      <div className="h-[80vh] w-full flex items-center justify-center">
+        <Spinner />
+      </div>
+    )
+  }
+
   return (
     <div>
-      <Link
-        className="flex items-center text-main-blue-alurkerja gap-1 mb-4"
-        to="/keuangan/hutang/tagihan"
-      >
-        <ArrowLeft />
-        Kembali
-      </Link>
+      <div className="flex gap-4 items-center  mb-4">
+        <Link
+          className="flex items-center text-main-blue-alurkerja gap-1"
+          to="/keuangan/hutang/tagihan"
+        >
+          <ArrowLeft />
+          Kembali
+        </Link>
+        <Button>Confirm</Button>
+      </div>
       <div className="bg-white">
         <div className="w-full h-14 px-6 py-3.5  rounded-tl rounded-tr border border-slate-200 justify-start items-center inline-flex">
           <div className="text-gray-700 text-base font-semibold">
-            Edit Invoice Pembelian
+            Detail Tagihan
           </div>
         </div>
         <div className="p-6 grid grid-cols-2 gap-6">
           <div>
             <label htmlFor="">Nama Supplier</label>
-            <Select options={supplierOption} />
+            {currentPartner && (
+              <Select
+                options={supplierOption}
+                onChange={(selected: any) =>
+                  setValue('partner_id', selected.value)
+                }
+                defaultValue={currentPartner}
+              />
+            )}
           </div>
           <div>
-            <label htmlFor="">Tanggal</label>
-            <InputDate />
+            <label htmlFor="">Tanggal Tagihan</label>
+            <InputDate
+              onChange={(date) => {
+                setValue('invoice_date', date)
+              }}
+              defaultValue={new Date(detailBills.invoice_date)}
+            />
           </div>
           <div>
             <label htmlFor="">Jatuh Tempo</label>
-            <InputDate />
-          </div>
-          <div className="col-span-2">
-            <label htmlFor="">Catatan</label>
-            <Input textArea />
-          </div>
-          <div className="w-full col-span-2">
-            <TableLowcode
-              title="Product"
-              baseUrl={import.meta.env.VITE_API_BASEURL}
-              specPath="/api/journal/journal"
-              data={dataTable}
-              renderState={renderState}
-              setRenderState={setRenderState}
-              filterBy={filterBy}
-              setFilterBy={setFilterBy}
-              search={search}
-              setSearch={setSearch}
-              column={[
-                { key: 'name', label: 'Nama Product' },
-                { key: 'name', label: 'Harga' },
-                { key: 'name', label: 'Dikirim' },
-                { key: 'name', label: 'Diterima' },
-                { key: 'name', label: 'Total' },
-              ]}
-              extraRow={() => (
-                <>
-                  <tr>
-                    <td colSpan={8}>
-                      <div className="flex items-center justify-between border-b">
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Total
-                        </div>
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Rp 6,000,000.00
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={8}>
-                      <div className="flex items-center justify-between border-b">
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Biaya Ongkir
-                        </div>
-                        <div className="text-zinc-800 text-xs font-bold py-5 px-4">
-                          Rp 50,000.00
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </>
-              )}
+            <InputDate
+              onChange={(date) => {
+                setValue('invoice_date_due', date)
+              }}
+              defaultValue={new Date(detailBills.invoice_date_due)}
             />
           </div>
+          <div className="col-span-2">
+            <label htmlFor="description">Catatan</label>
+            <Input {...register('description')} textArea />
+          </div>
         </div>
+        <div className="p-6">
+          <div className="flex justify-end items-center mb-2.5">
+            <Button onClick={() => addAccountRow()}>Tambah Product</Button>
+          </div>
+
+          <table className="w-full table-auto">
+            <thead className="bg-[#F8F9FD]">
+              <tr className="uppercase text-left">
+                <th className="px-3 py-4">Product</th>
+                <th className="px-3 py-4">Account</th>
+                <th className="px-3 py-4">Jumlah</th>
+                <th className="px-3 py-4">Harga</th>
+
+                <th className="px-3 py-4">SubTotal</th>
+                <th className="px-3 py-4">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {row.map((idx) => {
+                if (detailProduct) {
+                  const currentProductDetail = detailProduct?.filter(
+                    (product: any) => product.id === idx
+                  )[0]
+
+                  const currentProductOption = {
+                    label: currentProductDetail?.name,
+                    value: currentProductDetail?.id,
+                  }
+
+                  const currentAccountOption = {
+                    label: currentProductDetail?.account_id[1],
+                    value: currentProductDetail?.account_id[0],
+                  }
+
+                  return (
+                    <tr key={`account-row-${idx + 1}`}>
+                      <td className="px-3 py-2.5">
+                        <Select
+                          options={productOption}
+                          onChange={(selected: any) => {
+                            setValue(`product-${idx}`, selected)
+                          }}
+                          defaultValue={currentProductOption}
+                        />
+                      </td>
+                      <td className="px-3 py-2.5">
+                        <Select
+                          options={accountOptions}
+                          defaultValue={currentAccountOption}
+                        />
+                      </td>
+                      <td className="px-3 py-2.5">
+                        <Input {...register(`quantity-${idx}`)} />
+                      </td>
+                      <td className="px-3 py-2.5">
+                        <Input {...register(`price_unit-${idx}`)} />
+                      </td>
+
+                      <td className="text-center">
+                        <Input
+                          readOnly
+                          value={
+                            _.isNaN(
+                              watch(`price_unit-${idx}`) *
+                                watch(`quantity-${idx}`)
+                            )
+                              ? 0
+                              : watch(`price_unit-${idx}`) *
+                                watch(`quantity-${idx}`)
+                          }
+                        />
+                      </td>
+                      <td className="text-center">
+                        <Button
+                          color="red"
+                          onClick={() => removeAccoutRow(idx)}
+                        >
+                          Hapus
+                        </Button>
+                      </td>
+                    </tr>
+                  )
+                }
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="ml-auto p-6 w-fit"></div>
       </div>
     </div>
   )
