@@ -6,12 +6,7 @@ import moment from 'moment'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import {
-  axiosInstance,
-  getListAccount,
-  getListProduct,
-  getListSupplier,
-} from '@/api'
+import { axiosInstance, getListProduct, getListSupplier } from '@/api'
 import { Button, Dialog } from '@/components'
 import _ from 'underscore'
 
@@ -318,7 +313,14 @@ export const DetailBills = () => {
           <ArrowLeft />
           Kembali
         </Link>
-        <Button loading={isLoadingConfirm} onClick={() => onConfirm()}>
+        <Button
+          loading={isLoadingConfirm}
+          onClick={() =>
+            detailBills.state === 'posted'
+              ? navigate('pembayaran')
+              : onConfirm()
+          }
+        >
           {detailBills.state === 'posted' ? 'Register Payment' : 'Confirm'}
         </Button>
       </div>
