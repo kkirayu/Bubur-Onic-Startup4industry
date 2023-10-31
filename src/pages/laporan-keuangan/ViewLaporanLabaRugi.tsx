@@ -10,7 +10,8 @@ export function ViewLaporaLabaRugi() {
   const [searchParams] = useSearchParams()
 
   const companyID = searchParams.get('company')
-  const date = searchParams.get('date')
+  const startDate = searchParams.get('start')
+  const endDate = searchParams.get('end')
 
   const { data } = useQuery({
     queryKey: ['company', companyID],
@@ -25,7 +26,7 @@ export function ViewLaporaLabaRugi() {
     queryKey: ['laporan-laba-rugi'],
     queryFn: async () => {
       return axiosInstance
-        .get(`/laporan/laporan-laba-rugi?company=${companyID}&date=${date}`)
+        .get(`/laporan/laporan-laba-rugi?company=${companyID}&start=${startDate}&end=${endDate}`)
         .then((res) => res.data?.data)
     },
   })
@@ -85,7 +86,7 @@ export function ViewLaporaLabaRugi() {
         <img className="w-auto min-w-[120px] h-28" src="/icon.png" alt="Res" />
         <div>
           <div className="font-semibold">Laporan Laba Rugi</div>
-          <div>Periode {date}</div>
+          <div>Periode {startDate } ~ {endDate}</div>
           <div>{data?.nama}</div>
         </div>
       </div>
