@@ -5,6 +5,7 @@ import { Button } from '@/components'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { axiosInstance } from '@/api'
+import { formatToMoney } from '@/utils'
 
 export const ListPiutang = () => {
   const navigate = useNavigate()
@@ -134,6 +135,8 @@ export const ListPiutang = () => {
             customCell={({ defaultCell, name, value }) => {
               if (name === 'invoice_user_id') {
                 return value[1]
+              } else if (name === 'amount_residual_signed') {
+                return formatToMoney(value)
               }
               return defaultCell
             }}
