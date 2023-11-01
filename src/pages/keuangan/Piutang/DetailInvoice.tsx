@@ -273,14 +273,14 @@ export const DetailInvoice = () => {
         kwargs: {
           context: {
             params: {
-              id: id,
               cids: 1,
               menu_id: 115,
-              action: 233,
+              action: 231,
               model: 'account.move',
               view_type: 'form',
+              id: 50,
             },
-            default_move_type: 'in_invoice',
+            default_move_type: 'out_invoice',
             lang: 'en_US',
             tz: 'Asia/Jakarta',
             uid: 2,
@@ -294,9 +294,9 @@ export const DetailInvoice = () => {
     },
     onSuccess: () => {
       Dialog.success({
-        description: 'Berhasil membuat journal hutang',
+        description: 'Berhasil membuat journal piutang',
         callback: () => {
-          navigate('/keuangan/hutang/invoice')
+          navigate('/keuangan/piutang/invoice')
         },
       })
     },
