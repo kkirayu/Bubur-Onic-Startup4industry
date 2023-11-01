@@ -1,16 +1,15 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Input, Select, InputDate, Spinner } from 'alurkerja-ui'
-import { useMemo, useState } from 'react'
-import moment from 'moment'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { axiosInstance, getListProduct, getListSupplier } from '@/api'
 import { Button, Dialog } from '@/components'
 import _ from 'underscore'
 
-export const DetailBills = () => {
+export const DetailInvoice = () => {
   const { register, watch, setValue, handleSubmit } = useForm()
   const navigate = useNavigate()
   const { id } = useParams()
@@ -18,7 +17,7 @@ export const DetailBills = () => {
   const { listOption: supplierOption } = getListSupplier()
   const { listOption: productOption } = getListProduct()
 
-  const [row, setRow] = useState([0])
+  const [row, setRow] = useState<number[]>([])
   const [currentPartner, setCurrentPartner] = useState<{
     label: string
     value: number | string
@@ -79,8 +78,8 @@ export const DetailBills = () => {
     },
   })
 
-  const { data: detailBills } = useQuery({
-    queryKey: ['bills', id],
+  const { data: detailInvoice } = useQuery({
+    queryKey: ['invoice', id],
     queryFn: async () => {
       return axiosInstance
         .post('/odoo/odoo-api', {
@@ -177,7 +176,15 @@ export const DetailBills = () => {
               uid: 2,
               allowed_company_ids: [1],
               bin_size: true,
-              default_move_type: 'in_invoice',
+              params: {
+                cids: 1,
+                menu_id: 115,
+                action: 231,
+                model: 'account.move',
+                view_type: 'form',
+                id: 50,
+              },
+              default_move_type: 'out_invoice',
             },
           },
         })
@@ -192,7 +199,7 @@ export const DetailBills = () => {
     },
   })
 
-  const productID = detailBills?.invoice_line_ids
+  const productID = detailInvoice?.invoice_line_ids
 
   const { data: detailProduct, refetch } = useQuery({
     queryKey: ['detail-product'],
@@ -289,7 +296,7 @@ export const DetailBills = () => {
       Dialog.success({
         description: 'Berhasil membuat journal hutang',
         callback: () => {
-          navigate('/keuangan/hutang/tagihan')
+          navigate('/keuangan/hutang/invoice')
         },
       })
     },
@@ -326,7 +333,7 @@ export const DetailBills = () => {
       },
     })
 
-  if (!detailBills) {
+  if (!detailProduct) {
     return (
       <div className="h-[80vh] w-full flex items-center justify-center">
         <Spinner />
@@ -339,7 +346,7 @@ export const DetailBills = () => {
       <div className="flex gap-4 items-center  mb-4">
         <Link
           className="flex items-center text-main-blue-alurkerja gap-1"
-          to="/keuangan/hutang/tagihan"
+          to="/keuangan/hutang/invoice"
         >
           <ArrowLeft />
           Kembali
@@ -347,14 +354,14 @@ export const DetailBills = () => {
         <Button
           loading={isLoadingConfirm}
           onClick={() =>
-            detailBills.state === 'posted'
+            detailInvoice.state === 'posted'
               ? navigate('pembayaran')
               : onConfirm()
           }
         >
-          {detailBills.state === 'posted' ? 'Register Payment' : 'Confirm'}
+          {detailInvoice.state === 'posted' ? 'Register Payment' : 'Confirm'}
         </Button>
-        {detailBills.state === 'posted' && (
+        {detailInvoice.state === 'posted' && (
           <Button
             variant="outlined"
             onClick={() => mutateToDraft()}
@@ -367,12 +374,12 @@ export const DetailBills = () => {
       <div className="bg-white">
         <div className="w-full h-14 px-6 py-3.5  rounded-tl rounded-tr border border-slate-200 justify-start items-center inline-flex">
           <div className="text-gray-700 text-base font-semibold">
-            Detail Tagihan
+            Detail Invoice
           </div>
         </div>
         <div className="p-6 grid grid-cols-2 gap-6">
           <div>
-            <label htmlFor="">Nama Supplier</label>
+            <label htmlFor="">Nama Customer</label>
             {currentPartner && (
               <Select
                 isDisabled={readonly}
@@ -385,13 +392,13 @@ export const DetailBills = () => {
             )}
           </div>
           <div>
-            <label htmlFor="">Tanggal Tagihan</label>
+            <label htmlFor="">Tanggal Invoice</label>
             <InputDate
               disabled={readonly}
               onChange={(date) => {
                 setValue('invoice_date', date)
               }}
-              defaultValue={new Date(detailBills.invoice_date)}
+              defaultValue={new Date(detailInvoice.invoice_date)}
             />
           </div>
           <div>
@@ -401,15 +408,12 @@ export const DetailBills = () => {
               onChange={(date) => {
                 setValue('invoice_date_due', date)
               }}
-              defaultValue={new Date(detailBills.invoice_date_due)}
+              defaultValue={new Date(detailInvoice.invoice_date_due)}
             />
           </div>
           <div className="col-span-2">
             <label htmlFor="description">Catatan</label>
-            <Input
-              {...(register('description'), { readonly: readonly })}
-              textArea
-            />
+            <Input {...register('description')} textArea readOnly />
           </div>
         </div>
         <div className="p-6">
@@ -468,16 +472,10 @@ export const DetailBills = () => {
                         />
                       </td>
                       <td className="px-3 py-2.5">
-                        <Input
-                          {...register(`quantity-${idx}`)}
-                          readOnly={readonly}
-                        />
+                        <Input {...register(`quantity-${idx}`)} readOnly />
                       </td>
                       <td className="px-3 py-2.5">
-                        <Input
-                          {...register(`price_unit-${idx}`)}
-                          readOnly={readonly}
-                        />
+                        <Input {...register(`price_unit-${idx}`)} readOnly />
                       </td>
 
                       <td className="text-center">

@@ -105,8 +105,6 @@ export const ListPiutang = () => {
     },
   })
 
-  console.log(data)
-
   return (
     <div>
       <section className="bg-white">
@@ -173,6 +171,8 @@ export const ListPiutang = () => {
               </Button>
             )}
             onClickCreate={() => navigate('create')}
+            onClickDetail={(id) => navigate(`${id}`)}
+            customButtonEdit={() => <></>}
           />
         )}
       </section>
