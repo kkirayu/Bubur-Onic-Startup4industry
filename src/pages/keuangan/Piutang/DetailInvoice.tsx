@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, Select, InputDate, Spinner } from 'alurkerja-ui'
+import { Input, Select, InputDate, Spinner, Skeleton } from 'alurkerja-ui'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -78,7 +78,11 @@ export const DetailInvoice = () => {
     },
   })
 
-  const { data: detailInvoice } = useQuery({
+  const {
+    data: detailInvoice,
+    refetch: refetchDetail,
+    isFetching,
+  } = useQuery({
     queryKey: ['invoice', id],
     queryFn: async () => {
       return axiosInstance
@@ -191,6 +195,7 @@ export const DetailInvoice = () => {
         .then((res) => res.data.data[0])
     },
     onSuccess: (data) => {
+      setReadonly(data.state === 'draft' ? false : true)
       setRow(data.invoice_line_ids)
       setCurrentPartner({
         label: data.partner_id[1],
@@ -201,7 +206,7 @@ export const DetailInvoice = () => {
 
   const productID = detailInvoice?.invoice_line_ids
 
-  const { data: detailProduct, refetch } = useQuery({
+  const { data: detailProduct } = useQuery({
     queryKey: ['detail-product'],
     queryFn: async () => {
       return axiosInstance
@@ -296,7 +301,7 @@ export const DetailInvoice = () => {
       Dialog.success({
         description: 'Berhasil membuat journal piutang',
         callback: () => {
-          navigate('/keuangan/piutang/invoice')
+          refetchDetail()
         },
       })
     },
@@ -328,8 +333,13 @@ export const DetailInvoice = () => {
           model: 'account.move',
         })
       },
-      onSuccess: () => {
-        refetch()
+      onError: () => {
+        Dialog.success({
+          description: 'Berhasil Mengubah Journal ke Status Draft',
+          callback: () => {
+            refetchDetail()
+          },
+        })
       },
     })
 
@@ -352,17 +362,19 @@ export const DetailInvoice = () => {
           Kembali
         </Link>
         <Button
+          disabled={isFetching}
           loading={isLoadingConfirm}
           onClick={() =>
-            detailInvoice.state === 'posted'
+            detailInvoice?.state === 'posted'
               ? navigate('pembayaran')
               : onConfirm()
           }
         >
-          {detailInvoice.state === 'posted' ? 'Register Payment' : 'Confirm'}
+          {detailInvoice?.state === 'posted' ? 'Register Payment' : 'Confirm'}
         </Button>
-        {detailInvoice.state === 'posted' && (
+        {detailInvoice?.state === 'posted' && (
           <Button
+            disabled={isFetching}
             variant="outlined"
             onClick={() => mutateToDraft()}
             loading={isLoadingMutateToDraft}
@@ -377,138 +389,160 @@ export const DetailInvoice = () => {
             Detail Invoice
           </div>
         </div>
-        <div className="p-6 grid grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="">Nama Customer</label>
-            {currentPartner && (
-              <Select
-                isDisabled={readonly}
-                options={supplierOption}
-                onChange={(selected: any) =>
-                  setValue('partner_id', selected.value)
-                }
-                defaultValue={currentPartner}
-              />
-            )}
+        {!isFetching ? (
+          <>
+            <div className="p-6 grid grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="">Nama Customer</label>
+                {currentPartner && (
+                  <Select
+                    isDisabled={readonly}
+                    options={supplierOption}
+                    onChange={(selected: any) =>
+                      setValue('partner_id', selected.value)
+                    }
+                    defaultValue={currentPartner}
+                  />
+                )}
+              </div>
+              <div>
+                <label htmlFor="">Tanggal Invoice</label>
+                <InputDate
+                  disabled={readonly}
+                  onChange={(date) => {
+                    setValue('invoice_date', date)
+                  }}
+                  defaultValue={new Date(detailInvoice.invoice_date)}
+                />
+              </div>
+              <div>
+                <label htmlFor="">Jatuh Tempo</label>
+                <InputDate
+                  disabled={readonly}
+                  onChange={(date) => {
+                    setValue('invoice_date_due', date)
+                  }}
+                  defaultValue={new Date(detailInvoice.invoice_date_due)}
+                />
+              </div>
+              <div className="col-span-2">
+                <label htmlFor="description">Catatan</label>
+                <Input {...register('description')} textArea readOnly />
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="flex justify-end items-center mb-2.5">
+                <Button onClick={() => addAccountRow()} disabled={readonly}>
+                  Tambah Product
+                </Button>
+              </div>
+
+              <table className="w-full table-auto">
+                <thead className="bg-[#F8F9FD]">
+                  <tr className="uppercase text-left">
+                    <th className="px-3 py-4">Product</th>
+                    <th className="px-3 py-4">Account</th>
+                    <th className="px-3 py-4">Jumlah</th>
+                    <th className="px-3 py-4">Harga</th>
+
+                    <th className="px-3 py-4">SubTotal</th>
+                    <th className="px-3 py-4">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {row.map((idx) => {
+                    if (detailProduct) {
+                      const currentProductDetail = detailProduct?.filter(
+                        (product: any) => product.id === idx
+                      )[0]
+
+                      const currentProductOption = {
+                        label: currentProductDetail?.name,
+                        value: currentProductDetail?.id,
+                      }
+
+                      const currentAccountOption = {
+                        label: currentProductDetail?.account_id[1],
+                        value: currentProductDetail?.account_id[0],
+                      }
+
+                      return (
+                        <tr key={`account-row-${idx + 1}`}>
+                          <td className="px-3 py-2.5">
+                            <Select
+                              isDisabled={readonly}
+                              options={productOption}
+                              onChange={(selected: any) => {
+                                setValue(`product-${idx}`, selected)
+                              }}
+                              defaultValue={currentProductOption}
+                            />
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <Select
+                              isDisabled={readonly}
+                              options={accountOptions}
+                              defaultValue={currentAccountOption}
+                            />
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <Input {...register(`quantity-${idx}`)} readOnly />
+                          </td>
+                          <td className="px-3 py-2.5">
+                            <Input
+                              {...register(`price_unit-${idx}`)}
+                              readOnly
+                            />
+                          </td>
+
+                          <td className="text-center">
+                            <Input
+                              readOnly
+                              value={
+                                _.isNaN(
+                                  watch(`price_unit-${idx}`) *
+                                    watch(`quantity-${idx}`)
+                                )
+                                  ? 0
+                                  : watch(`price_unit-${idx}`) *
+                                    watch(`quantity-${idx}`)
+                              }
+                            />
+                          </td>
+                          <td className="text-center">
+                            <Button
+                              disabled={readonly}
+                              color="red"
+                              onClick={() => removeAccoutRow(idx)}
+                            >
+                              Hapus
+                            </Button>
+                          </td>
+                        </tr>
+                      )
+                    }
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="ml-auto p-6 w-fit"></div>
+          </>
+        ) : (
+          <div className="p-6 grid grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <Skeleton width={50} />
+              <Skeleton height={40} />
+            </div>
+            <div className="space-y-1">
+              <Skeleton width={50} />
+              <Skeleton height={40} />
+            </div>
+            <div className="space-y-1 col-span-2">
+              <Skeleton width={50} />
+              <Skeleton height={40} />
+            </div>
           </div>
-          <div>
-            <label htmlFor="">Tanggal Invoice</label>
-            <InputDate
-              disabled={readonly}
-              onChange={(date) => {
-                setValue('invoice_date', date)
-              }}
-              defaultValue={new Date(detailInvoice.invoice_date)}
-            />
-          </div>
-          <div>
-            <label htmlFor="">Jatuh Tempo</label>
-            <InputDate
-              disabled={readonly}
-              onChange={(date) => {
-                setValue('invoice_date_due', date)
-              }}
-              defaultValue={new Date(detailInvoice.invoice_date_due)}
-            />
-          </div>
-          <div className="col-span-2">
-            <label htmlFor="description">Catatan</label>
-            <Input {...register('description')} textArea readOnly />
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="flex justify-end items-center mb-2.5">
-            <Button onClick={() => addAccountRow()} disabled={readonly}>
-              Tambah Product
-            </Button>
-          </div>
-
-          <table className="w-full table-auto">
-            <thead className="bg-[#F8F9FD]">
-              <tr className="uppercase text-left">
-                <th className="px-3 py-4">Product</th>
-                <th className="px-3 py-4">Account</th>
-                <th className="px-3 py-4">Jumlah</th>
-                <th className="px-3 py-4">Harga</th>
-
-                <th className="px-3 py-4">SubTotal</th>
-                <th className="px-3 py-4">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {row.map((idx) => {
-                if (detailProduct) {
-                  const currentProductDetail = detailProduct?.filter(
-                    (product: any) => product.id === idx
-                  )[0]
-
-                  const currentProductOption = {
-                    label: currentProductDetail?.name,
-                    value: currentProductDetail?.id,
-                  }
-
-                  const currentAccountOption = {
-                    label: currentProductDetail?.account_id[1],
-                    value: currentProductDetail?.account_id[0],
-                  }
-
-                  return (
-                    <tr key={`account-row-${idx + 1}`}>
-                      <td className="px-3 py-2.5">
-                        <Select
-                          isDisabled={readonly}
-                          options={productOption}
-                          onChange={(selected: any) => {
-                            setValue(`product-${idx}`, selected)
-                          }}
-                          defaultValue={currentProductOption}
-                        />
-                      </td>
-                      <td className="px-3 py-2.5">
-                        <Select
-                          isDisabled={readonly}
-                          options={accountOptions}
-                          defaultValue={currentAccountOption}
-                        />
-                      </td>
-                      <td className="px-3 py-2.5">
-                        <Input {...register(`quantity-${idx}`)} readOnly />
-                      </td>
-                      <td className="px-3 py-2.5">
-                        <Input {...register(`price_unit-${idx}`)} readOnly />
-                      </td>
-
-                      <td className="text-center">
-                        <Input
-                          readOnly
-                          value={
-                            _.isNaN(
-                              watch(`price_unit-${idx}`) *
-                                watch(`quantity-${idx}`)
-                            )
-                              ? 0
-                              : watch(`price_unit-${idx}`) *
-                                watch(`quantity-${idx}`)
-                          }
-                        />
-                      </td>
-                      <td className="text-center">
-                        <Button
-                          disabled={readonly}
-                          color="red"
-                          onClick={() => removeAccoutRow(idx)}
-                        >
-                          Hapus
-                        </Button>
-                      </td>
-                    </tr>
-                  )
-                }
-              })}
-            </tbody>
-          </table>
-        </div>
-        <div className="ml-auto p-6 w-fit"></div>
+        )}
       </div>
     </div>
   )
