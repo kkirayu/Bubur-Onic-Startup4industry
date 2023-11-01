@@ -129,6 +129,7 @@ export const ListPiutang = () => {
               { key: 'invoice_user_id', label: 'Customer' },
               { key: 'amount_residual_signed', label: 'Total' },
               { key: 'payment_state', label: 'Status' },
+              { key: 'state', label: 'Status Journal' },
             ]}
             customCell={({ defaultCell, name, value }) => {
               if (name === 'invoice_user_id') {

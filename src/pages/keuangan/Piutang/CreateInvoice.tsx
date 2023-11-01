@@ -79,7 +79,7 @@ export const CreateInvoice = () => {
             auto_post: 'no',
             auto_post_until: false,
             company_id: 1,
-            journal_id: 2,
+            journal_id: 1,
             show_name_warning: false,
             posted_before: false,
             payment_state: 'not_paid',
@@ -92,14 +92,12 @@ export const CreateInvoice = () => {
             l10n_id_kode_transaksi: false,
             l10n_id_replace_invoice_id: false,
             quick_edit_total_amount: 0,
-            ref: 'Pembelian-' + moment(new Date()).format('YYYY-MM-DD'),
+            ref: false,
             invoice_vendor_bill_id: false,
-            invoice_date: moment(payload.invoice_date).format('YYYY-MM-DD'),
+            invoice_date: payload.invoice_date,
             payment_reference: false,
             partner_bank_id: false,
-            invoice_date_due: moment(payload.invoice_date_due).format(
-              'YYYY-MM-DD'
-            ),
+            invoice_date_due: payload.invoice_date_due,
             invoice_payment_term_id: false,
             invoice_line_ids: invoiceLine,
             narration: false,
@@ -112,7 +110,6 @@ export const CreateInvoice = () => {
             fiscal_position_id: false,
             invoice_source_email: false,
             to_check: false,
-            l10n_id_tax_number: false,
           },
         ],
         model: 'account.move',
@@ -124,14 +121,13 @@ export const CreateInvoice = () => {
             uid: 2,
             allowed_company_ids: [1],
             params: {
-              id: 25,
+              action: 231,
+              model: 'account.move',
+              view_type: 'list',
               cids: 1,
               menu_id: 115,
-              action: 233,
-              model: 'account.move',
-              view_type: 'form',
             },
-            default_move_type: 'in_invoice',
+            default_move_type: 'out_invoice',
           },
         },
       })
@@ -211,7 +207,6 @@ export const CreateInvoice = () => {
                 <th className="px-3 py-4">Account</th>
                 <th className="px-3 py-4">Jumlah</th>
                 <th className="px-3 py-4">Harga</th>
-
                 <th className="px-3 py-4">SubTotal</th>
                 <th className="px-3 py-4">Aksi</th>
               </tr>
