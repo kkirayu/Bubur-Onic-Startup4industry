@@ -8,7 +8,7 @@ import {
   DetailJurnal,
   LayoutJournal,
   TerimaUang,
-  CreatePiutang,
+  CreateInvoice,
   CreateBills,
   ListAsset,
   CreateAsset,
@@ -47,7 +47,7 @@ export const keuanganRoutes: RouteObject = {
     { path: 'piutang/invoice', element: <ListPiutang /> },
     {
       path: 'piutang/invoice/create',
-      element: <CreatePiutang />,
+      element: <CreateInvoice />,
     },
     {
       path: 'journal',

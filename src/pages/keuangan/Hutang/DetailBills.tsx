@@ -16,7 +16,6 @@ export const DetailBills = () => {
   const { id } = useParams()
 
   const { listOption: supplierOption } = getListSupplier()
-
   const { listOption: productOption } = getListProduct()
 
   const [row, setRow] = useState([0])
@@ -24,6 +23,7 @@ export const DetailBills = () => {
     label: string
     value: number | string
   }>()
+  const [disabled, setDisabled] = useState(true)
 
   const removeAccoutRow = (idx: number) => {
     setRow((prev) => prev.filter((prevIdx) => prevIdx !== idx))
@@ -194,7 +194,7 @@ export const DetailBills = () => {
 
   const productID = detailBills?.invoice_line_ids
 
-  const { data: detailProduct } = useQuery({
+  const { data: detailProduct, refetch } = useQuery({
     queryKey: ['detail-product'],
     queryFn: async () => {
       return axiosInstance
@@ -295,6 +295,37 @@ export const DetailBills = () => {
     },
   })
 
+  const { mutate: mutateToDraft, isLoading: isLoadingMutateToDraft } =
+    useMutation({
+      mutationFn: () => {
+        return axiosInstance.post('/odoo/odoo-api', {
+          args: [[+id!!]],
+          kwargs: {
+            context: {
+              params: {
+                id: 36,
+                cids: 1,
+                menu_id: 115,
+                action: 233,
+                model: 'account.move',
+                view_type: 'form',
+              },
+              default_move_type: 'in_invoice',
+              lang: 'en_US',
+              tz: 'Asia/Jakarta',
+              uid: 2,
+              allowed_company_ids: [1],
+            },
+          },
+          method: 'button_draft',
+          model: 'account.move',
+        })
+      },
+      onSuccess: () => {
+        refetch()
+      },
+    })
+
   if (!detailBills) {
     return (
       <div className="h-[80vh] w-full flex items-center justify-center">
@@ -323,6 +354,15 @@ export const DetailBills = () => {
         >
           {detailBills.state === 'posted' ? 'Register Payment' : 'Confirm'}
         </Button>
+        {detailBills.state === 'posted' && (
+          <Button
+            variant="outlined"
+            onClick={() => mutateToDraft()}
+            loading={isLoadingMutateToDraft}
+          >
+            Reset To Draft
+          </Button>
+        )}
       </div>
       <div className="bg-white">
         <div className="w-full h-14 px-6 py-3.5  rounded-tl rounded-tr border border-slate-200 justify-start items-center inline-flex">
@@ -335,6 +375,7 @@ export const DetailBills = () => {
             <label htmlFor="">Nama Supplier</label>
             {currentPartner && (
               <Select
+                isDisabled={disabled}
                 options={supplierOption}
                 onChange={(selected: any) =>
                   setValue('partner_id', selected.value)
@@ -346,6 +387,7 @@ export const DetailBills = () => {
           <div>
             <label htmlFor="">Tanggal Tagihan</label>
             <InputDate
+              disabled={disabled}
               onChange={(date) => {
                 setValue('invoice_date', date)
               }}
@@ -355,6 +397,7 @@ export const DetailBills = () => {
           <div>
             <label htmlFor="">Jatuh Tempo</label>
             <InputDate
+              disabled={disabled}
               onChange={(date) => {
                 setValue('invoice_date_due', date)
               }}
@@ -363,12 +406,17 @@ export const DetailBills = () => {
           </div>
           <div className="col-span-2">
             <label htmlFor="description">Catatan</label>
-            <Input {...register('description')} textArea />
+            <Input
+              {...(register('description'), { disabled: disabled })}
+              textArea
+            />
           </div>
         </div>
         <div className="p-6">
           <div className="flex justify-end items-center mb-2.5">
-            <Button onClick={() => addAccountRow()}>Tambah Product</Button>
+            <Button onClick={() => addAccountRow()} disabled={disabled}>
+              Tambah Product
+            </Button>
           </div>
 
           <table className="w-full table-auto">
@@ -404,6 +452,7 @@ export const DetailBills = () => {
                     <tr key={`account-row-${idx + 1}`}>
                       <td className="px-3 py-2.5">
                         <Select
+                          isDisabled={disabled}
                           options={productOption}
                           onChange={(selected: any) => {
                             setValue(`product-${idx}`, selected)
@@ -413,15 +462,23 @@ export const DetailBills = () => {
                       </td>
                       <td className="px-3 py-2.5">
                         <Select
+                          isDisabled={disabled}
                           options={accountOptions}
                           defaultValue={currentAccountOption}
                         />
                       </td>
                       <td className="px-3 py-2.5">
-                        <Input {...register(`quantity-${idx}`)} />
+                        <Input
+                          {...(register(`quantity-${idx}`),
+                          { disabled: disabled })}
+                        />
                       </td>
                       <td className="px-3 py-2.5">
-                        <Input {...register(`price_unit-${idx}`)} />
+                        <Input
+                          {...register(`price_unit-${idx}`, {
+                            disabled: disabled,
+                          })}
+                        />
                       </td>
 
                       <td className="text-center">
@@ -440,6 +497,7 @@ export const DetailBills = () => {
                       </td>
                       <td className="text-center">
                         <Button
+                          disabled={disabled}
                           color="red"
                           onClick={() => removeAccoutRow(idx)}
                         >
