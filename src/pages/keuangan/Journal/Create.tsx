@@ -75,7 +75,7 @@ export const CreateJurnal = () => {
   const listOptionAccount = useMemo(() => {
     return listAccount?.map((acc) => ({
       ...acc,
-      label: acc.nama,
+      label: `(${acc.kode_akun}) ` +  acc.nama,
       value: acc.id,
     }))
   }, [listAccount])

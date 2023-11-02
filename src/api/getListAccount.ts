@@ -41,7 +41,7 @@ export const getListAccount = () => {
   const listAccountQuery = useQuery<AxiosResponse<ListResponse<Account>, any>>({
     queryKey: ['account'],
     queryFn: async () => {
-      return axiosInstance.get('/akun/akun')
+      return axiosInstance.get('akun/akun/avaiable-account')
     },
   })
 
@@ -50,7 +50,7 @@ export const getListAccount = () => {
 
   const listOptionAccount = useMemo(() => {
     return listAccount?.map((company) => ({
-      label: company.nama,
+      label: `(${company.kode_akun})` + company.nama,
       value: company.id,
     }))
   }, [listAccount])
