@@ -31,4 +31,26 @@ export class Dialog extends Component {
       arg?.callback?.()
     })
   }
+  static confirm = (arg?: DialogProps) => {
+    return Swal.fire({
+      title: arg?.title ?? 'Konfirmasi',
+      text: arg?.description || 'Apakah anda yakin ?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya',
+      cancelButtonText: 'Tidak',
+      reverseButtons: true,
+      buttonsStyling: false,
+      customClass: {
+        cancelButton:
+          'text-main-blue-alurkerja border border-main-blue-alurkerja px-[15px] py-2.5 text-base rounded mr-4',
+        confirmButton:
+          'bg-main-blue-alurkerja text-white disabled:bg-gray-alurkerja-2 px-[15px] py-2.5 text-base rounded',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        arg?.callback?.()
+      }
+    })
+  }
 }

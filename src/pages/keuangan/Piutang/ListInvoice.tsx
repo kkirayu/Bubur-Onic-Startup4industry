@@ -132,7 +132,7 @@ export const ListPiutang = () => {
             ]}
             customCell={({ defaultCell, name, value }) => {
               if (name === 'invoice_user_id') {
-                return value[1]
+                return value.length > 0 ? value[1] : "-"
               } else if (name === 'amount_residual_signed') {
                 return formatToMoney(value)
               }

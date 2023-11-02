@@ -91,7 +91,7 @@ export const CreateAsset = () => {
 
   return (
     <section className="bg-white rounded py-6">
-      <h3 className="font-bold text-xl mb-10 px-6">Tambah Jurnal</h3>
+      <h3 className="font-bold text-xl mb-10 px-6 ">Tambah Asset</h3>
       <div className="grid grid-cols-3 gap-4 px-10 mb-8">
         <div>
           <label

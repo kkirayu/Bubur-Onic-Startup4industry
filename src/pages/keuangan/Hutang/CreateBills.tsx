@@ -60,7 +60,7 @@ export const CreateBills = () => {
           analytic_distribution: false,
           discount: 0,
           tax_ids: [[6, false, []]],
-          partner_id: 9,
+          partner_id: payload.partner_id,
           currency_id: 12,
           display_type: 'product',
           product_uom_id: 1,
@@ -196,7 +196,7 @@ export const CreateBills = () => {
           </div>
           <div className="col-span-2">
             <label htmlFor="description">Catatan</label>
-            <Input {...register('description')} textArea />
+            <Input {...register('description')} textArea readOnly/>
           </div>
         </div>
         <div className="p-6">
