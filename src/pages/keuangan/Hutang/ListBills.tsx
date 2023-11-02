@@ -3,9 +3,9 @@ import { useState } from 'react'
 import { Download } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
-import { Button } from '@/components'
+import { Button, Dialog } from '@/components'
 import { SubHeader } from './Components'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { axiosInstance } from '@/api'
 import { formatToMoney } from '@/utils'
 
@@ -18,6 +18,47 @@ export const ListBills = () => {
   const [search, setSearch] = useState<string>()
   const [showFilter, setShowFilter] = useState(false)
 
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (id: any) => {
+
+      return axiosInstance.post('/odoo/odoo-api',  {
+        "model": "account.move",
+        "method": "unlink",
+        "args": [
+          [
+            id
+          ]
+        ],
+        "kwargs": {
+          "context": {
+            "lang": "en_US",
+            "tz": "Asia/Jakarta",
+            "uid": 2,
+            "allowed_company_ids": [
+              1
+            ],
+            "default_move_type": "in_invoice"
+          }
+        }
+      })
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil Menghapus Asset',
+        callback: () => {
+          navigate('/keuangan/aset')
+        },
+      })
+    },
+    onError: (err: any) => {
+      if (err.response.status === 422 || err.response.status === 500) {
+        Dialog.error({ description: err.response.data.message })
+      } else {
+        Dialog.error()
+      }
+    },
+  })
   const { data } = useQuery({
     queryKey: ['bills'],
     queryFn: async () => {
@@ -153,6 +194,14 @@ export const ListBills = () => {
             onClickDetail={(id) => navigate(`${id}`)}
             customButtonEdit={() => <></>}
             extraRow={() => <ExtraRow />}
+            onClickDelete={(_, id) => {
+              Dialog.confirm({
+                description: 'Apakah anda yakin ingin menghapus data ini?',
+                callback: () => {
+                  mutate(id)
+                },
+              })
+            }}
           />
         )}
       </section>
