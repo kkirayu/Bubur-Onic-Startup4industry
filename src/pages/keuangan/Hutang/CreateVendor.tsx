@@ -116,7 +116,7 @@ export const CreateVendor = () => {
             <label htmlFor="description">Nama</label>
             <Select
               options={[
-                { label: 'Individual', value: 'individual' },
+                { label: 'Individual', value: 'person' },
                 { label: 'Company', value: 'company' },
               ]}
               defaultValue={{ label: 'Company', value: 'company' }}
