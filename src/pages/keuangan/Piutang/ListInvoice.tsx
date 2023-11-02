@@ -70,6 +70,7 @@ export const ListPiutang = () => {
   })
 
   const { data } = useQuery({
+    cacheTime: 0,
     queryKey: ['invoices'],
     queryFn: async () => {
       return axiosInstance.post('/odoo/odoo-api', {

@@ -25,7 +25,7 @@ export function ViewLaporanBukuBesar() {
   })
 
   const { data: report } = useQuery({
-    queryKey: ['laporan-buku-besar'],
+    queryKey: ['laporan-buku-besar', group, startDate, endDate],
     queryFn: async () => {
       return axiosInstance
         .get(
@@ -185,7 +185,9 @@ export function ViewLaporanBukuBesar() {
                   <td className="p-4 text-right border-b font-bold">
                     {formatToMoney(item.credit)}
                   </td>
-                  <td className="px-4 text-right">{formatToMoney((item.credit - item.debit ) * -1) }</td>
+                  <td className="px-4 text-right">
+                    {formatToMoney((item.credit - item.debit) * -1)}
+                  </td>
                 </tr>
               </Fragment>
             ))}

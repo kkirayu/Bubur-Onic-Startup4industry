@@ -207,7 +207,7 @@ export const DetailInvoice = () => {
   const productID = detailInvoice?.invoice_line_ids
 
   const { data: detailProduct } = useQuery({
-    queryKey: ['detail-product'],
+    queryKey: ['product', productID],
     queryFn: async () => {
       return axiosInstance
         .post('/odoo/odoo-api', {

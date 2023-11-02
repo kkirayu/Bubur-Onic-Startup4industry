@@ -24,7 +24,7 @@ export function ViewLaporanJournal() {
   })
 
   const { data: report } = useQuery({
-    queryKey: ['laporan-journal'],
+    queryKey: ['laporan-journal', companyID, type, startDate, endDate],
     queryFn: async () => {
       return axiosInstance
         .get(
@@ -132,9 +132,8 @@ export function ViewLaporanJournal() {
               <Fragment key={i}>
                 <tr>
                   <td className="p-2.5">{item.tanggal_transaksi}</td>
-                  <td className='p-2.5'>
-                    <div className="font-semibold">{item.kode_jurnal}
-                    </div>
+                  <td className="p-2.5">
+                    <div className="font-semibold">{item.kode_jurnal}</div>
 
                     {item.judul}
                   </td>
