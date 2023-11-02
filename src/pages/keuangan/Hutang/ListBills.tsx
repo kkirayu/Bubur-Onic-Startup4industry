@@ -18,29 +18,21 @@ export const ListBills = () => {
   const [search, setSearch] = useState<string>()
   const [showFilter, setShowFilter] = useState(false)
 
-
   const { mutate, isLoading } = useMutation({
     mutationFn: (id: any) => {
-
-      return axiosInstance.post('/odoo/odoo-api',  {
-        "model": "account.move",
-        "method": "unlink",
-        "args": [
-          [
-            id
-          ]
-        ],
-        "kwargs": {
-          "context": {
-            "lang": "en_US",
-            "tz": "Asia/Jakarta",
-            "uid": 2,
-            "allowed_company_ids": [
-              1
-            ],
-            "default_move_type": "in_invoice"
-          }
-        }
+      return axiosInstance.post('/odoo/odoo-api', {
+        model: 'account.move',
+        method: 'unlink',
+        args: [[id]],
+        kwargs: {
+          context: {
+            lang: 'en_US',
+            tz: 'Asia/Jakarta',
+            uid: 2,
+            allowed_company_ids: [1],
+            default_move_type: 'in_invoice',
+          },
+        },
       })
     },
     onSuccess: () => {
@@ -59,7 +51,9 @@ export const ListBills = () => {
       }
     },
   })
+
   const { data } = useQuery({
+    cacheTime: 0,
     queryKey: ['bills'],
     queryFn: async () => {
       return axiosInstance.post('/odoo/odoo-api', {

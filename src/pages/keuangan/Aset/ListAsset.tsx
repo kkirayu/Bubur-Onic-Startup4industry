@@ -16,6 +16,7 @@ export const ListAsset = () => {
   const [search, setSearch] = useState<string>()
 
   const { data } = useQuery({
+    cacheTime: 0,
     queryKey: ['category-asset'],
     queryFn: async () => {
       return axiosInstance.post('/odoo/odoo-api', {
@@ -28,30 +29,22 @@ export const ListAsset = () => {
     },
   })
 
-
   const { mutate, isLoading } = useMutation({
     mutationFn: (id: any) => {
-
       return axiosInstance.post('/odoo/odoo-api', {
-        "model": "account.asset.asset",
-        "method": "unlink",
-        "args": [
-          [
-            id
-          ]
-        ],
-        "kwargs": {
-          "context": {
-            "lang": "en_US",
-            "tz": "Asia/Jakarta",
-            "uid": 2,
-            "allowed_company_ids": [
-              1
-            ],
-            "default_move_type": "in_invoice"
-          }
-        }
-      });
+        model: 'account.asset.asset',
+        method: 'unlink',
+        args: [[id]],
+        kwargs: {
+          context: {
+            lang: 'en_US',
+            tz: 'Asia/Jakarta',
+            uid: 2,
+            allowed_company_ids: [1],
+            default_move_type: 'in_invoice',
+          },
+        },
+      })
     },
     onSuccess: () => {
       Dialog.success({
@@ -100,15 +93,23 @@ export const ListAsset = () => {
             ]}
             customCell={({ defaultCell, name, value }) => {
               if (name === 'category_id') {
-                return value.length > 0 ? value[1] : "-"
+                return value.length > 0 ? value[1] : '-'
               } else if (name === 'value' || name === 'value_residual') {
                 return formatToMoney(value)
               }
               return defaultCell
             }}
-            customButtonCreate={() => (<>
-              <Button className="bg-blue-400 text-white" onClick={() => navigate('create')} size='sm'>Tambah Asset</Button>
-            </>)}
+            customButtonCreate={() => (
+              <>
+                <Button
+                  className="bg-blue-400 text-white"
+                  onClick={() => navigate('create')}
+                  size="sm"
+                >
+                  Tambah Asset
+                </Button>
+              </>
+            )}
             onClickEdit={(_, id) => navigate(id + '/edit')}
             onClickDelete={(_, id) => {
               Dialog.confirm({

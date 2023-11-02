@@ -37,26 +37,19 @@ export const ListPiutang = () => {
 
   const { mutate, isLoading } = useMutation({
     mutationFn: (id: any) => {
-
       return axiosInstance.post('/odoo/odoo-api', {
-        "model": "account.move",
-        "method": "unlink",
-        "args": [
-          [
-            id
-          ]
-        ],
-        "kwargs": {
-          "context": {
-            "lang": "en_US",
-            "tz": "Asia/Jakarta",
-            "uid": 2,
-            "allowed_company_ids": [
-              1
-            ],
-            "default_move_type": "out_invoice"
-          }
-        }
+        model: 'account.move',
+        method: 'unlink',
+        args: [[id]],
+        kwargs: {
+          context: {
+            lang: 'en_US',
+            tz: 'Asia/Jakarta',
+            uid: 2,
+            allowed_company_ids: [1],
+            default_move_type: 'out_invoice',
+          },
+        },
       })
     },
     onSuccess: () => {
@@ -173,7 +166,7 @@ export const ListPiutang = () => {
             ]}
             customCell={({ defaultCell, name, value }) => {
               if (name === 'invoice_user_id') {
-                return value.length > 0 ? value[1] : "-"
+                return value.length > 0 ? value[1] : '-'
               } else if (name === 'amount_residual_signed') {
                 return formatToMoney(value)
               }
@@ -195,7 +188,7 @@ export const ListPiutang = () => {
                   baseUrl={import.meta.env.VITE_API_BASEURL}
                   submitButtonText="Cari"
                   cancelButtonText="Reset"
-                  onCancel={(reset) => { }}
+                  onCancel={(reset) => {}}
                   onSubmit={(data) => console.log(data)}
                   submitButtonIcon={<Search size={18} />}
                   cancelButtonIcon={<RefreshCcw size={18} />}
