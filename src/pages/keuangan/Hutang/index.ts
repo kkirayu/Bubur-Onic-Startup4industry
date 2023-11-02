@@ -1,5 +1,6 @@
 export * from './ListBills'
 export * from './ListVendor'
 export * from './CreateBills'
+export * from './CreateVendor'
 export * from './DetailBills'
 export * from './PembayaranBills'
