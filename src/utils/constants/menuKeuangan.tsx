@@ -43,6 +43,10 @@ export const menuKeuangan = [
             href: '/keuangan/piutang/invoice',
             label: 'Invoice',
           },
+          {
+            href: '/keuangan/piutang/customer',
+            label: 'Customer',
+          },
         ],
       },
       {
@@ -50,8 +54,12 @@ export const menuKeuangan = [
         label: 'Hutang',
         child: [
           {
-            href: '/keuangan/hutang/Tagihan',
+            href: '/keuangan/hutang/tagihan',
             label: 'Tagihan',
+          },
+          {
+            href: '/keuangan/hutang/vendor',
+            label: 'Vendor',
           },
         ],
       },
