@@ -8,7 +8,7 @@ import {
   DetailJurnal,
   LayoutJournal,
   TerimaUang,
-  CreatePiutang,
+  CreateInvoice,
   CreateBills,
   ListAsset,
   CreateAsset,
@@ -16,6 +16,8 @@ import {
   DetailBills,
   ListBills,
   PembayaranBills,
+  DetailInvoice,
+  PembayaranInvoice,
 } from '@/pages/keuangan'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -47,8 +49,17 @@ export const keuanganRoutes: RouteObject = {
     { path: 'piutang/invoice', element: <ListPiutang /> },
     {
       path: 'piutang/invoice/create',
-      element: <CreatePiutang />,
+      element: <CreateInvoice />,
     },
+    {
+      path: 'piutang/invoice/:id',
+      element: <DetailInvoice />,
+    },
+    {
+      path: 'piutang/invoice/:id/pembayaran',
+      element: <PembayaranInvoice />,
+    },
+
     {
       path: 'journal',
       element: <Outlet />,

@@ -7,13 +7,13 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { FieldValues, useForm } from 'react-hook-form'
 import _ from 'underscore'
 
-export const PembayaranBills = () => {
+export const PembayaranInvoice = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { register, setValue, handleSubmit, watch } = useForm()
 
   const { data } = useQuery({
-    queryKey: ['bills', id],
+    queryKey: ['invoice', id],
     queryFn: async () => {
       return axiosInstance
         .post('/odoo/odoo-api', {
@@ -110,7 +110,15 @@ export const PembayaranBills = () => {
               uid: 2,
               allowed_company_ids: [1],
               bin_size: true,
-              default_move_type: 'in_invoice',
+              params: {
+                cids: 1,
+                menu_id: 115,
+                action: 231,
+                model: 'account.move',
+                view_type: 'form',
+                id: 50,
+              },
+              default_move_type: 'out_invoice',
             },
           },
         })
@@ -193,12 +201,12 @@ export const PembayaranBills = () => {
           kwargs: {
             context: {
               params: {
-                id: 41,
                 cids: 1,
                 menu_id: 115,
-                action: 233,
+                action: 231,
                 model: 'account.move',
                 view_type: 'form',
+                id: 50,
               },
               lang: 'en_US',
               tz: 'Asia/Jakarta',
@@ -218,7 +226,7 @@ export const PembayaranBills = () => {
         Dialog.success({
           description: 'Berhasil melakukan pembayaran',
           callback: () => {
-            navigate('/keuangan/hutang/tagihan')
+            navigate('/keuangan/piutang/invoice')
           },
         })
       },
@@ -232,18 +240,17 @@ export const PembayaranBills = () => {
             can_edit_wizard: true,
             can_group_payments: false,
             early_payment_discount_mode: false,
-            payment_type: 'outbound',
-            partner_type: 'supplier',
+            payment_type: 'inbound',
+            partner_type: 'customer',
             source_amount: data.amount_residual,
             source_amount_currency: data.amount_residual,
             source_currency_id: 12,
             company_id: 1,
-            partner_id: 19,
+            partner_id: 21,
             country_code: 'ID',
             journal_id: 7,
-            payment_method_line_id: 4,
+            payment_method_line_id: 3,
             payment_token_id: false,
-            partner_bank_id: false,
             group_payment: true,
             amount: payload.amount,
             currency_id: 12,
@@ -263,12 +270,12 @@ export const PembayaranBills = () => {
             uid: 2,
             allowed_company_ids: [1],
             params: {
-              id: 35,
               cids: 1,
               menu_id: 115,
-              action: 233,
+              action: 231,
               model: 'account.move',
               view_type: 'form',
+              id: 50,
             },
             dont_redirect_to_payments: true,
             active_model: 'account.move',
@@ -344,10 +351,7 @@ export const PembayaranBills = () => {
 
             <div>
               <label htmlFor="">Tanggal Pembayaran</label>
-              <InputDate
-                defaultValue={new Date()}
-                onChange={(date) => setValue('payment_date', date)}
-              />
+              <InputDate defaultValue={new Date()} />
             </div>
             <div>
               <label htmlFor="">Memo</label>
