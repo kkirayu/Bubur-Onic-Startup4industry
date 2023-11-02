@@ -1,9 +1,9 @@
 import { FormLowcodeLite, TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 import { Download, Search, RefreshCcw } from 'lucide-react'
-import { Button } from '@/components'
+import { Button, Dialog } from '@/components'
 import { useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { axiosInstance } from '@/api'
 import { formatToMoney } from '@/utils'
 
@@ -34,6 +34,47 @@ export const ListPiutang = () => {
       },
     },
   ]
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: (id: any) => {
+
+      return axiosInstance.post('/odoo/odoo-api', {
+        "model": "account.move",
+        "method": "unlink",
+        "args": [
+          [
+            id
+          ]
+        ],
+        "kwargs": {
+          "context": {
+            "lang": "en_US",
+            "tz": "Asia/Jakarta",
+            "uid": 2,
+            "allowed_company_ids": [
+              1
+            ],
+            "default_move_type": "out_invoice"
+          }
+        }
+      })
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil Menghapus Asset',
+        callback: () => {
+          navigate('/keuangan/aset')
+        },
+      })
+    },
+    onError: (err: any) => {
+      if (err.response.status === 422 || err.response.status === 500) {
+        Dialog.error({ description: err.response.data.message })
+      } else {
+        Dialog.error()
+      }
+    },
+  })
 
   const { data } = useQuery({
     queryKey: ['invoices'],
@@ -132,7 +173,7 @@ export const ListPiutang = () => {
             ]}
             customCell={({ defaultCell, name, value }) => {
               if (name === 'invoice_user_id') {
-                return value[1]
+                return value.length > 0 ? value[1] : "-"
               } else if (name === 'amount_residual_signed') {
                 return formatToMoney(value)
               }
@@ -154,7 +195,7 @@ export const ListPiutang = () => {
                   baseUrl={import.meta.env.VITE_API_BASEURL}
                   submitButtonText="Cari"
                   cancelButtonText="Reset"
-                  onCancel={(reset) => {}}
+                  onCancel={(reset) => { }}
                   onSubmit={(data) => console.log(data)}
                   submitButtonIcon={<Search size={18} />}
                   cancelButtonIcon={<RefreshCcw size={18} />}
@@ -173,6 +214,14 @@ export const ListPiutang = () => {
             onClickCreate={() => navigate('create')}
             onClickDetail={(id) => navigate(`${id}`)}
             customButtonEdit={() => <></>}
+            onClickDelete={(_, id) => {
+              Dialog.confirm({
+                description: 'Apakah anda yakin ingin menghapus data ini?',
+                callback: () => {
+                  mutate(id)
+                },
+              })
+            }}
           />
         )}
       </section>

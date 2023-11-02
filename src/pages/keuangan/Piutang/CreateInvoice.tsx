@@ -60,7 +60,7 @@ export const CreateInvoice = () => {
           analytic_distribution: false,
           discount: 0,
           tax_ids: [[6, false, []]],
-          partner_id: 9,
+          partner_id: payload.partner_id,
           currency_id: 12,
           display_type: 'product',
           product_uom_id: 1,
