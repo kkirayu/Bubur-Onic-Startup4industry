@@ -16,6 +16,7 @@ export const ListVendor = () => {
   const [search, setSearch] = useState<string>()
 
   const { data } = useQuery({
+    cacheTime: 0,
     queryKey: ['vendor'],
     queryFn: async () => {
       return axiosInstance.post('/odoo/odoo-api', {

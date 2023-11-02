@@ -13,6 +13,7 @@ export const ListCustomer = () => {
   const [search, setSearch] = useState<string>()
 
   const { data } = useQuery({
+    cacheTime: 0,
     queryKey: ['customer'],
     queryFn: async () => {
       return axiosInstance.post('/odoo/odoo-api', {
