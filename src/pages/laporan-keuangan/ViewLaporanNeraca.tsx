@@ -158,10 +158,10 @@ export function ViewLaporaNeraca() {
                         Saldo Awal
                       </th>
                       <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
-                        Saldo Akhir
+                        Selama Periode
                       </th>
                       <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
-                        Kenaikan
+                        Saldo Akhir
                       </th>
                     </tr>
                   </thead>
@@ -176,10 +176,10 @@ export function ViewLaporaNeraca() {
                             {formatToMoney(acc.saldo.dataAwal.saldo)}
                           </td>
                           <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
-                            {formatToMoney(acc.saldo.dataAkhir.saldo)}
+                            {formatToMoney(acc.saldo.selisih)}
                           </td>
                           <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
-                            {formatToMoney(acc.saldo.selisih)}
+                            {formatToMoney(acc.saldo.dataAkhir.saldo)}
                           </td>
                         </tr>
                       )
