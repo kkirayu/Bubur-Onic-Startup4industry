@@ -1,11 +1,8 @@
-import { FormLowcodeLite, TableLowcode } from 'alurkerja-ui'
+import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
-import { Download, Search, RefreshCcw } from 'lucide-react'
-import { Button } from '@/components'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { axiosInstance } from '@/api'
-import { formatToMoney } from '@/utils'
 
 export const ListCustomer = () => {
   const navigate = useNavigate()
