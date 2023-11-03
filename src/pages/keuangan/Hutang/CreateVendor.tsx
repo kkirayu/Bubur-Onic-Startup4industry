@@ -100,7 +100,7 @@ export const CreateVendor = () => {
     <div>
       <Link
         className="flex items-center text-main-blue-alurkerja gap-1 mb-4"
-        to="/"
+        to="/keuangan/hutang/vendor"
       >
         <ArrowLeft />
         Kembali
