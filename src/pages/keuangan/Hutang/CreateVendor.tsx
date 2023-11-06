@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, Select } from 'alurkerja-ui'
+import { Input, Radio, Select } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Dialog } from '@/components'
 import { axiosInstance } from '@/api'
 
 export const CreateVendor = () => {
-  const { register, setValue, handleSubmit } = useForm()
+  const { register, setValue, handleSubmit, watch } = useForm()
   const navigate = useNavigate()
 
   const { mutate, isLoading } = useMutation({
@@ -27,20 +27,20 @@ export const CreateVendor = () => {
             parent_id: false,
             company_name: false,
             type: 'contact',
-            street: false,
-            street2: false,
-            city: false,
+            street: payload.street,
+            street2: payload.street2,
+            city: payload.city,
             state_id: false,
-            zip: false,
+            zip: payload.zip,
             country_id: false,
             vat: false,
             l10n_id_pkp: false,
             function: false,
-            phone: false,
-            mobile: false,
+            phone: payload.phone,
+            mobile: payload.mobile,
             user_ids: [],
-            email: false,
-            website: false,
+            email: payload.email,
+            website: payload.website,
             title: false,
             lang: 'en_US',
             category_id: [[6, false, []]],
@@ -112,27 +112,60 @@ export const CreateVendor = () => {
           </div>
         </div>
         <div className="p-6 grid grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="description">Nama</label>
-            <Select
-              options={[
-                { label: 'Individual', value: 'person' },
-                { label: 'Company', value: 'company' },
-              ]}
-              defaultValue={{ label: 'Company', value: 'company' }}
-              onChange={(selected: any) =>
-                setValue('company_type', selected.value)
-              }
-            />
+          <div className="col-span-2 space-y-6">
+            <div>
+              <Radio
+                listOption={[
+                  { label: 'Individual', key: 'person' },
+                  { label: 'Company', key: 'company' },
+                ]}
+                defaultValue="company"
+                onChange={(selected) => setValue('company_type', selected)}
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="display_name"
+                className="after:content-['*'] after:text-red-400 after:text-sm"
+              >
+                Nama
+              </label>
+              <Input
+                {...register('name', { required: true })}
+                placeholder="contoh: PT RES"
+              />
+            </div>
           </div>
           <div>
-            <label
-              htmlFor="display_name"
-              className="after:content-['*'] after:text-red-400 after:text-sm"
-            >
-              Nama
-            </label>
-            <Input {...register('name', { required: true })} />
+            <label htmlFor="display_name">Alamat</label>
+            <div className="space-y-6">
+              <Input {...register('street')} placeholder="jalan" />
+              <Input {...register('street2')} placeholder="jalan 2" />
+              <div className="flex gap-2">
+                <Input {...register('city')} placeholder="Kota" />
+                <Input {...register('state')} placeholder="Provinsi" />
+                <Input {...register('zip')} placeholder="ZIP" />
+              </div>
+              <Input {...register('country')} placeholder="Negara" />
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div>
+              <label htmlFor="display_name">Phone</label>
+              <Input {...register('phone')} />
+            </div>
+            <div>
+              <label htmlFor="display_name">Mobile</label>
+              <Input {...register('mobile')} />
+            </div>
+            <div>
+              <label htmlFor="display_name">Email</label>
+              <Input {...register('email')} />
+            </div>
+            <div>
+              <label htmlFor="display_name">Website</label>
+              <Input {...register('website')} />
+            </div>
           </div>
         </div>
 
