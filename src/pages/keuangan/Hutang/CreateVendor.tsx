@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, Radio, Select } from 'alurkerja-ui'
+import { Input, Radio } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { Button, Dialog } from '@/components'

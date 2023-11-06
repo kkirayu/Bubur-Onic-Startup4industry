@@ -101,7 +101,9 @@ export const ListVendor = () => {
             search={search}
             setSearch={setSearch}
             column={[{ key: 'display_name', label: 'Nama' }]}
+            customButtonDetail={() => <></>}
             onClickCreate={() => navigate('create')}
+            onClickEdit={(_, id) => navigate(`${id}`)}
           />
         )}
       </section>
