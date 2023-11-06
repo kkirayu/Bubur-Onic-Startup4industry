@@ -142,7 +142,7 @@ export function ViewLaporanBukuBesar() {
         {report ?
           <>
             <div className="bg-gray-alurkerja-3 text-gray-alurkerja-1 font-bold p-4 uppercase">
-              {report.report.length > 0 ? report.report[0].account_id[1] : ""}
+              {report.akun.display_name}
             </div>
             <table className="w-full table-auto">
               <thead className="border-y border-black-alurkerja-1">
