@@ -117,8 +117,8 @@ export const ListProduct = () => {
               { key: 'vendor_tax', label: 'Pajak Vendor' },
             ]}
             onClickCreate={() => navigate('create')}
-            onClickEdit={(_, id) => navigate(`${id}`)}
-            customButtonDetail={() => <></>}
+            onClickEdit={(_, id) => navigate(`${id}/edit`)}
+            onClickDetail={(id) => navigate(`${id}`)}
             onClickDelete={(_, id) => {
               Dialog.confirm({
                 description: 'Apakah anda yakin ingin menghapus data ini?',
