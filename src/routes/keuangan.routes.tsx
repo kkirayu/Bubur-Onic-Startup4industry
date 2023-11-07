@@ -24,6 +24,7 @@ import {
   CreateCustomer,
   EditVendor,
   ListProduct,
+  CreateProduct,
 } from '@/pages/keuangan'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -40,6 +41,7 @@ export const keuanganRoutes: RouteObject = {
     { path: 'hutang/tagihan', element: <ListBills /> },
     { path: 'hutang/vendor', element: <ListVendor /> },
     { path: 'hutang/product', element: <ListProduct /> },
+    { path: 'hutang/product/create', element: <CreateProduct /> },
     { path: 'hutang/vendor/create', element: <CreateVendor /> },
     { path: 'hutang/vendor/:id', element: <EditVendor /> },
     {
