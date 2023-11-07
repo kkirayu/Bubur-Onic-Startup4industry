@@ -54,6 +54,10 @@ export const menuKeuangan = [
         label: 'Hutang',
         child: [
           {
+            href: '/keuangan/hutang/product',
+            label: 'Data Product',
+          },
+          {
             href: '/keuangan/hutang/tagihan',
             label: 'Tagihan',
           },

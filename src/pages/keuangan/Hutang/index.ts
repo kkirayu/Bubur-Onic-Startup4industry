@@ -1,5 +1,6 @@
 export * from './ListBills'
 export * from './ListVendor'
+export * from './ListProduct'
 export * from './EditVendor'
 export * from './CreateBills'
 export * from './CreateVendor'
