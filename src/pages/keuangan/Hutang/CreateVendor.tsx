@@ -152,11 +152,11 @@ export const CreateVendor = () => {
           <div className="space-y-6">
             <div>
               <label htmlFor="display_name">Phone</label>
-              <Input {...register('phone')} />
+              <Input {...register('phone')} type="number" />
             </div>
             <div>
               <label htmlFor="display_name">Mobile</label>
-              <Input {...register('mobile')} />
+              <Input {...register('mobile')} type="number" />
             </div>
             <div>
               <label htmlFor="display_name">Email</label>
