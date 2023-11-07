@@ -2,17 +2,19 @@ import { Modal, Select } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { IconLaporan } from '@/assets'
 import { Button } from '@/components'
-import { getListCompany } from '@/api'
+import { getListAccount, getListCompany, getListKategoriAkun, getListParentAkun } from '@/api'
 import moment from 'moment'
+import _ from 'underscore'
 
 export const CardBukuBesar = () => {
   const {
     setValue,
     handleSubmit,
+    watch, 
     formState: { errors },
     setError,
     clearErrors,
@@ -20,6 +22,7 @@ export const CardBukuBesar = () => {
     defaultValues: {
       company: '',
       group: '',
+      akun : ''
     },
   })
 
@@ -27,9 +30,27 @@ export const CardBukuBesar = () => {
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
 
+
+  const { listOption: listParentAkun, data: listParentAkunData } = getListKategoriAkun()
+  const { listOption: listAkun, data: listAkunData } = getListAccount()
+  const watcher = watch('group')
+
+  const [currentListAkun, setCurrentListAkun] = useState<any[]>([]);
+
+  useEffect(() => {
+    console.log(watcher,  listAkunData,  _.where(listAkunData || [], { kategori_akun_id: +watcher }));
+    const validListAkun = _.where(listAkunData || [], { kategori_akun_id: +watcher })
+    setCurrentListAkun(validListAkun.map((item : any) => {
+      return {
+        label: `(${item.kode_akun}) ` + item.nama,
+        value: item.kode_akun,
+      }
+    }))
+  }, [watcher]);
+
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    new Date(),
-    new Date(),
+    moment().date(1).toDate(),
+    moment().endOf('month').toDate(),
   ])
 
   const onClickJournal = (data: FieldValues) => {
@@ -39,10 +60,14 @@ export const CardBukuBesar = () => {
     if (data.group === '') {
       setError('group', { type: 'required', message: 'group COA required' })
     }
-    if (data.company !== '' && data.group !== '') {
+    if (data.akun === '') {
+      setError('akun', { type: 'required', message: 'COA required' })
+    }
+    if (data.company !== '' && data.group !== '' && data.akun !== '') {
+      alert('success')
       navigate({
         pathname: 'buku-besar',
-        search: `?company=${data.company}&group=${data.group}&start=${moment(
+        search: `?company=${data.company}&group=${data.group}&coa=${data.akun}&start=${moment(
           dateRange[0]
         ).format('DD/MM/YYYY')}&end=${moment(dateRange[1]).format(
           'DD/MM/YYYY'
@@ -99,38 +124,7 @@ export const CardBukuBesar = () => {
                     )}
                   </div>
                 </div>
-                <div>
-                  <label
-                    htmlFor=""
-                    className="after:content-['*'] after:text-red-400 after:text-sm"
-                  >
-                    Group COA
-                  </label>
-                  <Select
-                    invalid={errors.group ? true : false}
-                    options={[
-                      { label: 'Asset', value: 'asset' },
-                      { label: 'Liability', value: 'liability' },
-                      { label: 'Equity', value: 'equity' },
-                      { label: 'Income', value: 'income' },
-                      { label: 'Expense', value: 'expense' },
-                      { label: 'Off Balance', value: 'off_balance' },
-                    ]}
-                    onChange={(selected: any) => {
-                      setValue('group', selected.value)
-                      clearErrors('group')
-                    }}
-                  />
-                  <div className="text-xs text-gray-alurkerja-2">
-                    {errors?.group ? (
-                      <span className="text-red-alurkerja">
-                        {errors?.group.message}
-                      </span>
-                    ) : (
-                      'Group Coa Yang ingin ditampilkan'
-                    )}
-                  </div>
-                </div>
+
                 <div>
                   <label
                     htmlFor=""
@@ -150,6 +144,57 @@ export const CardBukuBesar = () => {
                   />
                   <div className="text-xs text-gray-alurkerja-2">
                     Periode Transaksi
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor=""
+                    className="after:content-['*'] after:text-red-400 after:text-sm"
+                  >
+                    Group COA
+                  </label>
+                  <Select
+                    invalid={errors.group ? true : false}
+                    options={listParentAkun}
+                    onChange={(selected: any) => {
+                      setValue('group', selected.value)
+                      clearErrors('group')
+                    }}
+                  />
+                  <div className="text-xs text-gray-alurkerja-2">
+                    {errors?.group ? (
+                      <span className="text-red-alurkerja">
+                        {errors?.group.message}
+                      </span>
+                    ) : (
+                      'Group Coa Yang ingin ditampilkan'
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor=""
+                    className="after:content-['*'] after:text-red-400 after:text-sm"
+                  >
+                    Akun
+                  </label>
+                  <Select
+                    invalid={errors.akun ? true : false}
+                    options={currentListAkun}
+                    onChange={(selected: any) => {
+                      setValue('akun', selected.value)
+                      clearErrors('akun')
+                    }}
+                  />
+                  <div className="text-xs text-gray-alurkerja-2">
+                    {errors?.akun ? (
+                      <span className="text-red-alurkerja">
+                        {errors?.akun.message}
+                      </span>
+                    ) : (
+                      'Akun'
+                    )}
                   </div>
                 </div>
               </div>

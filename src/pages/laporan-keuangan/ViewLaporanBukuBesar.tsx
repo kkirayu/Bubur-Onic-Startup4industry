@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { axiosInstance } from '@/api'
 import { formatToMoney } from '@/utils'
 import { Spinner } from 'alurkerja-ui'
+import _ from 'underscore'
 
 export function ViewLaporanBukuBesar() {
   const [searchParams] = useSearchParams()
@@ -14,6 +15,7 @@ export function ViewLaporanBukuBesar() {
   const group = searchParams.get('group')
   const startDate = searchParams.get('start')
   const endDate = searchParams.get('end')
+  const coa = searchParams.get('coa')
 
   const { data: currentCompany } = useQuery({
     queryKey: ['company', companyID],
@@ -25,50 +27,54 @@ export function ViewLaporanBukuBesar() {
   })
 
   const { data: report } = useQuery({
-    queryKey: ['laporan-buku-besar', group, startDate, endDate],
+    queryKey: ['laporan-buku-besar', group, startDate, endDate, coa, companyID],
     queryFn: async () => {
       return axiosInstance
         .get(
-          `/laporan/laporan-buku-besar?company=1&group=${group}&start=${startDate}&end=${endDate}`
+          `/laporan/laporan-buku-besar?company=${companyID}&group=${group}&coa=${coa}&start=${startDate}&end=${endDate}`
         )
         .then((res) => res.data?.data)
     },
   })
 
   const totalDebit = useMemo(() => {
-    let total = 0
-    const mergedData = report?.reduce((result: any, currentObject: any) => {
-      return result.concat(currentObject.items)
-    }, [])
+    if (report) {
+      let total = 0
+      return _.reduce(report.report, (total, n) => {
+        return total += _.reduce(n.journal_lawan, (total, n) => {
+          return total += n.posisi_akun == "DEBIT" ? n.jumlah : 0
+        }, 0)
+      }, 0)
 
-    mergedData?.forEach((transaction: any) => {
-      total += +transaction.debit
-    })
-
-    return total
+    }
+    return 0;
   }, [report])
 
   const totalCredit = useMemo(() => {
-    let total = 0
-    const mergedData = report?.reduce((result: any, currentObject: any) => {
-      return result.concat(currentObject.items)
-    }, [])
+    if (report) {
 
-    mergedData?.forEach((transaction: any) => {
-      total += +transaction.credit
-    })
+      let total = 0
+      return _.reduce(report.report, (total, n) => {
+        return total += _.reduce(n.journal_lawan, (total, n) => {
+          return total += n.posisi_akun == "CREDIT" ? n.jumlah : 0
+        }, 0)
 
-    return total
+      }, 0)
+    }
+    return 0;
   }, [report])
 
   const totalSaldo = useMemo(() => {
     let total = 0
+    if (report) {
 
-    report?.forEach((account: any) => {
-      total += +account.balance
-    })
 
-    return total
+      return _.reduce(report.report, (total, n) => {
+        console.log(n)
+        return total += +n.balance
+      }, 0)
+    }
+    return 0;
   }, [report])
 
   const { mutate: exportLaporan, isLoading } = useMutation({
@@ -133,84 +139,76 @@ export function ViewLaporanBukuBesar() {
         </div>
       </div>
       <div>
-        <div className="bg-gray-alurkerja-3 text-gray-alurkerja-1 font-bold p-4 uppercase">
-          {group}
-        </div>
-        <table className="w-full table-auto">
-          <thead className="border-y border-black-alurkerja-1">
-            <tr>
-              <th className="text-left p-4">Tanggal</th>
-              <th className="text-left p-4">
-                No. Transaksi - Keterangan Transaksi
-              </th>
-              <th className="p-4 text-right">Nilai Debit</th>
-              <th className="p-4 text-right">Nilai Kredit</th>
-              <th className="p-4 text-right">Saldo COA</th>
-            </tr>
-          </thead>
-          <tbody>
-            {report?.map((item: any, i: number) => (
-              <Fragment key={i}>
+        {report ?
+          <>
+            <div className="bg-gray-alurkerja-3 text-gray-alurkerja-1 font-bold p-4 uppercase">
+              {report.akun.display_name}
+            </div>
+            <table className="w-full table-auto">
+              <thead className="border-y border-black-alurkerja-1">
                 <tr>
-                  <td className="px-4 pt-4 text-main-blue-alurkerja">
-                    {item.date}
-                  </td>
-                  <td className="px-4 pt-4 text-main-blue-alurkerja font-bold">
-                    {item?.account_id[1]}
-                  </td>
+                  <th className="text-left p-4">Tanggal</th>
+                  <th className="text-left p-4">
+                    No. Transaksi
+                  </th>
+                  <th className="text-left p-4">
+                    Keterangan
+                  </th>
+                  <th className="text-left p-4">Akun Lawan</th>
+                  <th className="p-4 text-right">Nilai Debit</th>
+                  <th className="p-4 text-right">Nilai Kredit</th>
                 </tr>
-                {item?.items?.map((transaction: any, i: number) => {
-                  return (
-                    <tr key={i}>
-                      <td className="px-4 text-right text-main-blue-alurkerja"></td>
-                      <td className="px-4">{transaction?.move_name}</td>
-                      <td className="px-4 text-right">
-                        {formatToMoney(transaction.debit)}
-                      </td>
-                      <td className="px-4 text-right">
-                        {formatToMoney(transaction.credit)}
-                      </td>
-                      <td className="px-4 text-right">
-                        {/* {formatToMoney(transaction.balance ,  true)} */}
-                      </td>
-                    </tr>
-                  )
-                })}
-                <tr>
-                  <td className="border-b"></td>
-                  <td className="p-4 border-b font-bold">Total</td>
-                  <td className="p-4 border-b text-right font-bold">
-                    {formatToMoney(item.debit)}
-                  </td>
-                  <td className="p-4 text-right border-b font-bold">
-                    {formatToMoney(item.credit)}
-                  </td>
-                  <td className="px-4 text-right">
-                    {formatToMoney((item.credit - item.debit) * -1)}
-                  </td>
-                </tr>
-              </Fragment>
-            ))}
+              </thead>
+              <tbody>
+                {/* {JSON.stringify(report)} */}
+                {report?.report?.map((itemValue: any, iindex: number) => (
+                  <Fragment key={iindex}>
+                    {
+                      itemValue.journal_lawan.map((item: any, i: number) => {
+                        return <Fragment key={i}>
+                          <tr>
+                            <td className="border-b">{itemValue.date}</td>
 
-            <tr className="bg-gray-alurkerja-3">
-              <td></td>
-              <td className="p-4 text-left font-bold text-black-alurkerja-1">
-                Total Debit/Kredit
-              </td>
-              <td className="p-4 text-right">{formatToMoney(totalDebit)}</td>
-              <td className="p-4 text-right">{formatToMoney(totalCredit)}</td>
-              <td className="p-4"></td>
-            </tr>
-          </tbody>
-        </table>
-        <div className="flex items-center justify-between p-4">
-          <div></div>
-          <div className="flex items-center gap-6">
-            <div>Nilai Mutasi : {formatToMoney(totalDebit - totalCredit)}</div>
-            <div>Saldo Akhir : {formatToMoney(totalSaldo)}</div>
-          </div>
-        </div>
+                            <td className="border-b">{itemValue.move_name}</td>
+                            <td className="border-b">{itemValue.journal_id[1]}</td>
+
+                            <td className="px-4 pt-4 text-main-blue-alurkerja ">
+                              {item?.akun_label}
+                            </td>
+                            <td className="p-4 border-b text-right ">
+                              {formatToMoney(item.posisi_akun == "DEBIT" ? item.jumlah : 0)}
+                            </td>
+                            <td className="p-4 text-right border-b ">
+                              {formatToMoney(item.posisi_akun == "CREDIT" ? item.jumlah : 0)}
+                            </td>
+                          </tr>
+                        </Fragment>
+                      })
+                    }
+                  </Fragment>
+                ))}
+
+                <tr className="bg-gray-alurkerja-3">
+                  <td colSpan={4} className="p-4 text-left font-bold text-black-alurkerja-1">
+                    Total Debit/Kredit
+                  </td>
+                  <td className="p-4 text-right">{formatToMoney(totalDebit)}</td>
+                  <td className="p-4 text-right">{formatToMoney(totalCredit)}</td>
+                  <td className="p-4"></td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="flex items-center justify-between p-4">
+              <div></div>
+              <div className="flex items-center gap-6">
+                <div>Saldo Awal :  {formatToMoney(report.saldoAwal)}</div>
+                <div>Nilai Mutasi : {formatToMoney((totalDebit - totalCredit) )}</div>
+                <div>Saldo Akhir :  {formatToMoney(report.saldoAkhir )}</div>
+              </div>
+            </div></> : <>Mengambil Data</>
+        }
       </div>
+
     </div>
   )
 }
