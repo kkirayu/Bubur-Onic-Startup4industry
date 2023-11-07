@@ -98,7 +98,7 @@ export const ListProduct = () => {
       <section className="bg-white">
         {!isFetching && (
           <TableLowcode
-            title="Tagihan"
+            title="Product"
             data={data?.data.data.content}
             baseUrl={import.meta.env.VITE_API_BASEURL}
             specPath="/api/journal/journal"
