@@ -1,4 +1,4 @@
-import { TableLowcode } from 'alurkerja-ui'
+import { Skeleton, TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
 import { Download } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -17,41 +17,7 @@ export const ListProduct = () => {
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
 
-  const { mutate, isLoading } = useMutation({
-    mutationFn: (id: any) => {
-      return axiosInstance.post('/odoo/odoo-api', {
-        model: 'account.move',
-        method: 'unlink',
-        args: [[id]],
-        kwargs: {
-          context: {
-            lang: 'en_US',
-            tz: 'Asia/Jakarta',
-            uid: 2,
-            allowed_company_ids: [1],
-            default_move_type: 'in_invoice',
-          },
-        },
-      })
-    },
-    onSuccess: () => {
-      Dialog.success({
-        description: 'Berhasil Menghapus Product',
-        callback: () => {
-          navigate('/keuangan/aset')
-        },
-      })
-    },
-    onError: (err: any) => {
-      if (err.response.status === 422 || err.response.status === 500) {
-        Dialog.error({ description: err.response.data.message })
-      } else {
-        Dialog.error()
-      }
-    },
-  })
-
-  const { data } = useQuery({
+  const { data, refetch, isFetching } = useQuery({
     cacheTime: 0,
     queryKey: ['products'],
     queryFn: async () => {
@@ -94,13 +60,46 @@ export const ListProduct = () => {
     },
   })
 
+  const { mutate } = useMutation({
+    mutationFn: (id: string | number) => {
+      return axiosInstance.post('/odoo/odoo-api', {
+        model: 'product.template',
+        method: 'unlink',
+        args: [[+id]],
+        kwargs: {
+          context: {
+            lang: 'en_US',
+            tz: 'Asia/Jakarta',
+            uid: 2,
+            allowed_company_ids: [1],
+          },
+        },
+      })
+    },
+    onSuccess: () => {
+      Dialog.success({
+        description: 'Berhasil Menghapus Product',
+        callback: () => {
+          refetch()
+        },
+      })
+    },
+    onError: (err: any) => {
+      if (err.response.status === 422 || err.response.status === 500) {
+        Dialog.error({ description: err.response.data.message })
+      } else {
+        Dialog.error()
+      }
+    },
+  })
+
   return (
     <div>
       <section className="bg-white">
-        {data && (
+        {!isFetching && (
           <TableLowcode
             title="Tagihan"
-            data={data.data.data.content}
+            data={data?.data.data.content}
             baseUrl={import.meta.env.VITE_API_BASEURL}
             specPath="/api/journal/journal"
             renderState={renderState}
