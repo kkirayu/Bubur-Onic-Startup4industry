@@ -64,7 +64,6 @@ export const CardBukuBesar = () => {
       setError('akun', { type: 'required', message: 'COA required' })
     }
     if (data.company !== '' && data.group !== '' && data.akun !== '') {
-      alert('success')
       navigate({
         pathname: 'buku-besar',
         search: `?company=${data.company}&group=${data.group}&coa=${data.akun}&start=${moment(
