@@ -5,13 +5,14 @@ import { FieldValues, useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Dialog } from '@/components'
 import { axiosInstance } from '@/api'
+import moment from 'moment'
 
 export const EditVendor = () => {
   const { register, setValue, handleSubmit, watch } = useForm()
   const navigate = useNavigate()
   const { id } = useParams()
 
-  const { isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     cacheTime: 0,
     queryKey: ['vendors', id],
     queryFn: async () => {
@@ -122,7 +123,6 @@ export const EditVendor = () => {
         'city',
         'zip',
         'phone',
-        'mobile',
         'email',
         'website',
       ]
@@ -134,66 +134,16 @@ export const EditVendor = () => {
 
   const { mutate, isLoading } = useMutation({
     mutationFn: (payload: FieldValues) => {
+      const body: { [x: string]: string | number | boolean } = {}
+      Object.keys(payload).forEach((key) => {
+        if (payload[key] !== '') {
+          body[key] = payload[key]
+        }
+      })
       return axiosInstance.post('/odoo/odoo-api', {
-        args: [
-          {
-            __last_update: false,
-            partner_gid: 0,
-            additional_info: false,
-            image_1920: false,
-            is_company: true,
-            active: true,
-            company_id: false,
-            company_type: payload.company_type ?? 'company',
-            name: payload.name,
-            parent_id: false,
-            company_name: false,
-            type: 'contact',
-            street: payload.street,
-            street2: payload.street2,
-            city: payload.city,
-            state_id: false,
-            zip: payload.zip,
-            country_id: false,
-            vat: false,
-            l10n_id_pkp: false,
-            function: false,
-            phone: payload.phone,
-            mobile: payload.mobile,
-            user_ids: [],
-            email: payload.email,
-            website: payload.website,
-            title: false,
-            lang: 'en_US',
-            category_id: [[6, false, []]],
-            child_ids: [],
-            user_id: false,
-            property_payment_term_id: false,
-            property_product_pricelist: false,
-            property_supplier_payment_term_id: false,
-            property_account_position_id: false,
-            company_registry: false,
-            ref: false,
-            industry_id: false,
-            payment_responsible_id: false,
-            payment_next_action_date: false,
-            payment_next_action: false,
-            payment_note: false,
-            unreconciled_aml_ids: [],
-            bank_ids: [],
-            property_account_receivable_id: 9,
-            property_account_payable_id: 29,
-            use_partner_credit_limit: false,
-            credit_limit: 0,
-            l10n_id_kode_transaksi: false,
-            l10n_id_nik: false,
-            l10n_id_tax_address: false,
-            l10n_id_tax_name: false,
-            comment: false,
-          },
-        ],
+        args: [[+id!!], body],
         model: 'res.partner',
-        method: 'create',
+        method: 'write',
         kwargs: {
           context: {
             lang: 'en_US',
@@ -275,13 +225,10 @@ export const EditVendor = () => {
               </div>
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="display_name">Phone</label>
-                  <Input {...register('phone')} />
+                  <label htmlFor="display_name">Nomor Tlp / HP</label>
+                  <Input {...register('phone')} type="number" />
                 </div>
-                <div>
-                  <label htmlFor="display_name">Mobile</label>
-                  <Input {...register('mobile')} />
-                </div>
+
                 <div>
                   <label htmlFor="display_name">Email</label>
                   <Input {...register('email')} />
