@@ -196,7 +196,7 @@ export function ViewLaporaNeraca() {
           return (
             <Fragment key={i}>
               <div className="text-gray-700 text-base font-bold ">
-                {neraca.value}
+                {neraca.value === 'Kewajiban' ? 'Pasiva' : neraca.value}
               </div>
               {neraca.key.map((group, i) => {
                 total += group.total_akhir
