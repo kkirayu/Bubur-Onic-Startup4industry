@@ -8,21 +8,21 @@ import { Spinner } from 'alurkerja-ui'
 import _ from 'underscore'
 
 
-export interface ReportNeraca {
+interface ReportNeraca {
   value: string;
   key:   DatumKey[];
   total_akhir: number;
 
 }
 
-export interface DatumKey {
+interface DatumKey {
   value:       string;
   key:         KeyKey[];
   total_awal:  number;
   total_akhir: number;
 }
 
-export interface KeyKey {
+interface KeyKey {
   account_id_count:         number;
   date:                     string;
   debit:                    number;
@@ -36,7 +36,7 @@ export interface KeyKey {
   journals:                 Journal[];
 }
 
-export interface Journal {
+interface Journal {
   id:                       number;
   analytic_precision:       number;
   move_id:                  Array<number | string>;
@@ -74,7 +74,7 @@ export interface Journal {
   sequence:                 number;
 }
 
-export enum AccountType {
+enum AccountType {
   AssetCash = "asset_cash",
   AssetCurrent = "asset_current",
   AssetFixed = "asset_fixed",
@@ -82,25 +82,25 @@ export enum AccountType {
   LiabilityCurrent = "liability_current",
 }
 
-export enum CompanyCurrencyIDEnum {
+enum CompanyCurrencyIDEnum {
   Idr = "IDR",
 }
 
-export enum CompanyIDEnum {
+enum CompanyIDEnum {
   MyCompany = "My Company",
 }
 
-export enum JournalIDEnum {
+enum JournalIDEnum {
   CustomerInvoices = "Customer Invoices",
   MiscellaneousOperations = "Miscellaneous Operations",
 }
 
-export enum MoveType {
+enum MoveType {
   Entry = "entry",
   OutInvoice = "out_invoice",
 }
 
-export enum ParentState {
+enum ParentState {
   Posted = "posted",
 }
 
