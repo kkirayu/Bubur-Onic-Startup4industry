@@ -200,7 +200,7 @@ export function ViewLaporanBukuBesar() {
                               )}
                             </td>
                             <td className="p-4 text-right border-b ">
-                              {formatToMoney(item.current_balance)}
+                              {formatToMoney(item.balance)}
                             </td>
                           </tr>
                         </Fragment>
