@@ -174,7 +174,7 @@ export function ViewLaporanBukuBesar() {
               <tbody>
                 {/* {JSON.stringify(report)} */}
                 {report?.report?.map((itemValue: any, iindex: number) => {
-                  let balance_in_line = itemValue.balance ?? 0
+                  let balance_in_line = report.akun.current_balance
                   return (
                     <Fragment key={iindex}>
                       {itemValue.journal_lawan.map((item: any, i: number) => {
