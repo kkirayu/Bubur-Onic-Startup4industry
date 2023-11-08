@@ -40,41 +40,56 @@ export function ViewLaporanBukuBesar() {
   const totalDebit = useMemo(() => {
     if (report) {
       let total = 0
-      return _.reduce(report.report, (total, n) => {
-        return total += _.reduce(n.journal_lawan, (total, n) => {
-          return total += n.posisi_akun == "DEBIT" ? n.jumlah : 0
-        }, 0)
-      }, 0)
-
+      return _.reduce(
+        report.report,
+        (total, n) => {
+          return (total += _.reduce(
+            n.journal_lawan,
+            (total, n) => {
+              return (total += n.posisi_akun == 'DEBIT' ? n.jumlah : 0)
+            },
+            0
+          ))
+        },
+        0
+      )
     }
-    return 0;
+    return 0
   }, [report])
 
   const totalCredit = useMemo(() => {
     if (report) {
-
       let total = 0
-      return _.reduce(report.report, (total, n) => {
-        return total += _.reduce(n.journal_lawan, (total, n) => {
-          return total += n.posisi_akun == "CREDIT" ? n.jumlah : 0
-        }, 0)
-
-      }, 0)
+      return _.reduce(
+        report.report,
+        (total, n) => {
+          return (total += _.reduce(
+            n.journal_lawan,
+            (total, n) => {
+              return (total += n.posisi_akun == 'CREDIT' ? n.jumlah : 0)
+            },
+            0
+          ))
+        },
+        0
+      )
     }
-    return 0;
+    return 0
   }, [report])
 
   const totalSaldo = useMemo(() => {
     let total = 0
     if (report) {
-
-
-      return _.reduce(report.report, (total, n) => {
-        console.log(n)
-        return total += +n.balance
-      }, 0)
+      return _.reduce(
+        report.report,
+        (total, n) => {
+          console.log(n)
+          return (total += +n.balance)
+        },
+        0
+      )
     }
-    return 0;
+    return 0
   }, [report])
 
   const { mutate: exportLaporan, isLoading } = useMutation({
@@ -139,7 +154,7 @@ export function ViewLaporanBukuBesar() {
         </div>
       </div>
       <div>
-        {report ?
+        {report ? (
           <>
             <div className="bg-gray-alurkerja-3 text-gray-alurkerja-1 font-bold p-4 uppercase">
               {report.akun.display_name}
@@ -148,52 +163,65 @@ export function ViewLaporanBukuBesar() {
               <thead className="border-y border-black-alurkerja-1">
                 <tr>
                   <th className="text-left p-4">Tanggal</th>
-                  <th className="text-left p-4">
-                    No. Transaksi
-                  </th>
-                  <th className="text-left p-4">
-                    Keterangan
-                  </th>
+                  <th className="text-left p-4">No. Transaksi</th>
+                  <th className="text-left p-4">Keterangan</th>
                   <th className="text-left p-4">Akun Lawan</th>
                   <th className="p-4 text-right">Nilai Debit</th>
                   <th className="p-4 text-right">Nilai Kredit</th>
+                  <th className="p-4 text-right">Saldo</th>
                 </tr>
               </thead>
               <tbody>
                 {/* {JSON.stringify(report)} */}
                 {report?.report?.map((itemValue: any, iindex: number) => (
                   <Fragment key={iindex}>
-                    {
-                      itemValue.journal_lawan.map((item: any, i: number) => {
-                        return <Fragment key={i}>
+                    {itemValue.journal_lawan.map((item: any, i: number) => {
+                      return (
+                        <Fragment key={i}>
                           <tr>
                             <td className="border-b">{itemValue.date}</td>
 
                             <td className="border-b">{itemValue.move_name}</td>
-                            <td className="border-b">{itemValue.journal_id[1]}</td>
+                            <td className="border-b">
+                              {itemValue.journal_id[1]}
+                            </td>
 
                             <td className="px-4 pt-4 text-main-blue-alurkerja ">
                               {item?.akun_label}
                             </td>
                             <td className="p-4 border-b text-right ">
-                              {formatToMoney(item.posisi_akun == "DEBIT" ? item.jumlah : 0)}
+                              {formatToMoney(
+                                item.posisi_akun == 'DEBIT' ? item.jumlah : 0
+                              )}
                             </td>
                             <td className="p-4 text-right border-b ">
-                              {formatToMoney(item.posisi_akun == "CREDIT" ? item.jumlah : 0)}
+                              {formatToMoney(
+                                item.posisi_akun == 'CREDIT' ? item.jumlah : 0
+                              )}
+                            </td>
+                            <td className="p-4 text-right border-b ">
+                              {formatToMoney(item.current_balance)}
                             </td>
                           </tr>
                         </Fragment>
-                      })
-                    }
+                      )
+                    })}
                   </Fragment>
                 ))}
 
                 <tr className="bg-gray-alurkerja-3">
-                  <td colSpan={4} className="p-4 text-left font-bold text-black-alurkerja-1">
+                  <td
+                    colSpan={4}
+                    className="p-4 text-left font-bold text-black-alurkerja-1"
+                  >
                     Total Debit/Kredit
                   </td>
-                  <td className="p-4 text-right">{formatToMoney(totalDebit)}</td>
-                  <td className="p-4 text-right">{formatToMoney(totalCredit)}</td>
+                  <td className="p-4 text-right">
+                    {formatToMoney(totalDebit)}
+                  </td>
+                  <td className="p-4 text-right">
+                    {formatToMoney(totalCredit)}
+                  </td>
                   <td className="p-4"></td>
                 </tr>
               </tbody>
@@ -201,14 +229,18 @@ export function ViewLaporanBukuBesar() {
             <div className="flex items-center justify-between p-4">
               <div></div>
               <div className="flex items-center gap-6">
-                <div>Saldo Awal :  {formatToMoney(report.saldoAwal)}</div>
-                <div>Nilai Mutasi : {formatToMoney((totalDebit - totalCredit) )}</div>
-                <div>Saldo Akhir :  {formatToMoney(report.saldoAkhir )}</div>
+                <div>Saldo Awal : {formatToMoney(report.saldoAwal)}</div>
+                <div>
+                  Nilai Mutasi : {formatToMoney(totalDebit - totalCredit)}
+                </div>
+                <div>Saldo Akhir : {formatToMoney(report.saldoAkhir)}</div>
               </div>
-            </div></> : <>Mengambil Data</>
-        }
+            </div>
+          </>
+        ) : (
+          <>Mengambil Data</>
+        )}
       </div>
-
     </div>
   )
 }
