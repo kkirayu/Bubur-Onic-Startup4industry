@@ -3,6 +3,7 @@ import {
   CardJournal,
   CardLabaRugi,
   CardNeraca,
+  CardNeracaAkhir,
 } from './components'
 
 export function Dashboard() {
@@ -18,6 +19,7 @@ export function Dashboard() {
         <CardBukuBesar />
         <CardNeraca />
         <CardLabaRugi />
+        <CardNeracaAkhir />
       </div>
     </div>
   )
