@@ -96,62 +96,77 @@ export function ViewLaporaLabaRugi() {
         </div>
       </div>
       <div className="px-4">
-        <table className="w-full table-auto">
-          <thead>
-            <tr>
-              <th className="text-left p-2 border-b">Keterangan</th>
-              <th className="text-left p-2 border-b">Saldo Awal</th>
-              <th className="text-left p-2 border-b">Saldo Akhir</th>
-              <th className="text-left p-2 border-b">Selisi Saldo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {report?.map((item, i) => (
-              <Fragment key={i}>
-                <tr>
-                  <td className="font-semibold text-main-blue-alurkerja p-1">
-                    {item.value}
-                  </td>
-                </tr>
-                {item.group.map((accRoot: any, i: number) => (
-                  <Fragment key={i}>
-                    <tr>
-                      <td className="p-1 font-semibold">
-                        {accRoot.account_root_id[1]}{' '}
-                        <span className="font-normal text-sm">
-                          ({accRoot.tanggal_awal} s/d {accRoot.tanggal_akhir})
-                        </span>
-                      </td>
-                    </tr>
-                    {accRoot.items.map((transaction: any, i: number) => (
-                      <tr key={i}>
-                        <td className="px-4 py-1">
-                          |--{transaction.account_id[1]}
-                        </td>
-                        <td>
-                          {formatToMoney(
-                            transaction.saldo.dataAwal.saldo,
-                            true
-                          )}
-                        </td>
-                        <td>
-                          {formatToMoney(
-                            transaction.saldo.dataAkhir.saldo,
-                            true
-                          )}
-                        </td>
-                        <td>
-                          {formatToMoney(transaction.saldo.selisih, true)}
-                        </td>
-                      </tr>
-                    ))}
-                  </Fragment>
-                ))}
-              </Fragment>
+            
+          {report?.map((neraca, i) => (
+          <Fragment key={i}>
+            <div className="text-gray-700 text-base font-bold ">
+              {neraca.value}
+            </div>
+            {neraca.key.map((group, i) => (
+              <div className="mb-6" key={i}>
+                <div className="text-gray-700 text-sm font-normal">
+                  {group.value}
+                  <table className="w-full">
+                   <thead>
+                     <tr>
+                       <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-left w-[400px]">
+                         Keterangan / Uraian
+                       </th>
+                       <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                         Saldo Awal
+                       </th>
+                       <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                         Selama Periode
+                       </th>
+                       <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                         Saldo Akhir
+                       </th>
+                     </tr>
+                   </thead>
+                   <tbody>
+                     {group.key.map((acc, i) => {
+                       return (
+                         <tr>
+                           <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y">
+                             {acc.account_id?.[1]} 
+                           </td>
+                           <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                             {formatToMoney(acc.balance_start)}
+                           </td>
+                           <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                             {formatToMoney(acc.balance - acc.balance_start)}
+                           </td>
+                           <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                             {formatToMoney(acc.balance)}
+                           </td>
+                         </tr>
+                       )
+                     })}
+                     <tr>
+                       <td className="text-zinc-800 text-xs px-3.5 py-2.5 border-y font-bold bg-slate-100">
+                         Total {group.value}
+                       </td>
+                       <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                         {formatToMoney(group.total_awal)}
+                       </td>
+                       <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                         {formatToMoney(group.total_akhir -group.total_awal)}
+                       </td>
+                       <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                         {formatToMoney(group.total_akhir)}
+                       </td>
+                     </tr>
+                   </tbody>
+                 </table>
+                </div>
+              </div>
             ))}
-          </tbody>
 
-          {report?.map((item, i) => (
+          </Fragment>
+        ))}
+        <table className="w-full">
+
+        {report?.map((item, i) => (
             <Fragment key={i}>
               <tr>
                 <td
@@ -160,7 +175,7 @@ export function ViewLaporaLabaRugi() {
                 >
                   Total {item.value}
                 </td>
-                <td className="">{formatToMoney(item.total, true)}</td>
+                <td className="">{formatToMoney(item.total_akhir , true)}</td>
               </tr>
             </Fragment>
           ))}
@@ -175,13 +190,13 @@ export function ViewLaporaLabaRugi() {
               </td>
               <td className="">
                 {formatToMoney(
-                  _.reduce(report || [], (memo, item) => memo + item.total, 0),
-                  true
+                  _.reduce(report || [], (memo, item) => memo + item.total_akhir * -1, 0)  * -1
                 )}
               </td>
             </tr>
           </Fragment>
         </table>
+
       </div>
     </div>
   )
