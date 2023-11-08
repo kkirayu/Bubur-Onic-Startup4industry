@@ -173,41 +173,51 @@ export function ViewLaporanBukuBesar() {
               </thead>
               <tbody>
                 {/* {JSON.stringify(report)} */}
-                {report?.report?.map((itemValue: any, iindex: number) => (
-                  <Fragment key={iindex}>
-                    {itemValue.journal_lawan.map((item: any, i: number) => {
-                      return (
-                        <Fragment key={i}>
-                          <tr>
-                            <td className="border-b">{itemValue.date}</td>
+                {report?.report?.map((itemValue: any, iindex: number) => {
+                  let balance_in_line = itemValue.balance ?? 0
+                  return (
+                    <Fragment key={iindex}>
+                      {itemValue.journal_lawan.map((item: any, i: number) => {
+                        if (item.posisi_akun === 'DEBIT') {
+                          balance_in_line -= item.jumlah
+                        } else {
+                          balance_in_line += item.jumlah
+                        }
+                        return (
+                          <Fragment key={i}>
+                            <tr>
+                              <td className="border-b">{itemValue.date}</td>
 
-                            <td className="border-b">{itemValue.move_name}</td>
-                            <td className="border-b">
-                              {itemValue.journal_id[1]}
-                            </td>
+                              <td className="border-b">
+                                {itemValue.move_name}
+                              </td>
+                              <td className="border-b">
+                                {itemValue.journal_id[1]}
+                              </td>
 
-                            <td className="px-4 pt-4 text-main-blue-alurkerja ">
-                              {item?.akun_label}
-                            </td>
-                            <td className="p-4 border-b text-right ">
-                              {formatToMoney(
-                                item.posisi_akun == 'DEBIT' ? item.jumlah : 0
-                              )}
-                            </td>
-                            <td className="p-4 text-right border-b ">
-                              {formatToMoney(
-                                item.posisi_akun == 'CREDIT' ? item.jumlah : 0
-                              )}
-                            </td>
-                            <td className="p-4 text-right border-b ">
-                              {formatToMoney(item.saldo_di_line)}
-                            </td>
-                          </tr>
-                        </Fragment>
-                      )
-                    })}
-                  </Fragment>
-                ))}
+                              <td className="px-4 pt-4 text-main-blue-alurkerja ">
+                                {item?.akun_label}
+                              </td>
+                              <td className="p-4 border-b text-right ">
+                                {formatToMoney(
+                                  item.posisi_akun == 'DEBIT' ? item.jumlah : 0
+                                )}
+                              </td>
+                              <td className="p-4 text-right border-b ">
+                                {formatToMoney(
+                                  item.posisi_akun == 'CREDIT' ? item.jumlah : 0
+                                )}
+                              </td>
+                              <td className="p-4 text-right border-b ">
+                                {formatToMoney(balance_in_line)}
+                              </td>
+                            </tr>
+                          </Fragment>
+                        )
+                      })}
+                    </Fragment>
+                  )
+                })}
 
                 <tr className="bg-gray-alurkerja-3">
                   <td
