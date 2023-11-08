@@ -37,7 +37,7 @@ export const CreateVendor = () => {
             l10n_id_pkp: false,
             function: false,
             phone: payload.phone,
-            mobile: payload.mobile,
+            mobile: false,
             user_ids: [],
             email: payload.email,
             website: payload.website,
