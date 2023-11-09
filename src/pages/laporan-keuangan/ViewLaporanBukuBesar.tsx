@@ -241,7 +241,7 @@ export function ViewLaporanBukuBesar() {
 
                 <tr className="bg-gray-alurkerja-3">
                   <td
-                    colSpan={4}
+                    colSpan={3}
                     className="p-4 text-left font-bold text-black-alurkerja-1"
                   >
                     Total Debit/Kredit
@@ -252,7 +252,7 @@ export function ViewLaporanBukuBesar() {
                   <td className="p-4 text-right">
                     {formatToMoney(totalCredit)}
                   </td>
-                  <td className="p-4"></td>
+                  <td colSpan={2} className="p-4"></td>
                 </tr>
               </tbody>
             </table>
