@@ -120,7 +120,7 @@ export function ViewLaporanBukuBesar() {
     },
   })
 
-  let balance_in_line = report?.akun.current_balance ?? 0
+  let balance_in_line = report?.saldoAwal
 
   return (
     <div className="px-4 pb-6 bg-white">
@@ -199,9 +199,9 @@ export function ViewLaporanBukuBesar() {
                     <Fragment key={iindex}>
                       {itemValue.journal_lawan.map((item: any, i: number) => {
                         if (item.posisi_akun === 'DEBIT') {
-                          balance_in_line -= item.jumlah
-                        } else {
                           balance_in_line += item.jumlah
+                        } else {
+                          balance_in_line -= item.jumlah
                         }
                         return (
                           <Fragment key={i}>
@@ -259,10 +259,7 @@ export function ViewLaporanBukuBesar() {
             <div className="flex items-center justify-between p-4">
               <div></div>
               <div className="flex items-center gap-6">
-                <div>
-                  Saldo Awal :{' '}
-                  {formatToMoney(report?.akun.current_balance ?? 0)}
-                </div>
+                <div>Saldo Awal : {formatToMoney(report?.saldoAwal)}</div>
                 <div>
                   Nilai Mutasi : {formatToMoney(totalDebit - totalCredit)}
                 </div>
