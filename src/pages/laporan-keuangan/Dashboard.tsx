@@ -2,6 +2,7 @@ import {
   CardBukuBesar,
   CardJournal,
   CardLabaRugi,
+  CardLabaRugiPerbandingan,
   CardNeraca,
   CardNeracaAkhir,
 } from './components'
@@ -20,6 +21,7 @@ export function Dashboard() {
         <CardNeraca />
         <CardLabaRugi />
         <CardNeracaAkhir />
+        <CardLabaRugiPerbandingan />
       </div>
     </div>
   )
