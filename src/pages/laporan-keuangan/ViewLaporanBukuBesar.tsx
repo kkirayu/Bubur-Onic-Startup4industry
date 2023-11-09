@@ -199,9 +199,9 @@ export function ViewLaporanBukuBesar() {
                     <Fragment key={iindex}>
                       {itemValue.journal_lawan.map((item: any, i: number) => {
                         if (item.posisi_akun === 'DEBIT') {
-                          balance_in_line += item.jumlah
-                        } else {
                           balance_in_line -= item.jumlah
+                        } else {
+                          balance_in_line += item.jumlah
                         }
                         return (
                           <Fragment key={i}>
