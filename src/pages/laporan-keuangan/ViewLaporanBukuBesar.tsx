@@ -259,7 +259,10 @@ export function ViewLaporanBukuBesar() {
             <div className="flex items-center justify-between p-4">
               <div></div>
               <div className="flex items-center gap-6">
-                <div>Saldo Awal : {formatToMoney(balance_in_line)}</div>
+                <div>
+                  Saldo Awal :{' '}
+                  {formatToMoney(report?.akun.current_balance ?? 0)}
+                </div>
                 <div>
                   Nilai Mutasi : {formatToMoney(totalDebit - totalCredit)}
                 </div>
