@@ -187,7 +187,9 @@ export function ViewLaporanBukuBesar() {
                   <td className="p-4 text-right border-b">
                     {formatToMoney(0)}
                   </td>
-                  <td className="p-4 text-right border-b">{balance_in_line}</td>
+                  <td className="p-4 text-right border-b">
+                    {formatToMoney(balance_in_line)}
+                  </td>
                   <td className="px-4 pt-4 text-main-blue-alurkerja text-center">
                     -
                   </td>
