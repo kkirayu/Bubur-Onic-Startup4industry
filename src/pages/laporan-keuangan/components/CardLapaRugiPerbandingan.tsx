@@ -51,7 +51,9 @@ export const CardLabaRugiPerbandingan = () => {
           triggerButton={<Button>Buka Laporan</Button>}
           maxWidth="2xl"
         >
-          <div>
+          <div className="relative">
+            {/* For tricky modal to not focus on InputYear */}
+            <button className="absolute"></button>
             <div className="border-b">
               <div className="p-6 grid grid-cols-2 gap-4">
                 <div>
