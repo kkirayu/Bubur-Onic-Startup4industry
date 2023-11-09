@@ -119,6 +119,8 @@ export function ViewLaporanBukuBesar() {
     },
   })
 
+  let balance_in_line = report?.akun.current_balance ?? 0
+
   return (
     <div className="px-4 pb-6 bg-white">
       <div className="p-4 border-b flex items-center justify-between">
@@ -174,7 +176,6 @@ export function ViewLaporanBukuBesar() {
               <tbody>
                 {/* {JSON.stringify(report)} */}
                 {report?.report?.map((itemValue: any, iindex: number) => {
-                  let balance_in_line = report.akun.current_balance
                   return (
                     <Fragment key={iindex}>
                       {itemValue.journal_lawan.map((item: any, i: number) => {
