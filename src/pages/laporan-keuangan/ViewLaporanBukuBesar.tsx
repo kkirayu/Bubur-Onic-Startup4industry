@@ -7,6 +7,7 @@ import { axiosInstance } from '@/api'
 import { formatToMoney } from '@/utils'
 import { Spinner } from 'alurkerja-ui'
 import _ from 'underscore'
+import moment from 'moment'
 
 export function ViewLaporanBukuBesar() {
   const [searchParams] = useSearchParams()
@@ -167,14 +168,30 @@ export function ViewLaporanBukuBesar() {
                   <th className="text-left p-4">Tanggal</th>
                   <th className="text-left p-4">No. Transaksi</th>
                   <th className="text-left p-4">Keterangan</th>
-                  <th className="text-left p-4">Akun Lawan</th>
                   <th className="p-4 text-right">Nilai Debit</th>
                   <th className="p-4 text-right">Nilai Kredit</th>
                   <th className="p-4 text-right">Saldo</th>
+                  <th className="text-center p-4">Akun Lawan</th>
                 </tr>
               </thead>
               <tbody>
-                {/* {JSON.stringify(report)} */}
+                <tr>
+                  <td className="border-b">
+                    {moment(startDate).format('YYYY-MM-DD')}
+                  </td>
+                  <td className="border-b">00000</td>
+                  <td className="border-b">Saldo Awal</td>
+                  <td className="p-4 border-b text-right">
+                    {formatToMoney(0)}
+                  </td>
+                  <td className="p-4 text-right border-b">
+                    {formatToMoney(0)}
+                  </td>
+                  <td className="p-4 text-right border-b">{balance_in_line}</td>
+                  <td className="px-4 pt-4 text-main-blue-alurkerja text-center">
+                    -
+                  </td>
+                </tr>
                 {report?.report?.map((itemValue: any, iindex: number) => {
                   return (
                     <Fragment key={iindex}>
@@ -196,9 +213,6 @@ export function ViewLaporanBukuBesar() {
                                 {itemValue.journal_id[1]}
                               </td>
 
-                              <td className="px-4 pt-4 text-main-blue-alurkerja ">
-                                {item?.akun_label}
-                              </td>
                               <td className="p-4 border-b text-right ">
                                 {formatToMoney(
                                   item.posisi_akun == 'DEBIT' ? item.jumlah : 0
@@ -211,6 +225,9 @@ export function ViewLaporanBukuBesar() {
                               </td>
                               <td className="p-4 text-right border-b ">
                                 {formatToMoney(balance_in_line)}
+                              </td>
+                              <td className="px-4 pt-4 text-main-blue-alurkerja text-center">
+                                {item?.akun_label}
                               </td>
                             </tr>
                           </Fragment>
