@@ -141,7 +141,7 @@ export function ViewLaporanJournal() {
                   <td></td>
                 </tr>
                 {item.journal_akuns?.map((akun: any, i: number) => {
-                  const accountName = akun.akun ? `(${akun.akun.kode_akun })`+ " " +  akun.akun.nama : '-'
+                  const accountName = akun.akun_instance ? `(${akun.akun_instance.kode_akun })`+ " " +  akun.akun_instance.nama : '-'
                   return (
                     <tr key={i}>
                       <td></td>
