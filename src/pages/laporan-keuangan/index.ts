@@ -1,6 +1,5 @@
 export * from './BukuBesar'
 export * from './LabaRugi'
-export * from './ListJournal'
 export * from './Neraca'
 export * from './PenambahanModal'
 export * from './Dashboard'
