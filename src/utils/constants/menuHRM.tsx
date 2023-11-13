@@ -10,6 +10,14 @@ export const menuHRM = [
         href: '/hrm/manajemen-kasbon',
         label: 'Manajemen Kasbon',
       },
+      {
+        href: '/hrm/klaim-kasbon',
+        label: 'Klaim Kasbon',
+      },
+      {
+        href: '/hrm/pinjaman-karyawan',
+        label: 'Pinjaman Karyawan',
+      },
     ],
   },
 ]
