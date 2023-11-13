@@ -23,7 +23,7 @@ export const CreateAkun = () => {
   const [accountType, setAccountType] = useState("");
   const [kategoriAkunOptions, setKategoriAkunOptions] = useState<any[]>([]);
 
-  const watchKategoriAkun = watch('kategori_akun')
+  const watchKategoriAkun = watch('kategori_akun_id')
   const watchParentAkun = watch('parent_akun')
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export const CreateAkun = () => {
     if (watchParentAkun) {
 
       const found = _.where(listKategoriAkunData || [],  {"parent_kategori_akun" : watchParentAkun})
-      setValue("kategori_akun" ,  null);
+      setValue("kategori_akun_id" ,  null);
       setKategoriAkunOptions(_.map(found, (item: any) => {
         return {
           label: `(${item.prefix_akun}) ` + item.nama,
@@ -54,7 +54,7 @@ export const CreateAkun = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: (payload: CreatePayload) => {
       return axiosInstance.post(
-        '/akun/akun/create-akun',
+        '/akun/akun',
         payload
       )
     },
@@ -78,10 +78,11 @@ export const CreateAkun = () => {
   const onSubmit = (body: FieldValues) => {
     body.kode_akun = accountPrefix + body.kode_akun;
 
+    delete body.parent_akun;
     const payload: CreatePayload = {
       ...body,
-      account_type: accountType,
       perusahaan_id: 1,
+      is_kas : body.is_kas ? 1 : 0,
       cabang_id: 1,
     } as CreatePayload
     console.log(JSON.stringify(payload));
@@ -115,7 +116,7 @@ export const CreateAkun = () => {
             </label>
             <Select
               options={kategoriAkunOptions}
-              onChange={(v: any) => setValue('kategori_akun', +v.value)}
+              onChange={(v: any) => setValue('kategori_akun_id', +v.value)}
             />
           </div>
         </>
@@ -142,7 +143,17 @@ export const CreateAkun = () => {
             >
               Nama Akun
             </label>
-            <Input onChange={(v: any) => setValue('nama_akun', v.target.value)}>
+            <Input onChange={(v: any) => setValue('nama', v.target.value)}>
+            </Input>
+          </div>
+          <div>
+            <label
+              htmlFor=""
+              className="after:content-['*'] after:text-red-400 after:text-sm"
+            >
+              Deskripsi
+            </label>
+            <Input textArea onChange={(v: any) => setValue('deskripsi', v.target.value)}>
             </Input>
           </div>
           <div>
@@ -153,7 +164,7 @@ export const CreateAkun = () => {
               Akun Kas
             </label>
             <Switch
-              onChange={(v: any) => setValue('is_akun_bank', v)}
+              onChange={(v: any) => setValue('is_kas', v)}
               options={[
                 { label: 'Ya', value: true },
                 { label: 'Tidak', value: false },
