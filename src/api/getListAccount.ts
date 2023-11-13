@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import { axiosInstance } from '.'
-import { ListResponse } from '@/utils'
+import { ListNotPaginatedResponse, ListResponse } from '@/utils'
 import { useMemo } from 'react'
 
 interface Account {
@@ -38,7 +38,7 @@ interface KategoriAkun {
 }
 
 export const getListAccount = () => {
-  const listAccountQuery = useQuery<AxiosResponse<ListResponse<Account>, any>>({
+  const listAccountQuery = useQuery<AxiosResponse<ListNotPaginatedResponse<Account>, any>>({
     queryKey: ['account'],
     queryFn: async () => {
       return axiosInstance.get('akun/akun/avaiable-account')
@@ -46,7 +46,7 @@ export const getListAccount = () => {
   })
 
   const { data } = listAccountQuery
-  const listAccount = data?.data.data.content
+  const listAccount = data?.data.data
 
   const listOptionAccount = useMemo(() => {
     return listAccount?.map((company) => ({

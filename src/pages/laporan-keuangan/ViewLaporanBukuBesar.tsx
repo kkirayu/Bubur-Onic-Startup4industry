@@ -40,17 +40,11 @@ export function ViewLaporanBukuBesar() {
 
   const totalDebit = useMemo(() => {
     if (report) {
-      let total = 0
       return _.reduce(
         report.report,
         (total, n) => {
-          return (total += _.reduce(
-            n.journal_lawan,
-            (total, n) => {
+          console.log(n, "yang ini")
               return (total += n.posisi_akun == 'DEBIT' ? n.jumlah : 0)
-            },
-            0
-          ))
         },
         0
       )
@@ -60,17 +54,10 @@ export function ViewLaporanBukuBesar() {
 
   const totalCredit = useMemo(() => {
     if (report) {
-      let total = 0
       return _.reduce(
         report.report,
         (total, n) => {
-          return (total += _.reduce(
-            n.journal_lawan,
-            (total, n) => {
               return (total += n.posisi_akun == 'CREDIT' ? n.jumlah : 0)
-            },
-            0
-          ))
         },
         0
       )
@@ -78,20 +65,20 @@ export function ViewLaporanBukuBesar() {
     return 0
   }, [report])
 
-  const totalSaldo = useMemo(() => {
-    let total = 0
-    if (report) {
-      return _.reduce(
-        report.report,
-        (total, n) => {
-          console.log(n)
-          return (total += +n.balance)
-        },
-        0
-      )
-    }
-    return 0
-  }, [report])
+  // const totalSaldo = useMemo(() => {
+  //   let total = 0
+  //   if (report) {
+  //     return _.reduce(
+  //       report.report,
+  //       (total, n) => {
+  //         console.log(n)
+  //         return (total += +n.balance)
+  //       },
+  //       0
+  //     )
+  //   }
+  //   return 0
+  // }, [report])
 
   const { mutate: exportLaporan, isLoading } = useMutation({
     mutationFn: () => {
@@ -194,10 +181,7 @@ export function ViewLaporanBukuBesar() {
                     -
                   </td>
                 </tr>
-                {report?.report?.map((itemValue: any, iindex: number) => {
-                  return (
-                    <Fragment key={iindex}>
-                      {itemValue.journal_lawan.map((item: any, i: number) => {
+                      {report.report.map((item: any, i: number) => {
                         if (item.posisi_akun === 'DEBIT') {
                           balance_in_line -= item.jumlah
                         } else {
@@ -206,13 +190,13 @@ export function ViewLaporanBukuBesar() {
                         return (
                           <Fragment key={i}>
                             <tr>
-                              <td className="border-b">{itemValue.date}</td>
+                              <td className="border-b">{item.tanggal_transaksi}</td>
 
                               <td className="border-b">
-                                {itemValue.move_name}
+                                {item.kode_jurnal}
                               </td>
                               <td className="border-b">
-                                {itemValue.journal_id[1]}
+
                               </td>
 
                               <td className="p-4 border-b text-right ">
@@ -226,18 +210,15 @@ export function ViewLaporanBukuBesar() {
                                 )}
                               </td>
                               <td className="p-4 text-right border-b ">
-                                {formatToMoney(balance_in_line)}
+                                {formatToMoney(item.saldo_di_line)}
                               </td>
-                              <td className="px-4 pt-4 text-main-blue-alurkerja text-center">
-                                {item?.akun_label}
+                              <td className="px-4 text-main-blue-alurkerja text-center">
+                                ({item?.akun_instance.kode_akun}) {item?.akun_instance.nama}
                               </td>
                             </tr>
                           </Fragment>
                         )
                       })}
-                    </Fragment>
-                  )
-                })}
 
                 <tr className="bg-gray-alurkerja-3">
                   <td
@@ -261,7 +242,7 @@ export function ViewLaporanBukuBesar() {
               <div className="flex items-center gap-6">
                 <div>Saldo Awal : {formatToMoney(report?.saldoAwal)}</div>
                 <div>
-                  Nilai Mutasi : {formatToMoney(totalDebit - totalCredit)}
+                  Nilai Mutasi : {formatToMoney(report.saldoAkhir - report.saldoAwal)}
                 </div>
                 <div>Saldo Akhir : {formatToMoney(report.saldoAkhir)}</div>
               </div>

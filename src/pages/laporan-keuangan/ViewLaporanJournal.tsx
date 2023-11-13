@@ -140,20 +140,20 @@ export function ViewLaporanJournal() {
                   <td></td>
                   <td></td>
                 </tr>
-                {item.journal_akuns?.map((akuns: any, i: number) => {
-                  const accountName = akuns.akun ? akuns.akun_label : '-'
+                {item.journal_akuns?.map((akun: any, i: number) => {
+                  const accountName = akun.akun ? `(${akun.akun.kode_akun })`+ " " +  akun.akun.nama : '-'
                   return (
                     <tr key={i}>
                       <td></td>
                       <td className="pl-14 pr-2.5 py-1">{accountName}</td>
                       <td className="text-center">
-                        {akuns.posisi_akun === 'DEBIT'
-                          ? formatToMoney(akuns.jumlah)
+                        {akun.posisi_akun === 'DEBIT'
+                          ? formatToMoney(akun.jumlah)
                           : '-'}
                       </td>
                       <td className="text-center">
-                        {akuns.posisi_akun === 'CREDIT'
-                          ? formatToMoney(akuns.jumlah)
+                        {akun.posisi_akun === 'CREDIT'
+                          ? formatToMoney(akun.jumlah)
                           : '-'}
                       </td>
                     </tr>
@@ -172,11 +172,11 @@ export function ViewLaporanJournal() {
                 </tr>
               </Fragment>
             ))}
-            <tr>
-              <td>Total Transaksi</td>
-              <td>Total Transaksi</td>
-              <td className="text-center">{formatToMoney(totalDebit)}</td>
-              <td className="text-center">{formatToMoney(totalKredit)}</td>
+            <tr >
+              <td className='pt-4'>Total Transaksi</td>
+              <td className='pt-4'>Total Transaksi</td>
+              <td className="text-center pt-4">{formatToMoney(totalDebit)}</td>
+              <td className="text-center pt-4">{formatToMoney(totalKredit)}</td>
             </tr>
           </tbody>
         </table>
