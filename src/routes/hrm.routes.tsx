@@ -1,4 +1,4 @@
-import { ListKasbon, CreateKasbon } from '@/pages/hrm'
+import { ListKasbon, CreateKasbon, DetailKasbon } from '@/pages/hrm'
 import { Outlet, RouteObject } from 'react-router-dom'
 
 export const hrmRoutes: RouteObject = {
@@ -7,5 +7,6 @@ export const hrmRoutes: RouteObject = {
   children: [
     { path: 'manajemen-kasbon', element: <ListKasbon /> },
     { path: 'manajemen-kasbon/create', element: <CreateKasbon /> },
+    { path: 'manajemen-kasbon/:id', element: <DetailKasbon /> },
   ],
 }
