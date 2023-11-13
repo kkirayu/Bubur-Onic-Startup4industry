@@ -1,17 +1,37 @@
-import { TableLowcode } from 'alurkerja-ui'
-import { useState } from 'react'
+import { AuthContext, TableLowcode } from 'alurkerja-ui'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Check } from 'lucide-react'
-
-import { Button } from '@/components'
+import { useMutation } from '@tanstack/react-query'
+import { Dialog } from '@/components'
 
 export const ListClaimableKasbon = () => {
   const navigate = useNavigate()
+  const axiosInstance = useContext(AuthContext)
 
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
+
+  const { mutate } = useMutation({
+    mutationFn: (id: number) => {
+      return axiosInstance.post('')
+    },
+    onSuccess: () => {
+      Dialog.success()
+    },
+  })
+
+  const onClaimKasbon = (id: number) => {
+    Dialog.confirm({
+      title: 'Claim kasbon',
+      description: 'Claim Kasbon tidak bisa di batalkan',
+      callback: () => {
+        mutate(id)
+      },
+    })
+  }
 
   return (
     <section className="bg-white">
@@ -33,9 +53,12 @@ export const ListClaimableKasbon = () => {
           { key: 'status', label: 'Status Kasbon' },
           { key: 'date', label: 'Tanggal Cair' },
         ]}
-        customActionCell={() => (
+        customActionCell={(data) => (
           <>
-            <button className="bg-light-blue-alurkerja text-main-blue-alurkerja p-1 rounded font-bold">
+            <button
+              className="bg-light-blue-alurkerja text-main-blue-alurkerja p-1 rounded font-bold"
+              onClick={() => onClaimKasbon(data.id)}
+            >
               <Check size={20} />
             </button>
           </>
