@@ -6,16 +6,39 @@ import {
   Select,
   TableLowcode,
 } from 'alurkerja-ui'
-
 import { Button, Dialog } from '@/components'
+import { useMutation } from '@tanstack/react-query'
+import { useParams } from 'react-router-dom'
 
 export const DetailKasbon = () => {
   const axiosInstance = useContext(AuthContext)
+  const { id } = useParams()
 
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
+
+  const { mutate } = useMutation({
+    mutationFn: (id: number) => {
+      return axiosInstance.post('')
+    },
+
+    onSuccess: () => {
+      Dialog.success()
+    },
+  })
+
+  const onClosedKasbon = (id: number) => {
+    Dialog.confirm({
+      title: 'Process Kasbon',
+      description:
+        'Ketika di close kasbon tidak bisa di buka lagi dan akan di lanjutkan ke team keuangan',
+      callback: () => {
+        mutate(id)
+      },
+    })
+  }
 
   return (
     <section className="bg-white rounded p-6">
@@ -74,7 +97,10 @@ export const DetailKasbon = () => {
           </label>
           <div className="flex">
             <Input className="rounded-r-none" />
-            <Button className="whitespace-nowrap rounded-l-none">
+            <Button
+              className="whitespace-nowrap rounded-l-none"
+              onClick={() => onClosedKasbon(+id!!)}
+            >
               Close Kusbon
             </Button>
           </div>
