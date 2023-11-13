@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { AuthContext, Input, Select, TableLowcode } from 'alurkerja-ui'
+import { AuthContext, Input, Modal, Select, TableLowcode } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import DatePicker from 'react-datepicker'
 import { useMutation } from '@tanstack/react-query'
@@ -103,9 +103,48 @@ export const DetailPinjamanKaryawan = () => {
           </label>
           <div className="flex">
             <Input className="rounded-r-none" />
-            <Button className="whitespace-nowrap rounded-l-none">
-              Bayar Hutang
-            </Button>
+            <Modal
+              title="Bayar Hutang Purwa"
+              triggerButton={
+                <Button className="h-full whitespace-nowrap rounded-l-none">
+                  Bayar Hutang
+                </Button>
+              }
+            >
+              <div className="grid grid-cols-2 gap-4 p-6">
+                <div className="col-span-2">
+                  <label
+                    htmlFor=""
+                    className="after:content-['*'] after:text-red-400 after:text-sm"
+                  >
+                    Sisa Hutang
+                  </label>
+                  <Input disabled />
+                </div>
+                <div>
+                  <label
+                    htmlFor=""
+                    className="after:content-['*'] after:text-red-400 after:text-sm"
+                  >
+                    Jumlah
+                  </label>
+                  <Input prefix="RP" type="number" />
+                </div>
+                <div>
+                  <label
+                    htmlFor=""
+                    className="after:content-['*'] after:text-red-400 after:text-sm"
+                  >
+                    Tanggal Bayar
+                  </label>
+                  <Input type="date" />
+                </div>
+                <div className="col-span-2 flex items-center gap-4 justify-end mb-4">
+                  <Button>Simpan</Button>
+                  <Button>Reset</Button>
+                </div>
+              </div>
+            </Modal>
           </div>
         </div>
       </div>
