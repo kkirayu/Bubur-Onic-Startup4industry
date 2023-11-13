@@ -24,8 +24,8 @@ export const CardLabaRugi = () => {
   })
 
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    new Date(),
-    new Date(),
+    moment().date(1).toDate(),
+    moment().endOf('month').toDate(),
   ])
 
   const navigate = useNavigate()

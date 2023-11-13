@@ -2,106 +2,55 @@ import { useSearchParams } from 'react-router-dom'
 import { RefreshCcw, Printer, Upload } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Fragment } from 'react'
-import { formatToMoneyInverted } from '@/utils'
+import { formatToMoney, formatToMoneyInverted } from '@/utils'
 import { axiosInstance } from '@/api'
 import { Spinner } from 'alurkerja-ui'
 import _ from 'underscore'
 
-interface ReportNeraca {
-  value: string
-  key: DatumKey[]
-  total_akhir: number
+interface LabaRugiReportItem {
+  key: string;
+  value: Value[];
+  total: number;
+  isInverted: boolean;
 }
 
-interface DatumKey {
-  value: string
-  key: KeyKey[]
-  total_awal: number
-  total_akhir: number
+interface Value {
+  id: number;
+  nama: string;
+  deskripsi: string;
+  perusahaan_id: number;
+  cabang_id: number;
+  parent_kategori_akun: number;
+  created_at: null;
+  updated_at: null;
+  created_by: null;
+  updated_by: null;
+  deleted_by: null;
+  deleted_at: null;
+  prefix_akun: string;
+  total_awal: number;
+  total_akhir: number;
+  akun: Akun[];
 }
 
-interface KeyKey {
-  account_id_count: number
-  date: string
-  debit: number
-  credit: number
-  discount_amount_currency: boolean | number
-  balance: number
-  amount_residual: number
-  amount_residual_currency: number
-  account_id: Array<number | string>
-  balance_start: number
-  journals: Journal[]
+interface Akun {
+  id: number;
+  kode_akun: string;
+  perusahaan_id: number;
+  cabang_id: number;
+  nama: string;
+  deskripsi: string;
+  kategori_akun_id: number;
+  is_kas: number;
+  created_at: string;
+  updated_at: string;
+  created_by: number;
+  updated_by: null;
+  deleted_by: null;
+  deleted_at: null;
+  saldo: number;
+  saldo_awal: number;
 }
-
-interface Journal {
-  id: number
-  analytic_precision: number
-  move_id: Array<number | string>
-  date: string
-  company_id: Array<CompanyIDEnum | number>
-  journal_id: Array<JournalIDEnum | number>
-  move_name: string
-  account_id: Array<number | string>
-  partner_id: Array<number | string> | boolean
-  ref: boolean | string
-  product_id: boolean
-  name: boolean | string
-  tax_ids: any[]
-  amount_currency: number
-  currency_id: Array<CompanyCurrencyIDEnum | number>
-  debit: number
-  credit: number
-  tax_tag_ids: any[]
-  discount_date: boolean
-  discount_amount_currency: number
-  tax_line_id: boolean
-  date_maturity: boolean | string
-  balance: number
-  matching_number: boolean
-  amount_residual: number
-  amount_residual_currency: number
-  analytic_distribution: boolean
-  move_type: MoveType
-  parent_state: ParentState
-  account_type: AccountType
-  statement_line_id: boolean
-  company_currency_id: Array<CompanyCurrencyIDEnum | number>
-  is_same_currency: boolean
-  is_account_reconcile: boolean
-  sequence: number
-}
-
-enum AccountType {
-  AssetCash = 'asset_cash',
-  AssetCurrent = 'asset_current',
-  AssetFixed = 'asset_fixed',
-  AssetReceivable = 'asset_receivable',
-  LiabilityCurrent = 'liability_current',
-}
-
-enum CompanyCurrencyIDEnum {
-  Idr = 'IDR',
-}
-
-enum CompanyIDEnum {
-  MyCompany = 'My Company',
-}
-
-enum JournalIDEnum {
-  CustomerInvoices = 'Customer Invoices',
-  MiscellaneousOperations = 'Miscellaneous Operations',
-}
-
-enum MoveType {
-  Entry = 'entry',
-  OutInvoice = 'out_invoice',
-}
-
-enum ParentState {
-  Posted = 'posted',
-}
-
 export function ViewLaporaLabaRugi() {
   const [searchParams] = useSearchParams()
 
@@ -118,7 +67,7 @@ export function ViewLaporaLabaRugi() {
     },
   })
 
-  const { data: report } = useQuery<ReportNeraca[]>({
+  const { data: report } = useQuery<LabaRugiReportItem[]>({
     queryKey: ['laporan-laba-rugi', companyID, startDate, endDate],
     queryFn: async () => {
       return axiosInstance
@@ -191,100 +140,129 @@ export function ViewLaporaLabaRugi() {
         </div>
       </div>
       <div className="px-4">
-        {report?.map((neraca, i) => (
-          <Fragment key={i}>
-            <div className="text-gray-700 text-base font-bold ">
-              {neraca.value}
-            </div>
-            {neraca.key.map((group, i) => (
-              <div className="mb-4" key={i}>
-                <div className="text-gray-700 text-sm font-normal">
-                  {group.value}
-                  <table className="w-full">
-                    <thead>
-                      <tr>
-                        <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-left w-[400px]">
-                          Keterangan / Uraian
-                        </th>
-                        <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
-                          Saldo Awal
-                        </th>
-                        <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
-                          Selama Periode
-                        </th>
-                        <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
-                          Saldo Akhir
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {group.key.map((acc, i) => {
-                        return (
+        {report?.map((neraca, i) => {
+          let total = 0
+          return (
+            <Fragment key={i}>
+              <div className="text-gray-700 text-base font-bold ">
+                {neraca.key === 'Kewajiban' ? 'Pasiva' : neraca.key}
+              </div>
+              {neraca.value.map((group, i) => {
+                // total += group.total_akhir
+                return (
+                  <div className="mb-4" key={i}>
+                    <div className="text-gray-700 text-sm font-normal">
+                      {group.nama}
+                      <table className="w-full">
+                        <thead>
                           <tr>
-                            <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y">
-                              {acc.account_id?.[1]}
+                            <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-left w-[400px]">
+                              Keterangan / Uraian
+                            </th>
+                            <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                              Saldo Awal
+                            </th>
+                            <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                              Selama Periode
+                            </th>
+                            <th className="text-gray-400 text-sm font-semibold bg-slate-100 p-3.5 text-center w-[242px]">
+                              Saldo Akhir
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {group.akun.map((acc, i) => {
+                            return (
+                              <tr key={i}>
+                                <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y">
+                                  {acc.kode_akun} - {acc.nama}
+                                </td>
+                                <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                                  {formatToMoney(acc.saldo_awal)}
+                                </td>
+                                <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                                  {formatToMoney(
+                                    acc.saldo - acc.saldo_awal
+                                  )}
+                                </td>
+                                <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
+                                  {formatToMoney(acc.saldo)}
+                                </td>
+                              </tr>
+                            )
+                          })}
+                          <tr>
+                            <td className="text-zinc-800 text-xs px-3.5 py-2.5 border-y font-bold bg-slate-100">
+                              Total {group.nama}
                             </td>
-                            <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
-                              {formatToMoneyInverted(acc.balance_start)}
+                            <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                              {formatToMoney(group.total_awal)}
                             </td>
-                            <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
-                              {formatToMoneyInverted(
-                                acc.balance - acc.balance_start
+                            <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                              {formatToMoney(
+                                group.total_akhir - group.total_awal
                               )}
                             </td>
-                            <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y text-center">
-                              {formatToMoneyInverted(acc.balance)}
+                            <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
+                              {formatToMoney(group.total_akhir)}
                             </td>
                           </tr>
-                        )
-                      })}
-                      <tr>
-                        <td className="text-zinc-800 text-xs px-3.5 py-2.5 border-y font-bold bg-slate-100">
-                          Total {group.value}
-                        </td>
-                        <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
-                          {formatToMoneyInverted(group.total_awal)}
-                        </td>
-                        <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
-                          {formatToMoneyInverted(
-                            group.total_akhir - group.total_awal
-                          )}
-                        </td>
-                        <td className="text-zinc-800 text-xs font-normal px-3.5 py-2.5 border-y bg-slate-100 text-center">
-                          {formatToMoneyInverted(group.total_akhir)}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+                )
+              }
+
+              )}
+              <div className="mb-6">
+                Total {neraca.key} : {formatToMoney(neraca.total)}
               </div>
-            ))}
-            <div className="flex items-center mb-6">
-              <div className="font-semibold text-main-blue-alurkerja p-1">
-                Total {neraca.value}
-              </div>
-              <div className="">
-                {formatToMoneyInverted(neraca.total_akhir, true)}
-              </div>
-            </div>
-          </Fragment>
-        ))}
+            </Fragment>
+          )
+        })}
         <hr className="mb-4" />
 
-        <div className="flex items-center">
-          <div className="font-semibold text-main-blue-alurkerja p-1">
-            Laba Bersih/Rugi
-          </div>
-          <div>
-            {formatToMoneyInverted(
-              _.reduce(
-                report || [],
-                (memo, item) => memo + item.total_akhir * -1,
-                0
-              ) * -1
-            )}
-          </div>
-        </div>
+        <table>
+
+          {report?.map((neraca, i) => {
+            return <>
+              <tr>
+                <td>
+
+                  <div className="font-semibold text-main-blue-alurkerja p-1">
+                    Total {neraca.key}
+                  </div>
+                </td>
+                <td>
+
+                  <div>
+                    {formatToMoneyInverted(neraca.total)}</div>
+                </td>
+              </tr>
+            </>
+          })}
+          <tr>
+            <td>
+              <div className="font-semibold text-main-blue-alurkerja p-1">
+                Laba Bersih/Rugi
+              </div>
+            </td>
+            <td>
+              <div>
+                {formatToMoneyInverted(
+                  _.reduce(
+                    report || [],
+                    (memo, item) => memo + (item.isInverted ? item.total * -1 : item.total ),
+                    0
+                  )
+                )}
+              </div>
+            </td>
+          </tr>
+        </table>
+
       </div>
     </div>
   )
