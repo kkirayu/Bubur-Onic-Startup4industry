@@ -195,8 +195,9 @@ export function ViewLaporanBukuBesar() {
                               <td className="border-b">
                                 {item.kode_jurnal}
                               </td>
-                              <td className="border-b">
 
+                              <td className="border-b">
+                                {item.deskripsi}
                               </td>
 
                               <td className="p-4 border-b text-right ">
