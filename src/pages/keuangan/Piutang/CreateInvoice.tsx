@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import {
   axiosInstance,
   getListAccount,
+  getListCustomer,
   getListProduct,
   getListSupplier,
 } from '@/api'
@@ -20,7 +21,7 @@ export const CreateInvoice = () => {
 
   const [row, setRow] = useState([0])
 
-  const { listOption: supplierOption } = getListSupplier()
+  const { listOption: supplierOption } = getListCustomer()
   const { listOption: accountOption, isLoading: isFetchingAccount } =
     getListAccount()
   const { listOption: productOption } = getListProduct()
@@ -41,96 +42,37 @@ export const CreateInvoice = () => {
         const productKey = `product-${idx}`
         const quantityKey = `quantity-${idx}`
         const priceKey = `price_unit-${idx}`
+        const descriptionKey = `desc-${idx}`
 
         const product = payload[productKey]
         const quantity = payload[quantityKey]
         const price = payload[priceKey]
+        const desc = payload[descriptionKey]
 
         totalPrice += +price
 
         return {
-          name: product.label,
-          product_id: product.value,
-          quantity: +quantity,
-          price_unit: price,
-          analytic_precision: 2,
-          sequence: 100,
-          asset_category_id: false,
-          account_id: 67,
-          analytic_distribution: false,
-          discount: 0,
-          tax_ids: [[6, false, []]],
-          partner_id: payload.partner_id,
-          currency_id: 12,
-          display_type: 'product',
-          product_uom_id: 1,
+          "product_id": product.value,
+          "qty": +quantity,
+          "account_id": 1,
+          "price": price,
+          "total": price * quantity,
+          "discount": 0,
+          "tax": 0,
+          "subtotal": price * quantity,
+          "description": desc,
         }
       })
+      const payloadData = {
+        "invoice_date": payload.invoice_date,
+        "due_date": payload.invoice_date_due,
+        "desc": payload.description,
+        "customer_id": payload.partner_id,
+        "total": totalPrice,
+        "invoice_details": listProduct
+      }
 
-      const invoiceLine = listProduct.map((product, idx) => [
-        0,
-        `virtual_${idx}`,
-        product,
-      ])
-      return axiosInstance.post('/odoo/odoo-api', {
-        args: [
-          {
-            date: moment(new Date()).format('YYYY-MM-DD'),
-            auto_post: 'no',
-            auto_post_until: false,
-            company_id: 1,
-            journal_id: 1,
-            show_name_warning: false,
-            posted_before: false,
-            payment_state: 'not_paid',
-            currency_id: 12,
-            statement_line_id: false,
-            payment_id: false,
-            tax_cash_basis_created_move_ids: [],
-            name: '/',
-            partner_id: payload.partner_id,
-            l10n_id_kode_transaksi: false,
-            l10n_id_replace_invoice_id: false,
-            quick_edit_total_amount: 0,
-            ref: false,
-            invoice_vendor_bill_id: false,
-            invoice_date: payload.invoice_date,
-            payment_reference: false,
-            partner_bank_id: false,
-            invoice_date_due: payload.invoice_date_due,
-            invoice_payment_term_id: false,
-            invoice_line_ids: invoiceLine,
-            narration: false,
-            line_ids: [],
-            user_id: 2,
-            invoice_user_id: 2,
-            invoice_origin: false,
-            qr_code_method: false,
-            invoice_incoterm_id: false,
-            fiscal_position_id: false,
-            invoice_source_email: false,
-            to_check: false,
-          },
-        ],
-        model: 'account.move',
-        method: 'create',
-        kwargs: {
-          context: {
-            lang: 'en_US',
-            tz: 'Asia/Jakarta',
-            uid: 2,
-            allowed_company_ids: [1],
-            params: {
-              action: 231,
-              model: 'account.move',
-              view_type: 'list',
-              cids: 1,
-              menu_id: 115,
-            },
-            default_move_type: 'out_invoice',
-          },
-        },
-      })
+      return axiosInstance.post('keuangan/invoice/create-invoice', payloadData)
     },
     onSuccess: () => {
       Dialog.success({
@@ -207,6 +149,7 @@ export const CreateInvoice = () => {
                 <th className="px-3 py-4">Account</th>
                 <th className="px-3 py-4">Jumlah</th>
                 <th className="px-3 py-4">Harga</th>
+                <th className="px-3 py-4">Desc</th>
                 <th className="px-3 py-4">SubTotal</th>
                 <th className="px-3 py-4">Aksi</th>
               </tr>
@@ -233,6 +176,10 @@ export const CreateInvoice = () => {
                   </td>
                   <td className="px-3 py-2.5">
                     <Input {...register(`price_unit-${idx}`)} />
+                  </td>
+
+                  <td className="px-3 py-2.5">
+                    <Input {...register(`desc-${idx}`)} />
                   </td>
 
                   <td className="text-center">

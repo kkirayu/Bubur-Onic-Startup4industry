@@ -4,13 +4,13 @@ import { axiosInstance } from '.'
 import { ListResponse, OdooResponse } from '@/utils'
 import { useMemo } from 'react'
 
-export const getListSupplier = () => {
+export const getListCustomer = () => {
   const listSupplierQuery = useQuery<
     AxiosResponse<ListResponse<any>, any>
   >({
-    queryKey: ['supplier'],
+    queryKey: ['customer'],
     queryFn: async () => {
-      return axiosInstance.get('/keuangan/supplier?show_all=true ');
+      return axiosInstance.get('/keuangan/customer?show_all=true ');
     },
   })
 

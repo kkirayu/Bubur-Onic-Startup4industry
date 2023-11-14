@@ -5,7 +5,7 @@ export const ListPaymentMethod = () => {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
-  const [search, setSearch] = useState<string>()
+const [search, setSearch] = useState<string>()
 
   return (
     <section className="bg-white">
