@@ -5,6 +5,7 @@ import { menuLaporanKeuangan } from './menuLaporanKeuangan'
 import { menuMaster } from './menuMaster'
 import { menuCompany } from './menuCompany'
 import { menuHRM } from './menuHRM'
+import { menuProductMaster } from './menuProductMaster'
 
 export const menuConfig: MenuConfig[] = [
   ...menuCompany,
@@ -12,4 +13,5 @@ export const menuConfig: MenuConfig[] = [
   ...menuLaporanKeuangan,
   ...menuHRM,
   ...menuMaster,
+  ...menuProductMaster
 ]

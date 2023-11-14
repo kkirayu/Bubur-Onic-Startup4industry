@@ -278,6 +278,11 @@ export const menuMaster = [
           </svg>
         ),
       },
+      {
+        href: '/master/payment-method',
+        label: 'Metode Pembayaran',
+        icon: <UserCog size={20} />,
+      },
     ],
   },
 ]

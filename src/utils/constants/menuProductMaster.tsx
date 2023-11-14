@@ -1,7 +1,16 @@
-export const menuKeuangan = [
+import {
+  UserCog,
+  User,
+  UserX2,
+  BadgeDollarSign,
+  BadgePercent,
+  Cog,
+} from 'lucide-react'
+
+export const menuProductMaster = [
   {
-    href: '/keuangan',
-    label: 'Keuangan',
+    href: '/product-master',
+    label: 'Master Product',
     icon: (
       <svg
         width="20"
@@ -28,45 +37,37 @@ export const menuKeuangan = [
     ),
     child: [
       {
-        href: '/keuangan/journal',
-        label: 'Journal (Double Entry)',
+        href: '/product-master/product',
+        label: 'Product',
+        icon: (
+          <svg
+            width="16"
+            height="20"
+            viewBox="0 0 16 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10 0H2C0.9 0 0 0.9 0 2V18C0 19.1 0.9 20 2 20H14C15.1 20 16 19.1 16 18V6L10 0ZM14 18H2V2H9V7H14V18ZM5 11V17H3V11H5ZM11 13V17H13V13H11ZM7 9V17H9V9H7Z"
+              fill="#A2A3B7"
+            />
+          </svg>
+        ),
       },
       {
-        href: '/keuangan/kas-bank',
-        label: 'Kas Bank',
+        href: '/product-master/brand',
+        label: 'Brand',
+        icon: <Cog size={20} />,
       },
       {
-        href: '/keuangan/piutang',
-        label: 'Piutang',
-        child: [
-          {
-            href: '/keuangan/piutang/invoice',
-            label: 'Invoice',
-          },
-          {
-            href: '/keuangan/piutang/customer',
-            label: 'Customer',
-          },
-        ],
+        href: '/product-master/Kategori',
+        label: 'Kategori',
+        icon: <Cog size={20} />,
       },
       {
-        href: '/keuangan/hutang',
-        label: 'Hutang',
-        child: [
-          
-          {
-            href: '/keuangan/hutang/tagihan',
-            label: 'Tagihan',
-          },
-          {
-            href: '/keuangan/hutang/vendor',
-            label: 'Supplier',
-          },
-        ],
-      },
-      {
-        href: '/keuangan/aset',
-        label: 'Aset',
+        href: '/product-master/unit',
+        label: 'Unit',
+        icon: <Cog size={20} />,
       },
     ],
   },

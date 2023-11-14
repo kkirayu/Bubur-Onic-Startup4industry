@@ -11,7 +11,7 @@ export const ListProduct = () => {
     <section className="bg-white">
       <TableLowcode
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        tableName="product"
+        specPath='/api/product/product'
         renderState={renderState}
         setRenderState={setRenderState}
         pageConfig={pageConfig}
