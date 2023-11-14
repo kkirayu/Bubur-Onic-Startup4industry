@@ -10,6 +10,7 @@ import {
   ViewLaporanJournal,
   ViewLaporanLabaRugiPerbandingan,
 } from '@/pages/laporan-keuangan'
+import { ViewLaporanNeracaAkhir } from '@/pages/laporan-keuangan/ViewLaporanNeracaAkhir'
 import { Outlet, RouteObject } from 'react-router-dom'
 
 export const laporanKeuanganRoutes: RouteObject = {
@@ -22,6 +23,7 @@ export const laporanKeuanganRoutes: RouteObject = {
     { path: 'dashboard/neraca', element: <ViewLaporaNeraca /> },
     { path: 'dashboard/laba-rugi', element: <ViewLaporaLabaRugi /> },
     { path: 'dashboard/laba-rugi-perbandingan', element: <ViewLaporanLabaRugiPerbandingan /> },
+    { path: 'dashboard/neraca-akhir', element: <ViewLaporanNeracaAkhir /> },
     // { path: 'buku-besar', element: <BukuBesar /> },
     // { path: 'neraca', element: <Neraca /> },
     // { path: 'laba-rugi', element: <LabaRugi /> },

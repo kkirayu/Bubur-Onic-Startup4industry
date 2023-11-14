@@ -1,9 +1,12 @@
-import { InputYear, Modal } from 'alurkerja-ui'
+import { InputYear, Modal, Select } from 'alurkerja-ui'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
 import { IconLaporan } from '@/assets'
 import { Button } from '@/components'
+import { getListCompany } from '@/api'
+import moment from 'moment'
+import _ from 'underscore'
 
 export const CardNeracaAkhir = () => {
   const {
@@ -11,23 +14,33 @@ export const CardNeracaAkhir = () => {
     handleSubmit,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm({
     defaultValues: {
       year: '',
+      company: ''
     },
   })
 
   const navigate = useNavigate()
 
+
+  const { listOption: listOptionCompany, isLoading: loadingListCompany } =
+    getListCompany()
   const onClickJournal = (data: FieldValues) => {
-    if (data.year !== '') {
+    if (data.year === '') {
+      setError('year', { type: 'required', message: 'Silahkan pilih tahun' })
+    } else if (data.company === '') {
+      setError('company', { type: 'required', message: 'Silahkan pilih Perusahaan' })
+    } else {
+
       navigate({
         pathname: 'neraca-akhir',
-        search: `?start=01-01-${data.year}&end=31-12-${data.year}`,
+        search: `?company=${data.company}&start=01/01/${data.year}&end=31/12/${data.year}`,
       })
-    } else {
-      setError('year', { type: 'required', message: 'Silahkan pilih tahun' })
     }
+
+
   }
 
   return (
@@ -36,16 +49,17 @@ export const CardNeracaAkhir = () => {
         <IconLaporan />
         <div>
           <div className="text-gray-700">Laporan</div>
-          <div className="text-gray-700 font-semibold">Neraca Akhir</div>
+          <div className="text-gray-700 font-semibold">
+            Neraca Akhir
+          </div>
         </div>
       </div>
       <div className="p-6">
         <p className="mb-6">
-          Menampilkan perbandingan antara coa aktiva dan pasiva pada periode
-          tertentu.
+          Menampilkan  neraca akhir perusahaan yang dipilih
         </p>
         <Modal
-          title="Konfigurasi Laporan Neraca Akhir"
+          title="Konfigurasi Laporan Laba Rugi Perbandingan"
           triggerButton={<Button>Buka Laporan</Button>}
           maxWidth="2xl"
         >
@@ -59,11 +73,42 @@ export const CardNeracaAkhir = () => {
                     htmlFor=""
                     className="after:content-['*'] after:text-red-400 after:text-sm"
                   >
+                    Journal Dari Perusahaan
+                  </label>
+                  <Select
+                    invalid={errors.company ? true : false}
+                    isLoading={loadingListCompany}
+                    options={listOptionCompany}
+                    onChange={(selected: any) => {
+                      setValue('company', selected.value)
+                      clearErrors('company')
+                    }}
+                  />
+                  <div className="text-xs text-gray-alurkerja-2">
+                    {errors?.company ? (
+                      <span className="text-red-alurkerja">
+                        {errors?.company.message}
+                      </span>
+                    ) : (
+                      'Pilih Perusahaan'
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <label
+                    htmlFor=""
+                    className="after:content-['*'] after:text-red-400 after:text-sm"
+                  >
                     Tahun
                   </label>
-                  <InputYear
-                    onChange={(value) => {
-                      setValue('year', value ?? '')
+                  <Select
+                    options={_.range(2010, moment().year()).map((year) => ({
+                      label: year,
+                      value: year,
+                    })
+                    )}
+                    onChange={(value: any) => {
+                      setValue('year', value.value ?? '')
                     }}
                   />
                   <div className="text-xs text-gray-alurkerja-2">
