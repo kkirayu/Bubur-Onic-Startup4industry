@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    options {
+        timestamps()
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+
+    environment {
+        scannerHome = tool 'sonar-scanner';
+    }
+    
+    stages {
+        stage('Checkout'){
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Code') {
+            steps {
+                nodejs(nodeJSInstallationName: 'node-18') {
+                    sh "node -v"
+                    sh "npm -v"
+                    sh "yarn -v"
+                    sh "yarn install --frozen-lockfile"
+                    sh "CI=false yarn build"
+                }
+            }
+        }
+
+        stage('Scan Sonar') {
+            steps {
+                withSonarQubeEnv('Sonar JAVAN') {
+                    sh '$scannerHome/bin/sonar-scanner -Dsonar.login=d042cf3289523af189b2eda9752bc6dfc8631c36'
+                }
+            }
+        }
+    }
+}
