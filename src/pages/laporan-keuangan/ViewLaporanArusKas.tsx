@@ -139,10 +139,10 @@ export function ViewLaporanArusKas() {
       </div>
       <div className="font-bold px-4">
         <div className="text-gray-700 text-base font-bold flex flex-row justify-between ">
-          <div>Saldo Awal Kas </div><div>{formatToMoney(report?.saldo_kas_awal || 0)}</div>
+          <div>A) Saldo Awal Kas </div><div>{formatToMoney(report?.saldo_kas_awal || 0)}</div>
         </div>
         <div className="text-gray-700 text-base font-bold ">
-          Penerimaan Kas (Kas Masuk)
+        B) Penerimaan Kas (Kas Masuk)
         </div>
         <table className="w-full">
           <thead>
@@ -184,11 +184,11 @@ export function ViewLaporanArusKas() {
           <div>{formatToMoney(report?.total_penerimaan || 0)}</div>
         </div>
         <div className="text-gray-700 text-base font-bold flex flex-row  justify-between">
-          <div>TOTAL KAS TERSEDIA ( A+B ) </div>
+          <div>C) TOTAL KAS TERSEDIA ( A+B ) </div>
           <div>{formatToMoney(report?.saldo_kas_tersedia || 0)}</div>
         </div>
         <div className="text-gray-700 text-base font-bold flex flex-row  justify-between">
-          <div>Pengeluaran  Kas (Kas Keluar)</div>
+          <div>D) Pengeluaran  Kas (Kas Keluar)</div>
         </div>
         <table className="w-full">
           <thead>
@@ -231,7 +231,7 @@ export function ViewLaporanArusKas() {
         </div>
 
         <div className="text-gray-700 text-base font-bold flex flex-row  justify-between">
-          <div> SALDO AKHIR KAS ( C-D ) </div>
+          <div>E) SALDO AKHIR KAS ( C-D ) </div>
           <div>{formatToMoney(report?.saldo_kas_akhir || 0)}</div>
         </div>
         {/* {report?.map((group, i) => {
