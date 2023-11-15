@@ -27,7 +27,7 @@ export const laporanKeuanganRoutes: RouteObject = {
     { path: 'dashboard/laba-rugi-perbandingan', element: <ViewLaporanLabaRugiPerbandingan /> },
     { path: 'dashboard/neraca-akhir', element: <ViewLaporanNeracaAkhir /> },
     { path: 'dashboard/arus-kas', element: <ViewLaporanArusKas /> },
-    { path: 'dashboard/arus-kas', element: <ViewLaporanPerubahanModal /> },
+    { path: 'dashboard/perubahan-modal', element: <ViewLaporanPerubahanModal /> },
     // { path: 'buku-besar', element: <BukuBesar /> },
     // { path: 'neraca', element: <Neraca /> },
     // { path: 'laba-rugi', element: <LabaRugi /> },

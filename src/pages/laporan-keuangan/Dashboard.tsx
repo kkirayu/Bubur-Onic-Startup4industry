@@ -7,6 +7,7 @@ import {
   CardNeracaAkhir,
 } from './components'
 import { CardCashFlow } from './components/CardCashFlow'
+import { CardPerubahanModal } from './components/CardPerubahanModal'
 
 export function Dashboard() {
   return (
@@ -24,6 +25,7 @@ export function Dashboard() {
         <CardNeracaAkhir />
         <CardLabaRugiPerbandingan />
         <CardCashFlow />
+        <CardPerubahanModal />
       </div>
     </div>
   )
