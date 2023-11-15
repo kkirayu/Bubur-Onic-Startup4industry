@@ -44,7 +44,7 @@ export function ViewLaporanBukuBesar() {
         report.report,
         (total, n) => {
           console.log(n, "yang ini")
-              return (total += n.posisi_akun == 'DEBIT' ? n.jumlah : 0)
+              return (total += n.posisi_akun == 'DEBIT' ? +n.jumlah : 0 )
         },
         0
       )
@@ -57,7 +57,7 @@ export function ViewLaporanBukuBesar() {
       return _.reduce(
         report.report,
         (total, n) => {
-              return (total += n.posisi_akun == 'CREDIT' ? n.jumlah : 0)
+              return (total += n.posisi_akun == 'CREDIT' ? +n.jumlah : 0)
         },
         0
       )
@@ -195,8 +195,9 @@ export function ViewLaporanBukuBesar() {
                               <td className="border-b">
                                 {item.kode_jurnal}
                               </td>
-                              <td className="border-b">
 
+                              <td className="border-b">
+                                {item.deskripsi}
                               </td>
 
                               <td className="p-4 border-b text-right ">

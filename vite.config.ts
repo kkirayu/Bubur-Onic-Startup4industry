@@ -12,6 +12,13 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/configs/vitestSetup.ts'],
+    reporters: ['default', 'vitest-sonar-reporter'],
+    // @ts-ignore
+    sonarReporterOptions: { silent: true },
+    outputFile: 'sonar-report.xml',
+    coverage: {
+      reporter: 'lcov',
+    },
   },
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(__dirname, './src') }],
