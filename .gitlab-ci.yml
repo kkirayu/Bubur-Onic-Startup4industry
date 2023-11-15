@@ -52,5 +52,5 @@ sonarqube-check:
       -Dsonar.projectKey=bubur-onic-fe
       -Dsonar.sources=src
       -Dsonar.host.url=https://sonar.javan.co.id
-      -Dsonar.login=${SONAR_LOGIN_TOKEN}
+      -Dsonar.login=cd0d286a9087c987496379df10fed7ec519dae2e
   when: manual
