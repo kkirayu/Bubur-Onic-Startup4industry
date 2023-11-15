@@ -1,6 +1,6 @@
 <testExecutions version="1">
   <file path="src\__test__\Login.test.tsx">
-    <testCase name="Login Page - should has error message when click button login while email &amp; password field is empty" duration="135" />
-    <testCase name="Login Page - should has error alert when login failed" duration="188" />
+    <testCase name="Login Page - should has error message when click button login while email &amp; password field is empty" duration="143" />
+    <testCase name="Login Page - should has error alert when login failed" duration="233" />
   </file>
 </testExecutions>
