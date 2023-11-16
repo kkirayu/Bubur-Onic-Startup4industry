@@ -14,6 +14,7 @@ export function ListPotongan() {
   return (
     <div>
       <TableLowcode
+        title="List Potongan"
         baseUrl="https://kpm-sys.merapi.javan.id"
         specPath="/api/crud/takwim"
         renderState={renderState}
