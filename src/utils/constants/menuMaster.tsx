@@ -97,6 +97,11 @@ export const menuMaster = [
         icon: <BadgePercent size={20} />,
       },
       {
+        href: '/master/potongan',
+        label: 'Potongan',
+        icon: <BadgePercent size={20} />,
+      },
+      {
         href: '/master/management-karyawan',
         label: 'Management Karyawan',
         icon: (

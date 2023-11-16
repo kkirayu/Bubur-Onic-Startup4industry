@@ -1,0 +1,1 @@
+export { ListPotongan } from './ListPotongan'

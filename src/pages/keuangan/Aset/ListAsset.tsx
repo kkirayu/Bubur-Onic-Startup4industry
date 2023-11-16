@@ -64,64 +64,59 @@ export const ListAsset = () => {
   })
 
   return (
-    <div>
-      <div className="text-gray-700 text-xl font-semibold mb-4">
-        Manage Asset
-      </div>
-      <section className="bg-white">
-        {data && (
-          <TableLowcode
-            title="Manage Asset"
-            data={data?.data.data.content}
-            baseUrl={import.meta.env.VITE_API_BASEURL}
-            specPath="/api/journal/journal"
-            renderState={renderState}
-            setRenderState={setRenderState}
-            pageConfig={pageConfig}
-            setPageConfig={setPageConfig}
-            filterBy={filterBy}
-            setFilterBy={setFilterBy}
-            search={search}
-            setSearch={setSearch}
-            column={[
-              { key: 'id', label: 'ID' },
-              { key: 'name', label: 'Nama Barang' },
-              { key: 'category_id', label: 'Kategori Barang' },
-              { key: 'value', label: 'Harga' },
-              { key: 'value_residual', label: 'Resedual' },
-              { key: 'date', label: 'Tanggal Pembelian' },
-            ]}
-            customCell={({ defaultCell, name, value }) => {
-              if (name === 'category_id') {
-                return value.length > 0 ? value[1] : '-'
-              } else if (name === 'value' || name === 'value_residual') {
-                return formatToMoney(value)
-              }
-              return defaultCell
-            }}
-            customButtonCreate={() => (
-              <>
-                <Button
-                  className="bg-blue-400 text-white"
-                  onClick={() => navigate('create')}
-                  size="sm"
-                >
-                  Tambah Asset
-                </Button>
-              </>
-            )}
-            onClickEdit={(_, id) => navigate(id + '/edit')}
-            onClickDelete={(_, id) => {
-              Dialog.confirm({
-                description: 'Apakah anda yakin ingin menghapus data ini?',
-                callback: () => {
-                  mutate(id)
-                },
-              })
-            }}
-          />
-        )}
-      </section>
-    </div>
+    <section className="bg-white">
+      {data && (
+        <TableLowcode
+          title="Manage Asset"
+          data={data?.data.data.content}
+          baseUrl={import.meta.env.VITE_API_BASEURL}
+          specPath="/api/journal/journal"
+          renderState={renderState}
+          setRenderState={setRenderState}
+          pageConfig={pageConfig}
+          setPageConfig={setPageConfig}
+          filterBy={filterBy}
+          setFilterBy={setFilterBy}
+          search={search}
+          setSearch={setSearch}
+          column={[
+            { key: 'id', label: 'ID' },
+            { key: 'name', label: 'Nama Barang' },
+            { key: 'category_id', label: 'Kategori Barang' },
+            { key: 'value', label: 'Harga' },
+            { key: 'value_residual', label: 'Resedual' },
+            { key: 'date', label: 'Tanggal Pembelian' },
+          ]}
+          customCell={({ defaultCell, name, value }) => {
+            if (name === 'category_id') {
+              return value.length > 0 ? value[1] : '-'
+            } else if (name === 'value' || name === 'value_residual') {
+              return formatToMoney(value)
+            }
+            return defaultCell
+          }}
+          customButtonCreate={() => (
+            <>
+              <Button
+                className="bg-blue-400 text-white"
+                onClick={() => navigate('create')}
+                size="sm"
+              >
+                Tambah Asset
+              </Button>
+            </>
+          )}
+          onClickEdit={(_, id) => navigate(id + '/edit')}
+          onClickDelete={(_, id) => {
+            Dialog.confirm({
+              description: 'Apakah anda yakin ingin menghapus data ini?',
+              callback: () => {
+                mutate(id)
+              },
+            })
+          }}
+        />
+      )}
+    </section>
   )
 }
