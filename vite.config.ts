@@ -17,7 +17,7 @@ export default defineConfig({
     sonarReporterOptions: { silent: true },
     outputFile: 'sonar-report.xml',
     coverage: {
-      reporter: 'lcov',
+      reporter: ['text', 'lcov'],
     },
   },
   resolve: {

@@ -49,8 +49,4 @@ sonarqube-check:
       - .sonar/cache
   script:
     - sonar-scanner
-      -Dsonar.projectKey=bubur-onic-fe
-      -Dsonar.sources=src
-      -Dsonar.host.url=https://sonar.javan.co.id
-      -Dsonar.login=${SONAR_LOGIN_TOKEN}
   when: manual
