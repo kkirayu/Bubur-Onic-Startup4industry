@@ -6,6 +6,7 @@ import {
   ListPinjamanKaryawan,
   CreatePinjamanKaryawan,
   DetailPinjamanKaryawan,
+  ListPengajuanKaryawan,
 } from '@/pages/hrm'
 import { Outlet, RouteObject } from 'react-router-dom'
 
@@ -20,5 +21,6 @@ export const hrmRoutes: RouteObject = {
     { path: 'pinjaman-karyawan', element: <ListPinjamanKaryawan /> },
     { path: 'pinjaman-karyawan/create', element: <CreatePinjamanKaryawan /> },
     { path: 'pinjaman-karyawan/:id', element: <DetailPinjamanKaryawan /> },
+    { path: 'pengajuan-karyawan', element: <ListPengajuanKaryawan /> },
   ],
 }
