@@ -9,7 +9,6 @@ export function ListPotongan() {
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any } | undefined>()
   const [search, setSearch] = useState<string>()
-  const [selected, setSelected] = useState<number[]>([])
 
   return (
     <div>
@@ -25,6 +24,9 @@ export function ListPotongan() {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
+        onClickCreate={() => navigate('create')}
+        onClickDetail={(id) => navigate(`${id}`)}
+        customButtonEdit={() => <></>}
       />
     </div>
   )

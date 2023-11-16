@@ -14,6 +14,8 @@ import {
   EditKaryawan,
   ListPaymentMethod,
   ListPotongan,
+  CreatePotongan,
+  DetailPotongan,
 } from '@/pages/master'
 import { CreateAkun } from '@/pages/master/AkunManagement'
 
@@ -39,5 +41,7 @@ export const masterRoutes: RouteObject = {
     { path: 'denda', element: <ListDenda /> },
     { path: 'payment-method', element: <ListPaymentMethod /> },
     { path: 'potongan', element: <ListPotongan /> },
+    { path: 'potongan/create', element: <CreatePotongan /> },
+    { path: 'potongan/:id', element: <DetailPotongan /> },
   ],
 }
