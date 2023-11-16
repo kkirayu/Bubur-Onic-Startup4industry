@@ -1,0 +1,99 @@
+{
+  // Place your alurkerja-UI-starter workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  "TableLowcode with all featured": {
+    "prefix": "tblc",
+    "body": [
+      "<TableLowcode",
+      "  baseUrl='https://kpm-sys.merapi.javan.id' ",
+      "  specPath='/api/crud/takwim'",
+      "  renderState={renderState}",
+      "  setRenderState={setRenderState}",
+      "  pageConfig={pageConfig}",
+      "  setPageConfig={setPageConfig}",
+      "  filterBy={filterBy}",
+      "  setFilterBy={setFilterBy}",
+      "  search={search}",
+      "  setSearch={setSearch}",
+      "  canBulk",
+      "  selectedRow={selected}",
+      "  setSelectedRow={setSelected}",
+      "/>"
+    ],
+    "description": "TableLowcode with all featured"
+  },
+  "TableLowcode with pagination": {
+    "prefix": "tblcp",
+    "body": [
+      "<TableLowcode",
+      "  baseUrl='https://kpm-sys.merapi.javan.id' ",
+      "  specPath='/api/crud/takwim'",
+      "  pageConfig={pageConfig}",
+      "  setPageConfig={setPageConfig}",
+      "/>"
+    ],
+    "description": "TableLowcode with pagination"
+  },
+  "TableLowcode with search": {
+    "prefix": "tblcs",
+    "body": [
+      "<TableLowcode",
+      "  baseUrl='https://kpm-sys.merapi.javan.id' ",
+      "  specPath='/api/crud/takwim'",
+      "  search={search}",
+      "  setSearch={setSearch}",
+      "/>"
+    ],
+    "description": "TableLowcode with search"
+  },
+  "TableLowcode with filter": {
+    "prefix": "tblcf",
+    "body": [
+      "<TableLowcode",
+      "  baseUrl='https://kpm-sys.merapi.javan.id' ",
+      "  specPath='/api/crud/takwim'",
+      "  filterBy={filterBy}",
+      "  setFilterBy={setFilterBy}",
+      "/>"
+    ],
+    "description": "TableLowcode with filter"
+  },
+  "TableLowcode with bulk": {
+    "prefix": "tblcb",
+    "body": [
+      "<TableLowcode",
+      "  baseUrl='https://kpm-sys.merapi.javan.id' ",
+      "  specPath='/api/crud/takwim'",
+      "  canBulk",
+      "  selectedRow={selected}",
+      "  setSelectedRow={setSelected}",
+      "/>"
+    ],
+    "description": "TableLowcode with bulk"
+  },
+  "TableLowcode state with all featured": {
+    "prefix": "tblcstate",
+    "body": [
+      "const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })",
+      "const [renderState, setRenderState] = useState(0)",
+      "const [filterBy, setFilterBy] = useState<{ [x: string]: any } | undefined>()",
+      "const [search, setSearch] = useState<string>()",
+      "const [selected, setSelected] = useState<number[]>([])"
+    ],
+    "description": "TableLowcode state with all featured"
+  }
+}
