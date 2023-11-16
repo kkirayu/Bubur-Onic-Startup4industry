@@ -28,9 +28,8 @@ export const ListPengajuanKaryawan = () => {
         column={[
           { key: 'id', label: 'ID' },
           { key: 'periode', label: 'Nama Pegawai' },
-          { key: 'status', label: 'Nominal Hutang' },
-          { key: 'total', label: 'Status Kasbon' },
-          { key: 'date', label: 'Periode Pinjaam' },
+          { key: 'status', label: 'Tipe Pengajuan' },
+          { key: 'status', label: 'Nominal Pengajuan' },
         ]}
         onClickCreate={() => navigate('create')}
       />
