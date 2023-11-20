@@ -28,10 +28,21 @@ export const ListPengajuanKaryawan = () => {
         column={[
           { key: 'id', label: 'ID' },
           { key: 'periode', label: 'Nama Pegawai' },
-          { key: 'status', label: 'Tipe Pengajuan' },
-          { key: 'status', label: 'Nominal Pengajuan' },
+          { key: 'status', label: 'Nominal Hutang' },
+          { key: 'status', label: 'Status Kasbon' },
+          { key: 'status', label: 'Periode Pinjaman' },
         ]}
         onClickCreate={() => navigate('create')}
+        customActionCell={(data) => (
+          <>
+            <button
+              className="bg-light-blue-alurkerja text-main-blue-alurkerja p-1 rounded font-bold"
+              onClick={() => navigate(`${data.id}`)}
+            >
+              <Wallet2 size={20} />
+            </button>
+          </>
+        )}
       />
     </section>
   )
