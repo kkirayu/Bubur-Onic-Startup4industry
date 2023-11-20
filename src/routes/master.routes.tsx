@@ -13,12 +13,11 @@ import {
   DetailKaryawan,
   EditKaryawan,
   ListPaymentMethod,
-  ListPotongan,
-  CreatePotongan,
-  DetailPotongan,
+ 
 } from '@/pages/master'
 import { CreateAkun } from '@/pages/master/AkunManagement'
 import { CreateListBonus, EditListBonus, ListBonusKaryawan } from '@/pages/master/ListBonusKaryawan'
+import { CreatePotongan, DetailPotongan, ListPotongan } from '@/pages/master/Potongan'
 
 import { Outlet, RouteObject } from 'react-router-dom'
 
@@ -41,14 +40,11 @@ export const masterRoutes: RouteObject = {
     { path: 'bonus', element: <ListBonus /> },
     { path: 'denda', element: <ListDenda /> },
     { path: 'payment-method', element: <ListPaymentMethod /> },
-<<<<<<< HEAD
     { path: 'list-bonus-karyawan', element: <ListBonusKaryawan /> },
     { path: 'list-bonus-karyawan/create', element: <CreateListBonus /> },
     { path: 'list-bonus-karyawan/:id/edit', element: <EditListBonus /> },
-=======
     { path: 'potongan', element: <ListPotongan /> },
     { path: 'potongan/create', element: <CreatePotongan /> },
     { path: 'potongan/:id', element: <DetailPotongan /> },
->>>>>>> 26051a00c0de07ba8b9ec87d21e82142bac1a5bd
   ],
 }
