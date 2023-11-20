@@ -75,6 +75,7 @@ const onSubmit = (payload: FieldValues) =>{
                 
                 <Input {...register('bukti', { required: true })}
                 placeholder='Placeholder'
+                type="file"
                 />
                 <ErrorMessage
             errors={errors}
@@ -91,7 +92,7 @@ const onSubmit = (payload: FieldValues) =>{
                 >
                 Periode Bonus
                 </label>
-                <Input {...register('date', { required: true })} type="month" />
+                <Input {...register('date', { required: true })} type="month"  />
                 <ErrorMessage
             errors={errors}
             name="date"
