@@ -1,8 +1,16 @@
 import { Input } from 'alurkerja-ui'
-import { Button } from '@/components'
+import { Button, Dialog } from '@/components'
 import React from 'react'
 
 export const DetailPengajuanKaryawan = () => {
+  const onAccept = () => {
+    Dialog.confirm({ title: 'Terima Pinjaman', callback: () => {} })
+  }
+
+  const onReject = () => {
+    Dialog.confirm({ title: 'Tolak Pinjaman', callback: () => {} })
+  }
+
   return (
     <section className="bg-white rounded py-6">
       <h3 className="font-bold text-xl mb-10 px-6">
@@ -67,8 +75,10 @@ export const DetailPengajuanKaryawan = () => {
       </div>
 
       <div className="w-fit ml-auto flex items-center gap-4 p-6">
-        <Button color="gray">Simpan</Button>
-        <Button>Simpan dan Ajukan</Button>
+        <Button onClick={onAccept}>Terima</Button>
+        <Button onClick={onReject} color="red">
+          Tolak
+        </Button>
       </div>
     </section>
   )
