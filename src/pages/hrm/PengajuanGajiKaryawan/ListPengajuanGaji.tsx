@@ -32,6 +32,7 @@ export const ListPengajuanGaji = () => {
           { key: 'status', label: 'Status Pengajuan' },
         ]}
         onClickCreate={() => navigate('create')}
+        onClickDetail={(id) => navigate(`${id}`)}
         customButtonDelete={() => <></>}
         customButtonEdit={() => <></>}
       />

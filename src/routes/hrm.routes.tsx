@@ -9,6 +9,7 @@ import {
   ListPengajuanKaryawan,
   DetailPengajuanKaryawan,
   ListPengajuanGaji,
+  DetailPengajuanGaji,
 } from '@/pages/hrm'
 import { Outlet, RouteObject } from 'react-router-dom'
 
@@ -28,6 +29,10 @@ export const hrmRoutes: RouteObject = {
     {
       path: 'pengajuan-gaji-karyawan',
       element: <ListPengajuanGaji />,
+    },
+    {
+      path: 'pengajuan-gaji-karyawan/:id',
+      element: <DetailPengajuanGaji />,
     },
   ],
 }
