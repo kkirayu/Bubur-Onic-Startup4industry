@@ -58,7 +58,7 @@ export const DetailPotongan = () => {
       </div>
 
       <div className="w-fit ml-auto flex items-center gap-4 px-6">
-        <Button variant="outlined">Simpan</Button>
+        <Button color="gray">Simpan</Button>
         <Button>Simpan dan Ajukan</Button>
       </div>
     </section>
