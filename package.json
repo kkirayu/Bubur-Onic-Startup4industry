@@ -31,7 +31,7 @@
     "@typescript-eslint/parser": "^5.46.0",
     "@vitejs/plugin-react": "^3.0.0",
     "@vitest/coverage-c8": "^0.25.6",
-    "alurkerja-ui": "^0.0.435",
+    "alurkerja-ui": "^0.0.443",
     "autoprefixer": "^10.4.14",
     "axios": "^1.4.0",
     "axios-mock-adapter": "^1.22.0",
