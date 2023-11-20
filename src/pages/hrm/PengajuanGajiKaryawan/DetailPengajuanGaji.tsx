@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
-import { Button } from '@/components'
+import { Button, Dialog } from '@/components'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, TableLowcode } from 'alurkerja-ui'
+import { Input, Modal, TableLowcode } from 'alurkerja-ui'
 
 export const DetailPengajuanGaji = () => {
   const [pageConfig, setPageConfig] = useState({ limit: 10, page: 0 })
   const [renderState, setRenderState] = useState(0)
   const [filterBy, setFilterBy] = useState<{ [x: string]: any } | undefined>()
   const [search, setSearch] = useState<string>()
+
+  const onAccept = () => {
+    Dialog.confirm({ title: 'Terima Pengajuan Gaji', callback: () => {} })
+  }
 
   return (
     <section>
@@ -92,8 +96,26 @@ export const DetailPengajuanGaji = () => {
         </div>
 
         <div className="w-fit ml-auto flex items-center gap-4 px-6">
-          <Button>Terima</Button>
-          <Button color="red">Revisi</Button>
+          <Button onClick={onAccept}>Terima</Button>
+          <Modal
+            title="Revisi"
+            triggerButton={<Button color="red">Revisi</Button>}
+          >
+            <div className="p-6 space-y-4">
+              <div>
+                <label
+                  htmlFor=""
+                  className="after:content-['*'] after:text-red-400 after:text-sm"
+                >
+                  Alasan Revisi Pengajuan *
+                </label>
+                <Input disabled textArea />
+              </div>
+              <div className="w-fit ml-auto">
+                <Button>Revisi</Button>
+              </div>
+            </div>
+          </Modal>
         </div>
       </div>
     </section>
