@@ -1,3 +1,5 @@
+# Bubur Onic FE
+
 ## Tech Stack
 
 **Client:** React v18, React-Router-Dom v6, Typescript, Vite v3
@@ -31,7 +33,7 @@ Start the server
 
 ## Running Tests
 
-To run tests, run the following command
+To run test & generate sonar report, run the following command
 
 ```bash
   yarn test

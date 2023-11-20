@@ -1,12 +1,11 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
-import { Input, StatusIcon } from 'alurkerja-ui'
+import { AuthContext, Input, StatusIcon } from 'alurkerja-ui'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 
 import { Button, Dialog } from '@/components'
 import { useAuthStore } from '@/stores'
-import { axiosInstance } from '@/api'
 
 const Login = () => {
   const {
@@ -21,6 +20,7 @@ const Login = () => {
   })
   const navigate = useNavigate()
   const { setToken } = useAuthStore()
+  const axiosInstance = useContext(AuthContext)
 
   const { mutate, isLoading } = useMutation({
     mutationFn: (credential: { email: string; password: string }) => {
@@ -85,9 +85,8 @@ const Login = () => {
             </div>
             {errorMessage && (
               <div
-                className={
-                  'flex items-center gap-1 bg-red-50 px-4 py-2 rounded fixed top-0 right-0 mr-10 mt-10 shadow'
-                }
+                className="flex items-center gap-1 bg-red-50 px-4 py-2 rounded fixed top-0 right-0 mr-10 mt-10 shadow"
+                data-testid="alert-popup"
               >
                 <StatusIcon type="danger" />
                 <span className="text-sm">{errorMessage}</span>
@@ -103,8 +102,13 @@ const Login = () => {
                   required: { message: 'this field required', value: true },
                 })}
                 type="email"
+                data-testid="field-email"
               />
-              <span className="text-xs text-red-400" role="alert">
+              <span
+                className="text-xs text-red-400"
+                role="alert"
+                data-testid="alert-email"
+              >
                 {errors?.email?.message}
               </span>
             </div>
@@ -117,12 +121,21 @@ const Login = () => {
                   required: { message: 'this field required', value: true },
                 })}
                 type="password"
+                data-testid="field-password"
               />
-              <span className="text-xs text-red-400" role="alert">
+              <span
+                className="text-xs text-red-400"
+                role="alert"
+                data-testid="alert-password"
+              >
                 {errors?.password?.message}
               </span>
             </div>
-            <Button block={false} loading={isLoading}>
+            <Button
+              block={false}
+              loading={isLoading}
+              data-testid="button-login"
+            >
               Login
             </Button>
 

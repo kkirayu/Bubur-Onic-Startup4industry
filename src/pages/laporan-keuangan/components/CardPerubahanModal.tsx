@@ -7,8 +7,10 @@ import { Button } from '@/components'
 import { getListCompany } from '@/api'
 import moment from 'moment'
 import _ from 'underscore'
+import { useState } from 'react'
+import ReactDatePicker from 'react-datepicker'
 
-export const CardNeracaAkhir = () => {
+export const CardPerubahanModal = () => {
   const {
     setValue,
     handleSubmit,
@@ -22,21 +24,29 @@ export const CardNeracaAkhir = () => {
     },
   })
 
+
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    moment().date(1).toDate(),
+    moment().endOf('month').toDate(),
+  ])
+
   const navigate = useNavigate()
 
 
   const { listOption: listOptionCompany, isLoading: loadingListCompany } =
     getListCompany()
   const onClickJournal = (data: FieldValues) => {
-    if (data.year === '') {
-      setError('year', { type: 'required', message: 'Silahkan pilih tahun' })
-    } else if (data.company === '') {
+    if (data.company === '') {
       setError('company', { type: 'required', message: 'Silahkan pilih Perusahaan' })
     } else {
 
       navigate({
-        pathname: 'neraca-akhir',
-        search: `?company=${data.company}&start=01/01/${data.year}&end=31/12/${data.year}`,
+        pathname: 'perubahan-modal',
+        search: `?company=${data.company}&start=${moment(
+          dateRange[0]
+        ).format('DD/MM/YYYY')}&end=${moment(dateRange[1]).format(
+          'DD/MM/YYYY'
+        )}`,
       })
     }
 
@@ -50,16 +60,16 @@ export const CardNeracaAkhir = () => {
         <div>
           <div className="text-gray-700">Laporan</div>
           <div className="text-gray-700 font-semibold">
-            Neraca Akhir
+            Perubahan Modal
           </div>
         </div>
       </div>
       <div className="p-6">
         <p className="mb-6">
-          Menampilkan  neraca akhir perusahaan yang dipilih
+          Menampilkan Perubahan Modal
         </p>
         <Modal
-          title="Konfigurasi Laporan Laba Rugi Perbandingan"
+          title="Konfigurasi Perubahan Modal"
           triggerButton={<Button>Buka Laporan</Button>}
           maxWidth="2xl"
         >
@@ -101,15 +111,15 @@ export const CardNeracaAkhir = () => {
                   >
                     Tahun
                   </label>
-                  <Select
-                    options={_.range(2010, moment().year()+  1).map((year) => ({
-                      label: year,
-                      value: year,
-                    })
-                    )}
-                    onChange={(value: any) => {
-                      setValue('year', value.value ?? '')
+                  <ReactDatePicker
+                    className="w-full border p-2 rounded"
+                    selectsRange={true}
+                    startDate={dateRange[0]}
+                    endDate={dateRange[1]}
+                    onChange={(update) => {
+                      setDateRange(update)
                     }}
+                    isClearable={true}
                   />
                   <div className="text-xs text-gray-alurkerja-2">
                     {errors?.year ? (

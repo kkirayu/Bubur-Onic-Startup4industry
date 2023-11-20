@@ -18,6 +18,10 @@ export const menuHRM = [
         href: '/hrm/pinjaman-karyawan',
         label: 'Pinjaman Karyawan',
       },
+      {
+        href: '/hrm/pengajuan-karyawan',
+        label: 'Pengajuan Karyawan',
+      },
     ],
   },
 ]

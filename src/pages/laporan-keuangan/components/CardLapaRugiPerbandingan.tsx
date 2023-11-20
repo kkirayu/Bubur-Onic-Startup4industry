@@ -103,7 +103,7 @@ export const CardLabaRugiPerbandingan = () => {
                     Tahun
                   </label>
                   <Select
-                    options={_.range(2010, moment().year()).map((year) => ({
+                    options={_.range(2010, moment().year() +  1).map((year) => ({
                       label: year,
                       value: year,
                     })

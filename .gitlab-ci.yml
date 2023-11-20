@@ -1,6 +1,7 @@
 stages:
   - dev
   - stag
+  - analyze
 
 deploy_dev:
   only:
@@ -29,4 +30,23 @@ deploy_stag:
   script:
     - echo "Deploy ke server merapi"
     - ssh root@192.168.88.210 "cd /opt/alurkerja/onic/onic-fe-stag && sh k8s_update.sh onic-fe-stag"
+  when: manual
+
+sonarqube-check:
+  tags:
+    - merapi
+  only:
+    - develop
+  stage: analyze
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: ['']
+  variables:
+    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
+    GIT_DEPTH: '0'
+  cache:
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner
   when: manual

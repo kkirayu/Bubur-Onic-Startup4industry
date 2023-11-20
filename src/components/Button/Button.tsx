@@ -8,7 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'medium'
   block?: boolean
   loading?: boolean
-  color?: 'blue' | 'red' | 'orange' | 'green'
+  color?: 'blue' | 'red' | 'orange' | 'green' | 'gray'
 }
 
 const Button: FC<ButtonProps> = (props) => {
@@ -29,6 +29,7 @@ const Button: FC<ButtonProps> = (props) => {
     red: 'bg-red-alurkerja text-white disabled:bg-gray-alurkerja-2',
     orange: 'bg-orange-alurkerja text-white disabled:bg-gray-alurkerja-2',
     green: 'bg-green-alurkerja text-white disabled:bg-gray-alurkerja-2',
+    gray: 'bg-gray-alurkerja-1 text-white',
   }
 
   const buttonSize = () =>
@@ -48,7 +49,7 @@ const Button: FC<ButtonProps> = (props) => {
   return (
     <button
       className={clsx(
-        'rounded-md disabled:cursor-not-allowed',
+        'rounded-md disabled:cursor-not-allowed ',
         buttonBlock(),
         buttonSize(),
         buttonVariant(),
