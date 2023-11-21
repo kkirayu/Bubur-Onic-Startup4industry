@@ -109,7 +109,7 @@ export const DetailPengajuanGaji = () => {
                 >
                   Alasan Revisi Pengajuan *
                 </label>
-                <Input disabled textArea />
+                <Input textArea />
               </div>
               <div className="w-fit ml-auto">
                 <Button>Revisi</Button>
