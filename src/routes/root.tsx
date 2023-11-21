@@ -19,6 +19,7 @@ import { masterRoutes } from './master.routes'
 import { laporanKeuanganRoutes } from './laporanKeuangan.routes'
 import { hrmRoutes } from './hrm.routes'
 import { productMaster } from './productMaster.routes'
+import { karyawanRoutes } from './karyawan.routes'
 
 const router = createBrowserRouter([
   {
@@ -79,7 +80,8 @@ const router = createBrowserRouter([
       laporanKeuanganRoutes,
       masterRoutes,
       hrmRoutes,
-      productMaster
+      productMaster,
+      karyawanRoutes,
     ],
   },
 ])
