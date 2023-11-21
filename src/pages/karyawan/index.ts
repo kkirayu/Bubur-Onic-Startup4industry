@@ -8,3 +8,9 @@ export {
   DetailPinjamanKaryawan,
   ListPinjamanKaryawan,
 } from './PinjamanKaryawan'
+export {
+  CreatePotongan,
+  ListPotongan,
+  DetailPotongan,
+  EditPotongan,
+} from './Potongan'

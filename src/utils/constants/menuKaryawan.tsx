@@ -14,6 +14,10 @@ export const menuKaryawan = [
         href: '/karyawan/pengajuan-pinjaman',
         label: 'Pengajuan Pinjaman',
       },
+      {
+        href: '/karyawan/potongan',
+        label: 'Potongan',
+      },
     ],
   },
 ]
