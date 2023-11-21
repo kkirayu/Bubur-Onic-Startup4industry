@@ -30,6 +30,10 @@ export const DetailPinjamanKaryawan = () => {
     },
   })
 
+  const onCancel = () => {
+    Dialog.confirm({ title: 'Membatalkan Pengajuan' })
+  }
+
   return (
     <section className="bg-white rounded p-6">
       <h3 className="text-sm font-semibold font-['Poppins'] leading-tight">
@@ -167,6 +171,11 @@ export const DetailPinjamanKaryawan = () => {
         ]}
         readonly
       />
+      <div className="w-fit ml-auto">
+        <Button color="red" onClick={onCancel}>
+          Batalkan Pengajuan
+        </Button>
+      </div>
     </section>
   )
 }

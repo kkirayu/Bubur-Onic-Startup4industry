@@ -10,6 +10,10 @@ export const menuKaryawan = [
         href: '/karyawan/pengajuan-gaji',
         label: 'Pengajuan Gaji',
       },
+      {
+        href: '/karyawan/pengajuan-pinjaman',
+        label: 'Pengajuan Pinjaman',
+      },
     ],
   },
 ]

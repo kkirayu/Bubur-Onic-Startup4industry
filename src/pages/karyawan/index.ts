@@ -3,3 +3,8 @@ export {
   DetailPengajuanGaji,
   EditPengajuanGaji,
 } from './PengajuanGaji'
+export {
+  CreatePinjamanKaryawan,
+  DetailPinjamanKaryawan,
+  ListPinjamanKaryawan,
+} from './PinjamanKaryawan'
