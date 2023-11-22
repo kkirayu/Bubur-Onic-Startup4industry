@@ -64,8 +64,8 @@ export const CreateBills = () => {
         }
       })
       const payloadData = {
-        bill_date: payload.bill_date,
-        due_date: payload.bill_date_due,
+        bill_date: moment(payload.bill_date).format('YYYY-MM-DD'),
+        due_date: moment(payload.bill_date_due).format('YYYY-MM-DD'),
         desc: payload.description,
         supplier_id: payload.partner_id,
         total: totalPrice,
@@ -172,10 +172,10 @@ export const CreateBills = () => {
                     />
                   </td>
                   <td className="px-3 py-2.5">
-                    <Input {...register(`quantity-${idx}`)} />
+                    <Input {...register(`quantity-${idx}`)} type="number" />
                   </td>
                   <td className="px-3 py-2.5">
-                    <Input {...register(`price_unit-${idx}`)} />
+                    <Input {...register(`price_unit-${idx}`)} type="number" />
                   </td>
 
                   <td className="px-3 py-2.5">
