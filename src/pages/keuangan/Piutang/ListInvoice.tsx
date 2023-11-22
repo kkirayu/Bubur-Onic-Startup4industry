@@ -1,11 +1,7 @@
-import { FormLowcodeLite, TableLowcode } from 'alurkerja-ui'
+import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
-import { Download, Search, RefreshCcw } from 'lucide-react'
-import { Button, Dialog } from '@/components'
+
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { axiosInstance } from '@/api'
-import { formatToMoney } from '@/utils'
 
 export const ListPiutang = () => {
   const navigate = useNavigate()
@@ -15,53 +11,31 @@ export const ListPiutang = () => {
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
 
-
   return (
     <div>
       <section className="bg-white">
-      <TableLowcode
-            title="Invoice"
-            baseUrl={import.meta.env.VITE_API_BASEURL}
-            specPath="/api/keuangan/invoice"
-            renderState={renderState}
-            setRenderState={setRenderState}
-            pageConfig={pageConfig}
-            setPageConfig={setPageConfig}
-            filterBy={filterBy}
-            setFilterBy={setFilterBy}
-            search={search}
-            setSearch={setSearch}
-            
-            customCell={({ defaultCell, name, value }) => {
-              if (name === 'desc') {
-                return <>
-                {value.toString().substring(0, 20) + '...'}
-                </>
-              }
-              return defaultCell
-            }}
-            
-            // extraButton={() => (
-            //   <Button
-            //     className="flex items-center gap-1"
-            //     color="orange"
-            //     size="small"
-            //   >
-            //     <Download size={18} /> Download
-            //   </Button>
-            // )}
-            onClickCreate={() => navigate('create')}
-            onClickDetail={(id) => navigate(`${id}`)}
-            customButtonEdit={() => <></>}
-            // onClickDelete={(_, id) => {
-            //   Dialog.confirm({
-            //     description: 'Apakah anda yakin ingin menghapus data ini?',
-            //     callback: () => {
-            //       mutate(id)
-            //     },
-            //   })
-            // }}
-          />
+        <TableLowcode
+          title="Invoice"
+          baseUrl={import.meta.env.VITE_API_BASEURL}
+          specPath="/api/keuangan/invoice"
+          renderState={renderState}
+          setRenderState={setRenderState}
+          pageConfig={pageConfig}
+          setPageConfig={setPageConfig}
+          filterBy={filterBy}
+          setFilterBy={setFilterBy}
+          search={search}
+          setSearch={setSearch}
+          customCell={({ defaultCell, name, value }) => {
+            if (name === 'desc') {
+              return <>{value.toString().substring(0, 20) + '...'}</>
+            }
+            return defaultCell
+          }}
+          onClickCreate={() => navigate('create')}
+          onClickDetail={(id) => navigate(`${id}`)}
+          customButtonEdit={() => <></>}
+        />
       </section>
     </div>
   )
