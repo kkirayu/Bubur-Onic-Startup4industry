@@ -52,24 +52,24 @@ export const CreateBills = () => {
         totalPrice += +price
 
         return {
-          "product_id": product.value,
-          "qty": +quantity,
-          "account_id": 1,
-          "price": price,
-          "total": price * quantity,
-          "discount": 0,
-          "tax": 0,
-          "subtotal": price * quantity,
-          "description": desc,
+          product_id: product.value,
+          qty: +quantity,
+          account_id: 1,
+          price: price,
+          total: price * quantity,
+          discount: 0,
+          tax: 0,
+          subtotal: price * quantity,
+          description: desc,
         }
       })
       const payloadData = {
-        "bill_date": payload.bill_date,
-        "due_date": payload.bill_date_due,
-        "desc": payload.description,
-        "supplier_id": payload.partner_id,
-        "total": totalPrice,
-        "bill_details": listProduct
+        bill_date: payload.bill_date,
+        due_date: payload.bill_date_due,
+        desc: payload.description,
+        supplier_id: payload.partner_id,
+        total: totalPrice,
+        bill_details: listProduct,
       }
 
       return axiosInstance.post('keuangan/bill/create-bill', payloadData)
