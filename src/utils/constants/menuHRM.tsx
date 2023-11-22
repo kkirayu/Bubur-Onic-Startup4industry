@@ -26,6 +26,10 @@ export const menuHRM = [
         href: '/hrm/pengajuan-karyawan',
         label: 'Pengajuan Karyawan',
       },
+      {
+        href: '/hrm/gaji',
+        label: 'Gaji',
+      },
     ],
   },
 ]
