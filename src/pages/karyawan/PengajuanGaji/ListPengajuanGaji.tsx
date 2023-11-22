@@ -15,7 +15,7 @@ export const ListPengajuanGaji = () => {
       <TableLowcode
         title="List Pengajuan Gaji Karyawan"
         baseUrl={import.meta.env.VITE_API_BASEURL}
-        specPath="/api/saas/perusahaan"
+        specPath="/api/akun/akun"
         renderState={renderState}
         setRenderState={setRenderState}
         pageConfig={pageConfig}
@@ -26,9 +26,9 @@ export const ListPengajuanGaji = () => {
         setSearch={setSearch}
         column={[
           { key: 'id', label: 'ID' },
-          { key: 'periode', label: 'Periode Gaji' },
-          { key: 'status', label: 'Nominal Total' },
-          { key: 'status', label: 'Status Pengajuan' },
+          { key: 'id', label: 'Periode Gaji' },
+          { key: 'id', label: 'Nominal Total' },
+          { key: 'id', label: 'Status Pengajuan' },
         ]}
         onClickCreate={() => navigate('create')}
         onClickDetail={(id) => navigate(`${id}`)}
