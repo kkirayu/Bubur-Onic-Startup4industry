@@ -1,265 +1,67 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Input, Select, InputDate, Spinner, Skeleton } from 'alurkerja-ui'
-import { useMemo, useState } from 'react'
-import moment from 'moment'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
-import { axiosInstance, getListProduct, getListSupplier } from '@/api'
-import { Button, Dialog } from '@/components'
 import _ from 'underscore'
 
+import {
+  axiosInstance,
+  getListProduct,
+  getListSupplier,
+  getListAccount,
+} from '@/api'
+import { Button, Dialog } from '@/components'
+import { DetailBill } from '@/utils'
+
 export const DetailBills = () => {
-  const { register, watch, setValue, handleSubmit } = useForm()
+  const { register, watch, setValue } = useForm()
   const navigate = useNavigate()
   const { id } = useParams()
 
   const { listOption: supplierOption } = getListSupplier()
   const { listOption: productOption } = getListProduct()
+  const { listOption: accountOption } = getListAccount()
 
-  const [row, setRow] = useState([0])
+  const [row, setRow] = useState<{ [x: string]: any }[]>([])
   const [currentPartner, setCurrentPartner] = useState<{
     label: string
     value: number | string
   }>()
   const [readonly, setReadonly] = useState(true)
 
-  const removeAccoutRow = (idx: number) => {
-    setRow((prev) => prev.filter((prevIdx) => prevIdx !== idx))
+  const removeAccoutRow = (id: number) => {
+    setRow((prev) => prev.filter((item) => item.id !== id))
   }
 
   const addAccountRow = () => {
     // selalu increment index meskipun row ada yang dihapus
-    setRow((prev) => [...prev, prev[prev.length - 1] + 1])
+    setRow((prev) => [...prev, {}])
   }
-
-  const { data: accountOptions } = useQuery({
-    queryKey: ['account-odoo-option'],
-    queryFn: async () => {
-      return axiosInstance
-        .post('/odoo/odoo-api', {
-          model: 'account.account',
-          method: 'name_search',
-          args: [],
-          kwargs: {
-            name: '',
-            operator: 'ilike',
-            args: [
-              '&',
-              '&',
-              '&',
-              ['deprecated', '=', false],
-              [
-                'account_type',
-                'not in',
-                ['asset_receivable', 'liability_payable'],
-              ],
-              ['company_id', '=', 1],
-              ['is_off_balance', '=', false],
-            ],
-            limit: 8,
-            context: {
-              lang: 'en_US',
-              tz: 'Asia/Jakarta',
-              uid: 2,
-              allowed_company_ids: [1],
-              partner_id: 9,
-              move_type: 'in_invoice',
-            },
-          },
-        })
-        .then((res) => res.data.data)
-        .then((res) =>
-          res.map((item: [number, string]) => ({
-            label: item[1],
-            value: item[0],
-          }))
-        )
-    },
-  })
 
   const {
     data: detailBills,
     refetch: refetchDetail,
     isFetching,
-  } = useQuery({
+  } = useQuery<DetailBill>({
     queryKey: ['bills', id],
     queryFn: async () => {
       return axiosInstance
-        .post('/odoo/odoo-api', {
-          args: [
-            [+id!!],
-            [
-              'authorized_transaction_ids',
-              'edi_show_cancel_button',
-              'edi_show_abandon_cancel_button',
-              'state',
-              'edi_blocking_level',
-              'edi_error_count',
-              'edi_web_services_to_process',
-              'edi_error_message',
-              'tax_lock_date_message',
-              'date',
-              'auto_post',
-              'auto_post_until',
-              'partner_credit_warning',
-              'transaction_ids',
-              'id',
-              'company_id',
-              'journal_id',
-              'show_name_warning',
-              'posted_before',
-              'move_type',
-              'payment_state',
-              'invoice_filter_type_domain',
-              'suitable_journal_ids',
-              'currency_id',
-              'company_currency_id',
-              'commercial_partner_id',
-              'bank_partner_id',
-              'display_qr_code',
-              'show_reset_to_draft_button',
-              'invoice_has_outstanding',
-              'is_move_sent',
-              'has_reconciled_entries',
-              'restrict_mode_hash_table',
-              'country_code',
-              'display_inactive_currency_warning',
-              'statement_line_id',
-              'payment_id',
-              'tax_country_id',
-              'tax_cash_basis_created_move_ids',
-              'quick_edit_mode',
-              'hide_post_button',
-              'duplicated_ref_ids',
-              'quick_encoding_vals',
-              'highest_name',
-              'name',
-              'partner_id',
-              'l10n_id_need_kode_transaksi',
-              'l10n_id_attachment_id',
-              'l10n_id_kode_transaksi',
-              'l10n_id_replace_invoice_id',
-              'quick_edit_total_amount',
-              'ref',
-              'tax_cash_basis_origin_move_id',
-              'invoice_vendor_bill_id',
-              'invoice_date',
-              'payment_reference',
-              'partner_bank_id',
-              'invoice_date_due',
-              'invoice_payment_term_id',
-              'edi_state',
-              'invoice_line_ids',
-              'narration',
-              'tax_totals',
-              'invoice_payments_widget',
-              'amount_residual',
-              'invoice_outstanding_credits_debits_widget',
-              'line_ids',
-              'user_id',
-              'invoice_user_id',
-              'invoice_origin',
-              'qr_code_method',
-              'invoice_incoterm_id',
-              'fiscal_position_id',
-              'invoice_source_email',
-              'to_check',
-              'l10n_id_tax_number',
-              'l10n_id_csv_created',
-              'reversed_entry_id',
-              'display_name',
-            ],
-          ],
-          model: 'account.move',
-          method: 'read',
-          kwargs: {
-            context: {
-              lang: 'en_US',
-              tz: 'Asia/Jakarta',
-              uid: 2,
-              allowed_company_ids: [1],
-              bin_size: true,
-              default_move_type: 'in_invoice',
-            },
-          },
-        })
-        .then((res) => res.data.data[0])
-    },
-    onSuccess: (data) => {
-      setReadonly(data.state === 'draft' ? false : true)
-      setRow(data.invoice_line_ids)
-      setCurrentPartner({
-        label: data.partner_id[1],
-        value: data.partner_id[0],
-      })
-    },
-  })
-
-  const productID = detailBills?.invoice_line_ids
-
-  const { data: detailProduct, refetch } = useQuery({
-    queryKey: ['detail-product'],
-    queryFn: async () => {
-      return axiosInstance
-        .post('/odoo/odoo-api', {
-          args: [
-            productID,
-            [
-              'analytic_precision',
-              'sequence',
-              'product_id',
-              'name',
-              'asset_category_id',
-              'account_id',
-              'analytic_distribution',
-              'quantity',
-              'product_uom_category_id',
-              'price_unit',
-              'discount',
-              'tax_ids',
-              'price_subtotal',
-              'partner_id',
-              'currency_id',
-              'company_id',
-              'company_currency_id',
-              'display_type',
-              'product_uom_id',
-            ],
-          ],
-          model: 'account.move.line',
-          method: 'read',
-          kwargs: {
-            context: {
-              lang: 'en_US',
-              tz: 'Asia/Jakarta',
-              uid: 2,
-              allowed_company_ids: [1],
-              params: {
-                id: 35,
-                cids: 1,
-                menu_id: 115,
-                action: 233,
-                model: 'account.move',
-                view_type: 'form',
-              },
-              default_move_type: 'in_invoice',
-              journal_id: 2,
-              default_partner_id: 9,
-              default_currency_id: 12,
-              default_display_type: 'product',
-              quick_encoding_vals: false,
-            },
-          },
-        })
+        .get(`/keuangan/bill/${id}`)
         .then((res) => res.data.data)
     },
-    enabled: !!productID,
     onSuccess: (data) => {
-      data.forEach((product: any) => {
-        setValue(`quantity-${product.id}`, product.quantity)
-        setValue(`price_unit-${product.id}`, product.price_unit)
+      // setReadonly(data.state === 'draft' ? false : true)
+      setRow(data.bill_details ?? [])
+      setCurrentPartner({
+        label: data.supplier.name,
+        value: data.supplier.id,
+      })
+      data.bill_details?.forEach((item) => {
+        setValue(`quantity-${item.id}`, item.qty)
+        setValue(`price_unit-${item.id}`, item.price)
+        setValue(`desc-${item.id}`, item.description)
       })
     },
   })
@@ -384,7 +186,6 @@ export const DetailBills = () => {
         </div>
         {!isFetching ? (
           <>
-            {' '}
             <div className="p-6 grid grid-cols-2 gap-6">
               <div>
                 <label htmlFor="">Nama Supplier</label>
@@ -404,9 +205,9 @@ export const DetailBills = () => {
                 <InputDate
                   disabled={readonly}
                   onChange={(date) => {
-                    setValue('invoice_date', date)
+                    setValue('bill_date', date)
                   }}
-                  defaultValue={new Date(detailBills.invoice_date)}
+                  defaultValue={new Date(detailBills.bill_date)}
                 />
               </div>
               <div>
@@ -414,9 +215,9 @@ export const DetailBills = () => {
                 <InputDate
                   disabled={readonly}
                   onChange={(date) => {
-                    setValue('invoice_date_due', date)
+                    setValue('due_date', date)
                   }}
-                  defaultValue={new Date(detailBills.invoice_date_due)}
+                  defaultValue={new Date(detailBills.due_date)}
                 />
               </div>
               <div className="col-span-2">
@@ -424,6 +225,7 @@ export const DetailBills = () => {
                 <Input
                   {...(register('description'), { readonly: readonly })}
                   textArea
+                  disabled={readonly}
                 />
               </div>
             </div>
@@ -447,80 +249,70 @@ export const DetailBills = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {row.map((idx) => {
-                    if (detailProduct) {
-                      const currentProductDetail = detailProduct?.filter(
-                        (product: any) => product.id === idx
-                      )[0]
+                  {row.map((item) => {
+                    return (
+                      <tr key={`account-row-${item.id}`}>
+                        <td className="px-3 py-2.5">
+                          <Select
+                            isDisabled={readonly}
+                            options={productOption}
+                            onChange={(selected: any) => {
+                              setValue(`product-${item.id}`, selected)
+                            }}
+                            defaultValue={{
+                              label: item.product_instance.name,
+                              value: item.product_instance.id,
+                            }}
+                          />
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <Select
+                            isDisabled={readonly}
+                            options={accountOption}
+                            defaultValue={{
+                              label: item.account_instance.nama,
+                              value: item.account_instance.id,
+                            }}
+                          />
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <Input
+                            {...register(`quantity-${item.id}`)}
+                            readOnly={readonly}
+                          />
+                        </td>
+                        <td className="px-3 py-2.5">
+                          <Input
+                            {...register(`price_unit-${item.id}`)}
+                            readOnly={readonly}
+                          />
+                        </td>
 
-                      const currentProductOption = {
-                        label: currentProductDetail?.name,
-                        value: currentProductDetail?.id,
-                      }
-
-                      const currentAccountOption = {
-                        label: currentProductDetail?.account_id[1],
-                        value: currentProductDetail?.account_id[0],
-                      }
-
-                      return (
-                        <tr key={`account-row-${idx + 1}`}>
-                          <td className="px-3 py-2.5">
-                            <Select
-                              isDisabled={readonly}
-                              options={productOption}
-                              onChange={(selected: any) => {
-                                setValue(`product-${idx}`, selected)
-                              }}
-                              defaultValue={currentProductOption}
-                            />
-                          </td>
-                          <td className="px-3 py-2.5">
-                            <Select
-                              isDisabled={readonly}
-                              options={accountOptions}
-                              defaultValue={currentAccountOption}
-                            />
-                          </td>
-                          <td className="px-3 py-2.5">
-                            <Input
-                              {...register(`quantity-${idx}`)}
-                              readOnly={readonly}
-                            />
-                          </td>
-                          <td className="px-3 py-2.5">
-                            <Input
-                              {...register(`price_unit-${idx}`)}
-                              readOnly={readonly}
-                            />
-                          </td>
-
-                          <td className="text-center">
-                            <Input
-                              readOnly
-                              value={
-                                _.isNaN(
-                                  watch(`price_unit-${idx}`) *
-                                    watch(`quantity-${idx}`)
-                                )
-                                  ? 0
-                                  : watch(`price_unit-${idx}`) *
-                                    watch(`quantity-${idx}`)
-                              }
-                            />
-                          </td>
-                          <td className="text-center">
-                            <Button
-                              disabled={readonly}
-                              color="red"
-                              onClick={() => removeAccoutRow(idx)}
-                            >
-                              Hapus
-                            </Button>
-                          </td>
-                        </tr>
-                      )
-                    }
+                        <td className="text-center">
+                          <Input
+                            readOnly
+                            value={
+                              _.isNaN(
+                                watch(`price_unit-${item.id}`) *
+                                  watch(`quantity-${item.id}`)
+                              )
+                                ? 0
+                                : watch(`price_unit-${item.id}`) *
+                                  watch(`quantity-${item.id}`)
+                            }
+                          />
+                        </td>
+                        <td className="text-center">
+                          <Button
+                            disabled={readonly}
+                            color="red"
+                            onClick={() => removeAccoutRow(item.id)}
+                          >
+                            Hapus
+                          </Button>
+                        </td>
+                      </tr>
+                    )
                   })}
                 </tbody>
               </table>

@@ -65,7 +65,7 @@ export const CreateBills = () => {
       })
       const payloadData = {
         bill_date: moment(payload.bill_date).format('YYYY-MM-DD'),
-        due_date: moment(payload.bill_date_due).format('YYYY-MM-DD'),
+        due_date: moment(payload.due_date).format('YYYY-MM-DD'),
         desc: payload.description,
         supplier_id: payload.partner_id,
         total: totalPrice,
@@ -128,7 +128,7 @@ export const CreateBills = () => {
             <label htmlFor="">Jatuh Tempo</label>
             <InputDate
               onChange={(date) => {
-                setValue('bill_date_due', date)
+                setValue('due_date', date)
               }}
             />
           </div>

@@ -2,6 +2,7 @@ export * from './loginResponseType'
 export * from './UserType'
 export * from './company.type'
 export * from './permissionsType'
+export type { DetailBill, BillDetailsEntity } from './bill.type'
 
 export type Pagination = {
   empty: boolean
