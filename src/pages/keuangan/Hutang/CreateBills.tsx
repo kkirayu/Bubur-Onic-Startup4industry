@@ -9,7 +9,6 @@ import { useMutation } from '@tanstack/react-query'
 import {
   axiosInstance,
   getListAccount,
-  getListCustomer,
   getListProduct,
   getListSupplier,
 } from '@/api'

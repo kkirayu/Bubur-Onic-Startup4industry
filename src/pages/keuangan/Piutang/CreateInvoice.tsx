@@ -2,16 +2,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { Input, Select, InputDate } from 'alurkerja-ui'
 import { useState } from 'react'
-import moment from 'moment'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import moment from 'moment'
 
 import {
   axiosInstance,
   getListAccount,
   getListCustomer,
   getListProduct,
-  getListSupplier,
 } from '@/api'
 import { Button, Dialog } from '@/components'
 
@@ -52,24 +51,24 @@ export const CreateInvoice = () => {
         totalPrice += +price
 
         return {
-          "product_id": product.value,
-          "qty": +quantity,
-          "account_id": 1,
-          "price": price,
-          "total": price * quantity,
-          "discount": 0,
-          "tax": 0,
-          "subtotal": price * quantity,
-          "description": desc,
+          product_id: product.value,
+          qty: +quantity,
+          account_id: 1,
+          price: price,
+          total: price * quantity,
+          discount: 0,
+          tax: 0,
+          subtotal: price * quantity,
+          description: desc,
         }
       })
       const payloadData = {
-        "invoice_date": payload.invoice_date,
-        "due_date": payload.invoice_date_due,
-        "desc": payload.description,
-        "customer_id": payload.partner_id,
-        "total": totalPrice,
-        "invoice_details": listProduct
+        invoice_date: moment(payload.invoice_date).format('YYYY-MM-DD'),
+        due_date: moment(payload.invoice_date_due).format('YYYY-MM-DD'),
+        desc: payload.description,
+        customer_id: payload.partner_id,
+        total: totalPrice,
+        invoice_details: listProduct,
       }
 
       return axiosInstance.post('keuangan/invoice/create-invoice', payloadData)
