@@ -288,11 +288,6 @@ export const menuMaster = [
         label: 'Metode Pembayaran',
         icon: <UserCog size={20} />,
       },
-      {
-        href: '/master/list-bonus-karyawan',
-        label: 'List Bonus Karyawan',
-        icon: <UserCog size={20} />,
-      },
     ],
   },
 ]

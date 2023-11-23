@@ -1,4 +1,4 @@
-import { TableLowcode } from 'alurkerja-ui'
+import { TableLowcode, Button } from 'alurkerja-ui'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -30,7 +30,17 @@ export function ListBonusKaryawan() {
         setFilterBy={setFilterBy}
         search={search}
         setSearch={setSearch}
-        onClickCreate={() => navigate('create')}
+        customButtonCreate={() => (
+          <>
+            <Button
+              className="bg-blue-400 text-white"
+              onClick={() => navigate('create')}
+              size="sm"
+            >
+              Tambah Bonus Karyawan
+            </Button>
+          </>
+        )}
         onClickDetail={(id) => navigate(`${id}`)}
         onClickEdit={(_, id) => navigate(`${id}/edit`)}
       />
