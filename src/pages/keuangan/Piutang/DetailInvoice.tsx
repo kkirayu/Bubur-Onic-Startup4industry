@@ -106,24 +106,29 @@ export const DetailInvoice = () => {
         invoice_details: listProduct,
       }
 
-      return axiosInstance.post(`/keuangan/invoice/${params.id}`, payloadData)
+      return axiosInstance.post(
+        `/keuangan/invoice/${params.id}/post`,
+        payloadData
+      )
     },
     onSuccess: () => {
+      refetch()
+
       Dialog.success({
         description: 'Berhasil membuat journal piutang',
-        callback: () => {
-          refetch()
-        },
       })
     },
   })
 
   const { mutate: onUnPost, isLoading: isLoadingUnPost } = useMutation({
     mutationFn: () => {
-      return axiosInstance.post('/keuangan/invoice/21/un-post', {})
+      return axiosInstance.post(`/keuangan/invoice/${params.id}/un-post`)
     },
     onSuccess: () => {
       refetch()
+      Dialog.success({
+        description: 'Berhasil mengubah journal menjadi draft',
+      })
     },
   })
 
@@ -147,14 +152,14 @@ export const DetailInvoice = () => {
         <Button
           loading={isLoadingConfirm}
           onClick={() =>
-            invoice.post_status === 'posted'
+            invoice.post_status === 'POSTED'
               ? navigate('pembayaran')
               : handleSubmit((payload) => confirm(payload))()
           }
         >
-          {invoice.post_status === 'posted' ? 'Register Payment' : 'Confirm'}
+          {invoice.post_status === 'POSTED' ? 'Register Payment' : 'Confirm'}
         </Button>
-        {invoice.post_status === 'posted' && (
+        {invoice.post_status === 'POSTED' && (
           <Button
             variant="outlined"
             onClick={() => onUnPost()}
