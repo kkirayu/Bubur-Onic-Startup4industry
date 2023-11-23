@@ -1,6 +1,6 @@
 import { TableLowcode } from 'alurkerja-ui'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { axiosInstance } from '@/api'
 
@@ -12,11 +12,9 @@ export const ListCustomer = () => {
   const [filterBy, setFilterBy] = useState<{ [x: string]: any }>()
   const [search, setSearch] = useState<string>()
 
-
   return (
     <div>
       <section className="bg-white">
-
         <TableLowcode
           title="Customer"
           baseUrl={import.meta.env.VITE_API_BASEURL}
@@ -29,11 +27,15 @@ export const ListCustomer = () => {
           setFilterBy={setFilterBy}
           search={search}
           setSearch={setSearch}
-          // column={[{ key: 'display_name', label: 'Nama' }]}
-          // onClickCreate={() => navigate('create')}
-          // customButtonEdit={() => <></>}
+          extraActionButton={(data) => (
+            <Link
+              className="bg-green-alurkerja text-white text-xs p-2 rounded"
+              to={`${data.id}/payment`}
+            >
+              Bayar
+            </Link>
+          )}
         />
-
       </section>
     </div>
   )

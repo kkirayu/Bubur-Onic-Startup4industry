@@ -17,7 +17,7 @@ import {
   ListBills,
   PembayaranBills,
   DetailInvoice,
-  PembayaranInvoice,
+  InvoicePayment,
   ListCustomer,
   ListVendor,
   CreateVendor,
@@ -27,6 +27,7 @@ import {
   CreateProduct,
   DetailProduct,
   EditProduct,
+  CustomerPayment,
 } from '@/pages/keuangan'
 
 import { Outlet, RouteObject } from 'react-router-dom'
@@ -65,6 +66,7 @@ export const keuanganRoutes: RouteObject = {
     { path: 'piutang/invoice', element: <ListPiutang /> },
     { path: 'piutang/customer', element: <ListCustomer /> },
     { path: 'piutang/customer/create', element: <CreateCustomer /> },
+    { path: 'piutang/customer/:id/payment', element: <CustomerPayment /> },
     {
       path: 'piutang/invoice/create',
       element: <CreateInvoice />,
@@ -75,7 +77,7 @@ export const keuanganRoutes: RouteObject = {
     },
     {
       path: 'piutang/invoice/:id/pembayaran',
-      element: <PembayaranInvoice />,
+      element: <InvoicePayment />,
     },
 
     {

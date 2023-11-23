@@ -12,7 +12,6 @@ export default {
     extend: {
       fontFamily: { sans: ['Poppins', ...defaultTheme.fontFamily.sans] },
       colors: {
-        black: '#3F4254',
         red: {
           alurkerja: '#F64E60',
         },

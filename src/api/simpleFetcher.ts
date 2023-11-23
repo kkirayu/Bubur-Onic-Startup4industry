@@ -21,7 +21,7 @@ export const usePaginatedFetcher = ({
   mapperFn,
 }: SimpleFetcherProps) => {
   const listAccountQuery = useQuery<AxiosResponse<ListResponse<any>, any>>({
-    queryKey: [queryKey],
+    queryKey: [...queryKey],
     queryFn: async () => {
       return axiosInstance.get(url)
     },

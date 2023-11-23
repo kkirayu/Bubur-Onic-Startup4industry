@@ -1,13 +1,12 @@
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Input, InputDate, Radio, Select } from 'alurkerja-ui'
+import { Input, InputDate, Select } from 'alurkerja-ui'
 import { Button, Dialog } from '@/components'
 import { axiosInstance } from '@/api'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { FieldValues, useForm } from 'react-hook-form'
-import _ from 'underscore'
 
-export const PembayaranInvoice = () => {
+export const InvoicePayment = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { register, setValue, handleSubmit, watch } = useForm()
@@ -337,14 +336,9 @@ export const PembayaranInvoice = () => {
             {data?.amount_residual - watch('amount') !== 0 && (
               <div>
                 <label htmlFor="">Payment Difference</label>
-                <Input value={data?.amount_residual - watch('amount')} />
-                <Radio
-                  name="payment_difference"
-                  listOption={[
-                    { label: 'Keep Open', key: 1 },
-                    { label: 'Mark As Fully Paid', key: 2 },
-                  ]}
-                  defaultValue={1}
+                <Input
+                  readOnly
+                  value={data?.amount_residual - watch('amount')}
                 />
               </div>
             )}
