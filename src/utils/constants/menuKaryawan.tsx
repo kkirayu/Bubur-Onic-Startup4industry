@@ -18,6 +18,10 @@ export const menuKaryawan = [
         href: '/karyawan/potongan',
         label: 'Potongan',
       },
+      {
+        href: '/karyawan/list-bonus-karyawan',
+        label: 'List Bonus Karyawan',
+      },
     ],
   },
 ]
