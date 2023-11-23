@@ -9,30 +9,30 @@ import { formatToMoney } from '@/utils'
 import { useMutation } from '@tanstack/react-query'
 import { useContext } from 'react'
 
-export const CustomerPayment = () => {
+export const VendorPayment = () => {
   const { register, handleSubmit } = useForm()
   const params = useParams()
   const axiosInstance = useContext(AuthContext)
 
   const { data, isFetching } = usePaginatedFetcher({
-    queryKey: ['invoice'],
-    url: `/keuangan/invoice?show_all=true&filter[customer_id]=${params.id}`,
+    queryKey: ['bill'],
+    url: `/keuangan/bill?show_all=true&filter[customer_id]=${params.id}`,
     mapperFn: (data) => data,
   })
 
   const { mutate, isLoading } = useMutation({
     mutationFn: (arg: FieldValues) => {
       const payload = {
-        invoices: data?.map((invoice, idx) => ({
-          invoice_id: invoice.id,
-          total: invoice.total ? +invoice.total : 0,
+        bills: data?.map((bill, idx) => ({
+          bill_id: bill.id,
+          total: bill.total ? +bill.total : 0,
           paid_total: 0,
           amount_paid: arg[`amount_paid-${idx}`]
             ? +arg[`amount_paid-${idx}`]
             : 0,
         })),
       }
-      return axiosInstance.post('/keuangan/invoice/pay-invoice', payload)
+      return axiosInstance.post('/keuangan/bill/pay-bill', payload)
     },
     onSuccess: () => {
       Dialog.success({ description: 'Berhasil melakukan pembayaran' })
@@ -51,7 +51,7 @@ export const CustomerPayment = () => {
       <div className="flex gap-4 items-center  mb-4">
         <Link
           className="flex items-center text-main-blue-alurkerja gap-1"
-          to="/keuangan/piutang/invoice"
+          to="/keuangan/piutang/vendor"
         >
           <ArrowLeft />
           Kembali
@@ -66,24 +66,21 @@ export const CustomerPayment = () => {
         <div className="p-6  space-y-6">
           {!isFetching ? (
             <>
-              {' '}
-              {data?.map((invoice, idx) => {
-                const hasReceivables = +invoice.total > 0
-                const isDraft = invoice.post_status === 'DRAFT'
+              {data?.map((bill, idx) => {
+                const hasReceivables = +bill.total > 0
+                const isDraft = bill.post_status === 'DRAFT'
 
                 return (
-                  <div key={invoice.id}>
+                  <div key={bill.id}>
                     <div className="font-bold text-main-blue-alurkerja">
-                      {invoice.invoice_number} ({invoice.post_status})
+                      {bill.bill_number} ({bill.post_status})
                     </div>
                     <div className="grid grid-cols-2 gap-6">
                       <div>
                         <label htmlFor="">Jumlah Piutang</label>
                         <Input
                           readOnly
-                          value={
-                            hasReceivables ? formatToMoney(invoice.total) : 0
-                          }
+                          value={hasReceivables ? formatToMoney(bill.total) : 0}
                         />
                       </div>
                       {hasReceivables && !isDraft && (
@@ -107,7 +104,7 @@ export const CustomerPayment = () => {
         </div>
 
         <p className="px-6 text-red-alurkerja text-sm">
-          note: hanya invoice yang sudah di post yang bisa dibayarkan
+          note: hanya bill yang sudah di post yang bisa dibayarkan
         </p>
 
         <div className="w-fit ml-auto p-6 flex items-center gap-4">

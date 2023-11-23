@@ -5,9 +5,8 @@ import { Button, Dialog } from '@/components'
 import { axiosInstance } from '@/api'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { FieldValues, useForm } from 'react-hook-form'
-import _ from 'underscore'
 
-export const PembayaranBills = () => {
+export const BillPayment = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { register, setValue, handleSubmit, watch } = useForm()
