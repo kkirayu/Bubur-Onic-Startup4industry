@@ -96,7 +96,7 @@ export const CreateInvoice = () => {
     <div>
       <Link
         className="flex items-center text-main-blue-alurkerja gap-1 mb-4"
-        to="/keuangan/hutang/tagihan"
+        to="/keuangan/piutang/invoice"
       >
         <ArrowLeft />
         Kembali
