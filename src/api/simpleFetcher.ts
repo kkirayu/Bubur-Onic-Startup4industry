@@ -5,20 +5,20 @@ import { ListNotPaginatedResponse, ListResponse } from '@/utils'
 import { useMemo } from 'react'
 
 interface SimpleFetcherProps {
-  queryKey: string
+  queryKey: Array<string | number>
   url: string
   mapperFn: (data: any) => any
 }
 interface SimpleItemFetcherProps {
-  queryKey: string
+  queryKey: Array<string | number>
   url: string
+  onSuccess?: (data?: any) => void
 }
 
-
-export const simplePaginatedFetcher = ({
+export const usePaginatedFetcher = ({
   queryKey,
   url,
-  mapperFn
+  mapperFn,
 }: SimpleFetcherProps) => {
   const listAccountQuery = useQuery<AxiosResponse<ListResponse<any>, any>>({
     queryKey: [queryKey],
@@ -41,20 +41,24 @@ export const simplePaginatedFetcher = ({
   }
 }
 
-export const simpleItemFetcher = ({
+export const useItemFetcher = ({
   queryKey,
-  url
+  url,
+  onSuccess,
 }: SimpleItemFetcherProps) => {
   const listAccountQuery = useQuery<AxiosResponse<any, any>>({
-    queryKey: [queryKey],
+    cacheTime: 0,
+    queryKey: [...queryKey],
     queryFn: async () => {
       return axiosInstance.get(url)
+    },
+    onSuccess: (data) => {
+      onSuccess?.(data?.data.data)
     },
   })
 
   const { data } = listAccountQuery
   const listAccount = data?.data.data
-
 
   return {
     ...listAccountQuery,
@@ -62,13 +66,14 @@ export const simpleItemFetcher = ({
   }
 }
 
-
-export const simpleNotPaginatedFetcher = ({
+export const useNotPaginatedFetcher = ({
   queryKey,
   url,
-  mapperFn
+  mapperFn,
 }: SimpleFetcherProps) => {
-  const listAccountQuery = useQuery<AxiosResponse<ListNotPaginatedResponse<any>, any>>({
+  const listAccountQuery = useQuery<
+    AxiosResponse<ListNotPaginatedResponse<any>, any>
+  >({
     queryKey: [queryKey],
     queryFn: async () => {
       return axiosInstance.get(url)

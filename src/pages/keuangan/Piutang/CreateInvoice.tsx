@@ -39,11 +39,13 @@ export const CreateInvoice = () => {
       let totalPrice = 0
       const listProduct = row.map((idx) => {
         const productKey = `product-${idx}`
+        const accountKey = `account-${idx}`
         const quantityKey = `quantity-${idx}`
         const priceKey = `price_unit-${idx}`
         const descriptionKey = `desc-${idx}`
 
         const product = payload[productKey]
+        const account = payload[accountKey]
         const quantity = payload[quantityKey]
         const price = payload[priceKey]
         const desc = payload[descriptionKey]
@@ -53,7 +55,7 @@ export const CreateInvoice = () => {
         return {
           product_id: product.value,
           qty: +quantity,
-          account_id: 1,
+          account_id: account.value,
           price: price,
           total: price * quantity,
           discount: 0,
@@ -168,6 +170,9 @@ export const CreateInvoice = () => {
                     <Select
                       isLoading={isFetchingAccount}
                       options={accountOption}
+                      onChange={(selected: any) => {
+                        setValue(`account-${idx}`, selected)
+                      }}
                     />
                   </td>
                   <td className="px-3 py-2.5">

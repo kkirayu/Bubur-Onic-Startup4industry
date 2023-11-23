@@ -52,7 +52,7 @@ export const DetailBills = () => {
         .then((res) => res.data.data)
     },
     onSuccess: (data) => {
-      // setReadonly(data.state === 'draft' ? false : true)
+      setReadonly(data.state === 'draft' ? false : true)
       setRow(data.bill_details ?? [])
       setCurrentPartner({
         label: data.supplier.name,
