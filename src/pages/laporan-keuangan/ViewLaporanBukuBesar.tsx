@@ -213,7 +213,7 @@ export function ViewLaporanBukuBesar() {
                               <td className="p-4 text-right border-b ">
                                 {formatToMoney(item.saldo_di_line)}
                               </td>
-                              <td className="px-4 text-main-blue-alurkerja text-center">
+                              <td className="px-4 text-main-blue-alurkerja text-left">
                                 ({item?.akun_instance.kode_akun}) {item?.akun_instance.nama}
                               </td>
                             </tr>
