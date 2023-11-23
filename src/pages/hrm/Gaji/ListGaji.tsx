@@ -32,6 +32,7 @@ export const ListGaji = () => {
         onClickDetail={(id) => navigate(`${id}`)}
         customButtonEdit={() => <></>}
         customButtonDelete={() => <></>}
+        customButtonCreate={() => <></>}
       />
     </section>
   )
